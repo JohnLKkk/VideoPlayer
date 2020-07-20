@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RobotTestDemo</string>
+    <string name="description">用于支持语音鼠标相关的功能。关闭此服务后将无法正常响应相关的按键功能。</string>
+</resources>

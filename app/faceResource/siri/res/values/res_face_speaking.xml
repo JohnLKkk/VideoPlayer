@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="face_speaking">
+        <item>@drawable/face_speaking_0</item>
+        <item>@drawable/face_speaking_1</item>
+        <item>@drawable/face_speaking_2</item>
+        <item>@drawable/face_speaking_3</item>
+        <item>@drawable/face_speaking_4</item>
+        <item>@drawable/face_speaking_5</item>
+        <item>@drawable/face_speaking_6</item>
+        <item>@drawable/face_speaking_7</item>
+        <item>@drawable/face_speaking_8</item>
+        <item>@drawable/face_speaking_9</item>
+        <item>@drawable/face_speaking_10</item>
+        <item>@drawable/face_speaking_11</item>
+        <item>@drawable/face_speaking_12</item>
+        <item>@drawable/face_speaking_13</item>
+        <item>@drawable/face_speaking_14</item>
+        <item>@drawable/face_speaking_15</item>
+        <item>@drawable/face_speaking_16</item>
+        <item>@drawable/face_speaking_17</item>
+        <item>@drawable/face_speaking_18</item>
+        <item>@drawable/face_speaking_19</item>
+        <item>@drawable/face_speaking_20</item>
+        <item>@drawable/face_speaking_21</item>
+        <item>@drawable/face_speaking_22</item>
+        <item>@drawable/face_speaking_23</item>
+        <item>@drawable/face_speaking_24</item>
+    </array>
+</resources>

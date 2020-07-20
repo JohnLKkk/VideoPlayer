@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="face_jt11200">
+        <item>@drawable/jt0001</item>
+        <item>@drawable/jt0002</item>
+        <item>@drawable/jt0003</item>
+        <item>@drawable/jt0004</item>
+        <item>@drawable/jt0005</item>
+        <item>@drawable/jt0006</item>
+        <item>@drawable/jt0007</item>
+        <item>@drawable/jt0008</item>
+        <item>@drawable/jt0009</item>
+        <item>@drawable/jt0010</item>
+        <item>@drawable/jt0011</item>
+        <item>@drawable/jt0012</item>
+        <item>@drawable/jt0013</item>
+        <item>@drawable/jt0014</item>
+        <item>@drawable/jt0015</item>
+        <item>@drawable/jt0016</item>
+        <item>@drawable/jt0017</item>
+        <item>@drawable/jt0018</item>
+        <item>@drawable/jt0019</item>
+        <item>@drawable/jt0020</item>
+    </array>
+</resources>

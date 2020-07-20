@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<array name="face_bm20500">
+		<item>@drawable/bm0001</item>
+		<item>@drawable/bm0002</item>
+		<item>@drawable/bm0003</item>
+		<item>@drawable/bm0004</item>
+		<item>@drawable/bm0005</item>
+		<item>@drawable/bm0006</item>
+		<item>@drawable/bm0007</item>
+		<item>@drawable/bm0008</item>
+		<item>@drawable/bm0009</item>
+		<item>@drawable/bm0010</item>
+		<item>@drawable/bm0011</item>
+		<item>@drawable/bm0012</item>
+		<item>@drawable/bm0013</item>
+		<item>@drawable/bm0014</item>
+		<item>@drawable/bm0015</item>
+	</array>
+</resources>

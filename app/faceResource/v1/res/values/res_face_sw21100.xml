@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="face_sw21100">
+        <item>@drawable/sw0001</item>
+        <item>@drawable/sw0002</item>
+        <item>@drawable/sw0003</item>
+        <item>@drawable/sw0004</item>
+        <item>@drawable/sw0005</item>
+        <item>@drawable/sw0006</item>
+        <item>@drawable/sw0007</item>
+        <item>@drawable/sw0008</item>
+        <item>@drawable/sw0009</item>
+        <item>@drawable/sw0010</item>
+        <item>@drawable/sw0011</item>
+        <item>@drawable/sw0012</item>
+        <item>@drawable/sw0013</item>
+        <item>@drawable/sw0014</item>
+        <item>@drawable/sw0015</item>
+        <item>@drawable/sw0016</item>
+        <item>@drawable/sw0017</item>
+        <item>@drawable/sw0018</item>
+        <item>@drawable/sw0019</item>
+        <item>@drawable/sw0020</item>
+    </array>
+</resources>

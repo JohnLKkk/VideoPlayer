@@ -1,0 +1,87 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_main_title_height">60dp</dimen>
+    <dimen name="layout_height_50">50dip</dimen>
+    <dimen name="phone_main_textsize">14sp</dimen>
+    <dimen name="selectlist_textsize">16sp</dimen>
+    <dimen name="shuaixuan_textsize">13sp</dimen>
+    <!--&lt;!&ndash;字体大小&ndash;&gt;-->
+    <!--<dimen name="android_text_size_12">12sp</dimen>-->
+    <!--<dimen name="android_text_size_14">14sp</dimen>-->
+    <!--<dimen name="android_text_size_16">16sp</dimen>-->
+    <!--<dimen name="android_text_size_18">18sp</dimen>-->
+    <!--<dimen name="android_text_size_20">20sp</dimen>-->
+    <!--<dimen name="android_text_size_22">22sp</dimen>-->
+    <!--<dimen name="android_text_size_24">24sp</dimen>-->
+    <!--<dimen name="android_text_size_26">26sp</dimen>-->
+    <!--<dimen name="android_text_size_28">28sp</dimen>-->
+    <!--<dimen name="android_text_size_30">30sp</dimen>-->
+    <!--<dimen name="android_text_size_32">32sp</dimen>-->
+    <!--<dimen name="android_text_size_34">34sp</dimen>-->
+
+    <dimen name="dp_066">0.66dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
+    <dimen name="dp_6">6dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_14">14dp</dimen>
+    <dimen name="dp_18">18dp</dimen>
+    <dimen name="dp_22">22dp</dimen>
+    <dimen name="dp_36">36dp</dimen>
+    <dimen name="dp_40">40dp</dimen>
+    <dimen name="dp_60">60dp</dimen>
+    <dimen name="dp_72">72dp</dimen>
+
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+
+    <dimen name="textandiconmargin">10dp</dimen>
+
+    <dimen name="label_text">18sp</dimen>
+
+    <dimen name="text_size_6">@dimen/x12</dimen>
+    <dimen name="text_size_7">@dimen/x14</dimen>
+    <dimen name="text_size_8">@dimen/x16</dimen>
+    <dimen name="text_size_9">@dimen/x18</dimen>
+    <dimen name="text_size_10">@dimen/x20</dimen>
+    <dimen name="text_size_11">@dimen/x22</dimen>
+    <dimen name="text_size_12">@dimen/x24</dimen>
+    <dimen name="text_size_13">@dimen/x26</dimen>
+    <dimen name="text_size_14">@dimen/x28</dimen>
+    <dimen name="text_size_15">@dimen/x30</dimen>
+    <dimen name="text_size_16">@dimen/x32</dimen>
+    <dimen name="text_size_17">@dimen/x34</dimen>
+    <dimen name="text_size_18">@dimen/x36</dimen>
+    <dimen name="text_size_19">@dimen/x38</dimen>
+    <dimen name="text_size_20">@dimen/x40</dimen>
+    <dimen name="text_size_21">@dimen/x42</dimen>
+    <dimen name="text_size_22">@dimen/x44</dimen>
+    <dimen name="text_size_23">@dimen/x46</dimen>
+    <dimen name="text_size_24">@dimen/x48</dimen>
+    <dimen name="text_size_26">@dimen/x52</dimen>
+    <dimen name="text_size_28">@dimen/x56</dimen>
+    <dimen name="text_size_29">@dimen/x58</dimen>
+    <dimen name="text_size_30">@dimen/x60</dimen>
+    <dimen name="text_size_32">@dimen/x64</dimen>
+    <dimen name="text_size_34">@dimen/x68</dimen>
+    <dimen name="text_size_36">@dimen/x72</dimen>
+    <dimen name="text_size_37">@dimen/x74</dimen>
+    <dimen name="text_size_38">@dimen/x76</dimen>
+    <dimen name="text_size_39">@dimen/x78</dimen>
+    <dimen name="text_size_40">@dimen/x80</dimen>
+    <dimen name="text_size_42">@dimen/x84</dimen>
+    <dimen name="text_size_44">@dimen/x88</dimen>
+    <dimen name="text_size_46">@dimen/x92</dimen>
+    <dimen name="text_size_48">@dimen/x96</dimen>
+    <dimen name="text_size_50">@dimen/x100</dimen>
+    <dimen name="text_size_51">@dimen/x102</dimen>
+    <dimen name="text_size_52">@dimen/x104</dimen>
+
+
+    <dimen name="button_radian_size">@dimen/x10</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+
+</resources>

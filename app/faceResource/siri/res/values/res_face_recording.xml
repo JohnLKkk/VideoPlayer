@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="face_recording">
+        <item>@drawable/face_recording_0</item>
+        <item>@drawable/face_recording_1</item>
+        <item>@drawable/face_recording_2</item>
+        <item>@drawable/face_recording_3</item>
+        <item>@drawable/face_recording_4</item>
+        <item>@drawable/face_recording_5</item>
+        <item>@drawable/face_recording_6</item>
+        <item>@drawable/face_recording_7</item>
+        <item>@drawable/face_recording_8</item>
+        <item>@drawable/face_recording_9</item>
+        <item>@drawable/face_recording_10</item>
+        <item>@drawable/face_recording_11</item>
+        <item>@drawable/face_recording_12</item>
+        <item>@drawable/face_recording_13</item>
+        <item>@drawable/face_recording_14</item>
+        <item>@drawable/face_recording_15</item>
+        <item>@drawable/face_recording_16</item>
+        <item>@drawable/face_recording_17</item>
+        <item>@drawable/face_recording_18</item>
+        <item>@drawable/face_recording_19</item>
+        <item>@drawable/face_recording_20</item>
+        <item>@drawable/face_recording_21</item>
+        <item>@drawable/face_recording_22</item>
+        <item>@drawable/face_recording_23</item>
+        <item>@drawable/face_recording_24</item>
+        <item>@drawable/face_recording_25</item>
+        <item>@drawable/face_recording_26</item>
+        <item>@drawable/face_recording_27</item>
+        <item>@drawable/face_recording_28</item>
+        <item>@drawable/face_recording_29</item>
+        <item>@drawable/face_recording_30</item>
+        <item>@drawable/face_recording_31</item>
+        <item>@drawable/face_recording_32</item>
+        <item>@drawable/face_recording_33</item>
+        <item>@drawable/face_recording_34</item>
+        <item>@drawable/face_recording_35</item>
+        <item>@drawable/face_recording_36</item>
+        <item>@drawable/face_recording_37</item>
+        <item>@drawable/face_recording_38</item>
+    </array>
+</resources>

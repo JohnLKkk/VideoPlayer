@@ -1,0 +1,18 @@
+<resources>
+
+    <style name="VideoBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#C9C9C9</item>
+        <item name="colorPrimaryDark">#C9C9C9</item>
+        <item name="colorAccent">#24252A</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+
+</resources>

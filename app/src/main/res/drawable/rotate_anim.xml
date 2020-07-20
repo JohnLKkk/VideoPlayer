@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="0"
+    android:toDegrees="360">
+<!--    <shape>-->
+<!--        <gradient-->
+<!--            android:endColor="#00000000"-->
+<!--            android:gradientRadius="60dp"-->
+<!--            android:startColor="#55000000"-->
+<!--            android:type="radial" />-->
+<!--    </shape>-->
+    <bitmap android:src="@drawable/test"/>
+</rotate>

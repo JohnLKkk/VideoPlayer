@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<array name="face_mz10500">
+		<item>@drawable/mz0001</item>
+		<item>@drawable/mz0002</item>
+		<item>@drawable/mz0003</item>
+		<item>@drawable/mz0004</item>
+		<item>@drawable/mz0005</item>
+		<item>@drawable/mz0006</item>
+		<item>@drawable/mz0007</item>
+		<item>@drawable/mz0008</item>
+		<item>@drawable/mz0009</item>
+		<item>@drawable/mz0010</item>
+		<item>@drawable/mz0011</item>
+		<item>@drawable/mz0012</item>
+		<item>@drawable/mz0013</item>
+		<item>@drawable/mz0014</item>
+		<item>@drawable/mz0015</item>
+		<item>@drawable/mz0016</item>
+		<item>@drawable/mz0017</item>
+		<item>@drawable/mz0018</item>
+		<item>@drawable/mz0019</item>
+		<item>@drawable/mz0020</item>
+	</array>
+</resources>

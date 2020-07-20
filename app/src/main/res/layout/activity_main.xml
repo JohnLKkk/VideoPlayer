@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:windowSoftInputMode="stateVisible|adjustResize">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="4">
+
+        <Button
+            android:onClick="onClickTest"
+            android:text="点击测试" />
+
+        <Button
+            android:onClick="onDialogClick"
+            android:text="弹窗测试" />
+
+        <Button
+            android:onClick="onBroadcastTest"
+            android:text="广播测试" />
+
+        <Button
+            android:onClick="onViewTest"
+            android:text="视图测试" />
+
+        <Button
+            android:onClick="viewpagerFragment"
+            android:text="ViewpagerFragment内容测试" />
+
+
+        <Button
+            android:onClick="notificationClick"
+            android:text="监听通知测试" />
+
+        <Button
+            android:onClick="onAudioRecorder"
+            android:text="Android原生录音测试" />
+
+        <Button
+            android:onClick="onBarrierFree"
+            android:text="无障碍服务测试" />
+
+        <ImageView
+            android:id="@+id/testImageView"
+            android:layout_margin="@dimen/x50"
+            android:background="@drawable/ic_play_audio"
+            android:onClick="onImageView" />
+
+        <Button
+            android:onClick="onPermissionTest"
+            android:text="权限测试" />
+
+        <Button
+            android:onClick="onOpenApp"
+            android:text="打开系统任意APP" />
+    </GridLayout>
+</FrameLayout>

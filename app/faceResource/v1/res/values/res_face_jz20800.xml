@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="face_jz20800">
+        <item>@drawable/jz0001</item>
+        <item>@drawable/jz0002</item>
+        <item>@drawable/jz0003</item>
+        <item>@drawable/jz0004</item>
+        <item>@drawable/jz0005</item>
+        <item>@drawable/jz0006</item>
+        <item>@drawable/jz0007</item>
+        <item>@drawable/jz0008</item>
+        <item>@drawable/jz0009</item>
+        <item>@drawable/jz0010</item>
+        <item>@drawable/jz0011</item>
+        <item>@drawable/jz0012</item>
+        <item>@drawable/jz0013</item>
+        <item>@drawable/jz0014</item>
+    </array>
+</resources>

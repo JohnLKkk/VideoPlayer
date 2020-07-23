@@ -24,6 +24,7 @@ android {
     }
     sourceSets {
         main {
+            res.srcDirs += ['../commonRes/dimen']
             jniLibs.srcDirs = ['libs']
 //            res.srcDirs+=['faceResource/v2']
             assets.srcDirs += ['faceResource/v5']

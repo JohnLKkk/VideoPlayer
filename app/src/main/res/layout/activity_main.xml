@@ -59,5 +59,8 @@
         <Button
             android:onClick="onOpenApp"
             android:text="打开系统任意APP" />
+        <Button
+            android:onClick="onScanDevicesIP"
+            android:text="扫描设备IP" />
     </GridLayout>
 </FrameLayout>

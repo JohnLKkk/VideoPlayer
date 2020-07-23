@@ -14,6 +14,7 @@ import com.example.testdemo.testModel.broadcast.BroadcastActivity
 import com.example.testdemo.testModel.notification.NotificationActivity
 import com.example.testdemo.testModel.permission.PermissionActivity
 import com.example.testdemo.testModel.popupWindow.PopupWindowActivity
+import com.example.testdemo.testModel.scanDevicesIP.ScanIPActivity
 import com.example.testdemo.testModel.startPhoneApp.StartPhoneAppActivity
 import com.example.testdemo.testModel.viewpager.ViewPagerActivity
 import com.example.testdemo.utlis.KLog
@@ -129,5 +130,9 @@ class MainActivity : AppCompatActivity() {
 
     fun onOpenApp(view: View) {
         startActivity(Intent(this, StartPhoneAppActivity::class.java))
+    }
+
+    fun onScanDevicesIP(view: View) {
+        startActivity(Intent(this, ScanIPActivity::class.java))
     }
 }

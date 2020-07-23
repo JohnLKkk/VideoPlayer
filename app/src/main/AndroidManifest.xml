@@ -57,6 +57,7 @@
         <activity android:name=".testModel.testView.TestViewActivity" />
         <activity android:name=".testModel.popupWindow.PopupWindowActivity"/>
         <activity android:name=".testModel.startPhoneApp.StartPhoneAppActivity"/>
+        <activity android:name=".testModel.scanDevicesIP.ScanIPActivity"/>
         <activity
             android:name=".testModel.permission.PermissionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

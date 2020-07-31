@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     android:columnCount="2"
     tools:context=".testModel.testView.TestViewActivity">
 
-    <Button
-        android:id="@+id/et1"
-        android:layout_width="700dp"
-        android:layout_height="match_parent"
-        android:text="111"
-        android:textSize="20sp" />
-
-    <Button
-        android:id="@+id/et2"
+    <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end|center_vertical"
-        android:minWidth="@dimen/x100"
-        android:text="222"
-        android:textSize="20sp" />
-</GridLayout>
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_bg1" />
+
+    <com.example.testdemo.testModel.testView.BitmapView
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center" />
+</FrameLayout>

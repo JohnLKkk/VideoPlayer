@@ -1,7 +1,7 @@
 package com.example.testdemo.testModel.testView
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
 
 class TestViewActivity : AppCompatActivity() {

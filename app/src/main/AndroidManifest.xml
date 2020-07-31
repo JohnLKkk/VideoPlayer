@@ -26,13 +26,10 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" /> <!-- bugly -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
 
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 接收开机广播需要的权限 -->
     <uses-permission-sdk-23 android:name="android.permission.INTERNET" />
@@ -48,16 +45,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".testModel.testAIDL.AIDLActivity"/>
+        <activity android:name=".testModel.ffmpeg.FFMPEGActivity"/>
+        <activity android:name=".testModel.testAIDL.AIDLActivity" />
         <activity android:name=".testModel.testAIDL.NetworkActivity" />
         <activity android:name=".testModel.audioRecorder.AudioRecorderActivity" />
         <activity android:name=".testModel.notification.NotificationActivity" />
         <activity android:name=".testModel.viewpager.ViewPagerActivity" />
-        <activity android:name=".testModel.barrierFree.BarrierFreeActivity"/>
-        <activity android:name=".testModel.testView.TestViewActivity" />
-        <activity android:name=".testModel.popupWindow.PopupWindowActivity"/>
-        <activity android:name=".testModel.startPhoneApp.StartPhoneAppActivity"/>
-        <activity android:name=".testModel.scanDevicesIP.ScanIPActivity"/>
+        <activity android:name=".testModel.barrierFree.BarrierFreeActivity" />
+        <activity
+            android:name=".testModel.testView.TestViewActivity"
+            android:theme="@style/ActivityDialogStyle" />
+        <activity android:name=".testModel.popupWindow.PopupWindowActivity" />
+        <activity android:name=".testModel.startPhoneApp.StartPhoneAppActivity" />
+        <activity android:name=".testModel.scanDevicesIP.ScanIPActivity" />
         <activity
             android:name=".testModel.permission.PermissionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -76,6 +76,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".testModel.notification.NotificationMonitorService"
             android:label="通知测试"
@@ -92,6 +93,7 @@
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility" />

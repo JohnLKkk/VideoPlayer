@@ -11,14 +11,15 @@ import androidx.core.content.ContextCompat
 import com.example.testdemo.testModel.audioRecorder.AudioRecorderActivity
 import com.example.testdemo.testModel.barrierFree.BarrierFreeActivity
 import com.example.testdemo.testModel.broadcast.BroadcastActivity
+import com.example.testdemo.testModel.ffmpeg.FFMPEGActivity
 import com.example.testdemo.testModel.notification.NotificationActivity
 import com.example.testdemo.testModel.permission.PermissionActivity
 import com.example.testdemo.testModel.popupWindow.PopupWindowActivity
 import com.example.testdemo.testModel.scanDevicesIP.ScanIPActivity
 import com.example.testdemo.testModel.startPhoneApp.StartPhoneAppActivity
+import com.example.testdemo.testModel.testView.TestViewActivity
 import com.example.testdemo.testModel.viewpager.ViewPagerActivity
 import com.example.testdemo.utlis.KLog
-import com.example.testdemo.testModel.testView.TestViewActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -29,11 +30,63 @@ import kotlinx.android.synthetic.main.activity_main.*
  *
  * 建议需要测试新的模块时，新建一个activity，不要删除旧的。
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
+    private var state = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        startActivity(Intent(this, StartPhoneAppActivity::class.java))
+        btn_1.setOnClickListener(this)
+        btn_2.setOnClickListener(this)
+        btn_3.setOnClickListener(this)
+        btn_4.setOnClickListener(this)
+        btn_5.setOnClickListener(this)
+        btn_6.setOnClickListener(this)
+        btn_7.setOnClickListener(this)
+        btn_8.setOnClickListener(this)
+        testImageView.setOnClickListener(this)
+        btn_9.setOnClickListener(this)
+        btn_10.setOnClickListener(this)
+        btn_11.setOnClickListener(this)
+        btn_12.setOnClickListener(this)
+        startActivity(Intent(this, FFMPEGActivity::class.java))
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.testImageView -> {
+                if (state) {
+                    testImageView.background = ContextCompat.getDrawable(this, R.drawable.ic_play_audio_anim)
+                    (testImageView.background as AnimationDrawable).start()
+                } else {
+                    testImageView.background = ContextCompat.getDrawable(this, R.drawable.ic_play_audio)
+                }
+                state = !state
+            }
+            R.id.btn_1 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(Intent().apply {
+                    action = "com.robot.app_ai.action.bootStartUp"
+                    setPackage("com.robot.app_ai")
+                    this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                })
+            } else {
+                startService(Intent().apply {
+                    action = "com.robot.app_ai.action.bootStartUp"
+                    setPackage("com.robot.app_ai")
+                    this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                })
+            }
+            R.id.btn_2 -> startActivity(Intent(this, PopupWindowActivity::class.java))
+            R.id.btn_3 -> startActivity(Intent(this, BroadcastActivity::class.java))
+            R.id.btn_4 -> startActivity(Intent(this, TestViewActivity::class.java))
+            R.id.btn_5 -> startActivity(Intent(this, ViewPagerActivity::class.java))
+            R.id.btn_6 -> startActivity(Intent(this, NotificationActivity::class.java))
+            R.id.btn_7 -> startActivity(Intent(this, AudioRecorderActivity::class.java))
+            R.id.btn_8 -> startActivity(Intent(this, BarrierFreeActivity::class.java))
+            R.id.btn_9 -> startActivity(Intent(this, PermissionActivity::class.java))
+            R.id.btn_10 -> startActivity(Intent(this, StartPhoneAppActivity::class.java))
+            R.id.btn_11 -> startActivity(Intent(this, ScanIPActivity::class.java))
+            R.id.btn_12 -> startActivity(Intent(this, FFMPEGActivity::class.java))
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -66,73 +119,5 @@ class MainActivity : AppCompatActivity() {
                 dimAmount = 0.0f
             }
         }
-    }
-
-    fun onClickTest(view: View) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(Intent().apply {
-                action = "com.robot.app_ai.action.bootStartUp"
-                setPackage("com.robot.app_ai")
-                this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            })
-        } else {
-            startService(Intent().apply {
-                action = "com.robot.app_ai.action.bootStartUp"
-                setPackage("com.robot.app_ai")
-                this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            })
-        }
-    }
-
-    fun viewpagerFragment(view: View) {
-        startActivity(Intent(this, ViewPagerActivity::class.java))
-    }
-
-    fun onDialogClick(view: View) {
-        startActivity(Intent(this, PopupWindowActivity::class.java))
-    }
-
-    fun notificationClick(view: View) {
-        startActivity(Intent(this, NotificationActivity::class.java))
-    }
-
-    fun onAudioRecorder(view: View) {
-        startActivity(Intent(this, AudioRecorderActivity::class.java))
-    }
-
-    fun onBroadcastTest(view: View) {
-        startActivity(Intent(this, BroadcastActivity::class.java))
-    }
-
-    fun onViewTest(view: View) {
-        startActivity(Intent(this, TestViewActivity::class.java))
-    }
-
-    fun onBarrierFree(view: View) {
-        startActivity(Intent(this, BarrierFreeActivity::class.java))
-    }
-
-    private var state = true
-
-    fun onImageView(view: View) {
-        if (state) {
-            testImageView.background = ContextCompat.getDrawable(this, R.drawable.ic_play_audio_anim)
-            (testImageView.background as AnimationDrawable).start()
-        } else {
-            testImageView.background = ContextCompat.getDrawable(this, R.drawable.ic_play_audio)
-        }
-        state = !state
-    }
-
-    fun onPermissionTest(view: View) {
-        startActivity(Intent(this, PermissionActivity::class.java))
-    }
-
-    fun onOpenApp(view: View) {
-        startActivity(Intent(this, StartPhoneAppActivity::class.java))
-    }
-
-    fun onScanDevicesIP(view: View) {
-        startActivity(Intent(this, ScanIPActivity::class.java))
     }
 }

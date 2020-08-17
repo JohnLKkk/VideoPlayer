@@ -22,6 +22,12 @@ class VideoPlayActivity : BaseDefaultActivity() {
         setActionBar("视频处理", true)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.onRelease()
+        uiControl.onRelease()
+    }
+
     override fun getLayoutID(): Int = R.layout.activity_video_play
 
     override fun isFullScreenWindow(): Boolean = true

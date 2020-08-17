@@ -14,30 +14,12 @@ import com.example.testdemo.utlis.KLog
  */
 class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
                          private val uiControl: VideoPlayUiControl) :
-        VideoPlayActivity.SelectFile, SurfaceHolder.Callback {
-    private val mediaPlayer = MediaPlayer()
-    private var surfaceHolder: SurfaceHolder? = null
+        VideoPlayActivity.SelectFile {
     private val mainHandler = Handler()
+    val playHandler = PlayVideoHandler()
 
     private var videoPath = ""
 
-    init {
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        mediaPlayer.setAudioAttributes(AudioAttributes.Builder().apply {
-            this.setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
-        }.build())
-    }
-
-    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-    }
-
-    override fun surfaceDestroyed(holder: SurfaceHolder?) {
-    }
-
-    override fun surfaceCreated(holder: SurfaceHolder?) {
-        mediaPlayer.reset()
-        mediaPlayer.setDisplay(holder)
-    }
 
     override fun selectCallback(path: String?) {
         if (path == null || path.isEmpty()) {
@@ -54,23 +36,16 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
             mActivity.openFileSelectTools(this)
             return
         }
-        playVideo(videoPath)
+        playHandler.prepare(videoPath)
+        playVideo()
     }
 
-    fun setSurfaceHolder(holder: SurfaceHolder) {
-        this.surfaceHolder = holder
-        holder.addCallback(this)
-    }
-
-    private fun playVideo(path: String) {
+    private fun playVideo() {
         KLog.d("即将播放的文件路径：$videoPath")
-        try {
-            mediaPlayer.reset()
-            mediaPlayer.setDataSource(path)
-            mediaPlayer.prepare()
-            mediaPlayer.start()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        uiControl.setVideoName(playHandler.playFile?.name ?: "---")
+        playHandler.start()
+    }
+    fun onRelease(){
+        playHandler.release()
     }
 }

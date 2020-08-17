@@ -1,12 +1,16 @@
 package com.example.testdemo.testModel.testView
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
+import com.example.testdemo.base.BaseDefaultActivity
 
-class TestViewActivity : AppCompatActivity() {
+class TestViewActivity : BaseDefaultActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_view)
+        setActionBar("视图测试",true)
     }
+
+    override fun getLayoutID(): Int = R.layout.activity_test_view
+
+    override fun isFullScreenWindow(): Boolean = true
 }

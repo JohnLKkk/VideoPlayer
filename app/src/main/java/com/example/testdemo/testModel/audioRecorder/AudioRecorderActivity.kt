@@ -8,25 +8,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
+import com.example.testdemo.base.BaseDefaultActivity
 import com.example.testdemo.utlis.KLog
 import com.example.testdemo.utlis.ToastUtils
 import com.example.testdemo.utlis.audioplayer.PcmFileUtil
 import com.example.testdemo.utlis.audioplayer.SimpleAudioTrack
 
-class AudioRecorderActivity : AppCompatActivity(), InnerAudioRecorder.AudioRecorderListener {
+class AudioRecorderActivity : BaseDefaultActivity(), InnerAudioRecorder.AudioRecorderListener {
     private val TAG = "Test-AudioRecorder-"
-    private var simpleAudioTrack= SimpleAudioTrack()
-    private var pcmFileUtil=  PcmFileUtil()
+    private var simpleAudioTrack = SimpleAudioTrack()
+    private var pcmFileUtil = PcmFileUtil()
 
     //用于保存测试的音频文件的文件名
     private val audioFileName = "audioRecorderTest"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_audio_recorder)
         simpleAudioTrack.init()
         checkPermission()
+        setActionBar("音频处理",true)
     }
+
+    override fun getLayoutID(): Int = R.layout.activity_audio_recorder
+
+    override fun isFullScreenWindow(): Boolean = true
 
     override fun onAudioData(data: ByteArray, start: Int, length: Int) {
         pcmFileUtil.createPcmFile(audioFileName, true)

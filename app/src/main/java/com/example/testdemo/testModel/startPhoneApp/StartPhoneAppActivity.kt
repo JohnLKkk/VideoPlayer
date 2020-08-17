@@ -8,16 +8,20 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
+import com.example.testdemo.base.BaseDefaultActivity
 import com.example.testdemo.utlis.ToastUtils
 import kotlinx.android.synthetic.main.activity_start_phone_app.*
 
-class StartPhoneAppActivity : AppCompatActivity() {
+class StartPhoneAppActivity : BaseDefaultActivity() {
     private val appItems = HashMap<String, ApplicationInfo>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_start_phone_app)
         getApps()
     }
+
+    override fun getLayoutID(): Int = R.layout.activity_start_phone_app
+
+    override fun isFullScreenWindow(): Boolean = true
 
     fun onStartApp(view: View) {
         val requestName = appNameEt.text.toString()

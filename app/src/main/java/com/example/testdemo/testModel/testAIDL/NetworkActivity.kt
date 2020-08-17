@@ -3,18 +3,22 @@ package com.example.testdemo.testModel.testAIDL
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
+import com.example.testdemo.base.BaseDefaultActivity
 import java.io.*
 import java.net.*
 import kotlin.concurrent.thread
 
-class NetworkActivity : AppCompatActivity() {
+class NetworkActivity : BaseDefaultActivity() {
     private val TAG = this::class.java.simpleName
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_network)
+        setActionBar("网络处理",true)
     }
+
+    override fun getLayoutID(): Int = R.layout.activity_network
+
+    override fun isFullScreenWindow(): Boolean = true
 
     fun createServer(view: View) {
 //        createTCPServer()

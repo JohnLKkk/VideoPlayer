@@ -7,13 +7,14 @@ import android.widget.FrameLayout
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
+import com.example.testdemo.base.BaseDefaultActivity
 
-class PopupWindowActivity : AppCompatActivity() {
+class PopupWindowActivity : BaseDefaultActivity() {
     private lateinit var mPopupWindow: PopupWindow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_popup_window)
+        setActionBar("弹窗测试")
         mPopupWindow = PopupWindow(
                 layoutInflater.inflate(R.layout.layout_skill_template_dialog, null),
                 FrameLayout.LayoutParams.WRAP_CONTENT,
@@ -22,6 +23,8 @@ class PopupWindowActivity : AppCompatActivity() {
         mPopupWindow.isOutsideTouchable=true
 //        mPopupWindow.showAtLocation(rootLayout, Gravity.CENTER, 0, 0)
     }
+
+    override fun getLayoutID(): Int = R.layout.activity_popup_window
 
     fun onClickBtn(view: View) {
 //        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return

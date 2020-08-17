@@ -14,20 +14,31 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.testdemo.R;
+import com.example.testdemo.base.BaseDefaultActivity;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends BaseDefaultActivity {
     private NotificationManager manager;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notification);
         manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        setActionBar("通知测试",true);
+    }
+
+    @Override
+    public int getLayoutID() {
+        return R.layout.activity_notification;
+    }
+
+    @Override
+    public boolean isFullScreenWindow() {
+        return true;
     }
 
     public void onOpenOntification(View view) {

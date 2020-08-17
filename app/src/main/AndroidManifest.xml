@@ -45,7 +45,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".testModel.ffmpeg.FFMPEGActivity"/>
+        <activity android:name=".testModel.ffmpeg.FFMPEGActivity" />
         <activity android:name=".testModel.testAIDL.AIDLActivity" />
         <activity android:name=".testModel.testAIDL.NetworkActivity" />
         <activity android:name=".testModel.audioRecorder.AudioRecorderActivity" />
@@ -99,5 +99,4 @@
                 android:resource="@xml/accessibility" />
         </service>
     </application>
-
 </manifest>

@@ -15,21 +15,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
+import com.example.testdemo.base.BaseDefaultActivity
 import com.example.testdemo.utlis.AppCode
 import com.example.testdemo.utlis.KLog
 import com.example.testdemo.utlis.ToastUtils
 
-class PermissionActivity : AppCompatActivity() {
+class PermissionActivity : BaseDefaultActivity() {
     private var permissionDialog: AlertDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_permission)
+        setActionBar("权限处理",true)
         if (checkPermission()) {
             if (checkFloatWindowPermission()) {
                 KLog.e("拿到全部权限！")
             }
         }
     }
+
+    override fun getLayoutID(): Int = R.layout.activity_permission
+
+    override fun isFullScreenWindow(): Boolean = true
 
     override fun onDestroy() {
         super.onDestroy()

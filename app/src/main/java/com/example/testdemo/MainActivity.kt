@@ -7,15 +7,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.example.testdemo.base.BaseDefaultActivity
 import com.example.testdemo.testModel.audioRecorder.AudioRecorderActivity
 import com.example.testdemo.testModel.barrierFree.BarrierFreeActivity
 import com.example.testdemo.testModel.broadcast.BroadcastActivity
-import com.example.testdemo.testModel.ffmpeg.FFMPEGActivity
+import com.example.testdemo.testModel.videoProcess.VideoPlayActivity
 import com.example.testdemo.testModel.notification.NotificationActivity
 import com.example.testdemo.testModel.permission.PermissionActivity
 import com.example.testdemo.testModel.popupWindow.PopupWindowActivity
@@ -23,7 +21,6 @@ import com.example.testdemo.testModel.scanDevicesIP.ScanIPActivity
 import com.example.testdemo.testModel.startPhoneApp.StartPhoneAppActivity
 import com.example.testdemo.testModel.testView.TestViewActivity
 import com.example.testdemo.testModel.viewpager.ViewPagerActivity
-import com.example.testdemo.utlis.KLog
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
@@ -55,7 +52,7 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_11.setOnClickListener(this)
         btn_12.setOnClickListener(this)
         setActionBar("测试模块")
-//        startActivity(Intent(this, FFMPEGActivity::class.java))
+        startActivity(Intent(this, VideoPlayActivity::class.java))
     }
 
     override fun getLayoutID(): Int = R.layout.activity_main
@@ -94,7 +91,7 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
             R.id.btn_9 -> startActivity(Intent(this, PermissionActivity::class.java))
             R.id.btn_10 -> startActivity(Intent(this, StartPhoneAppActivity::class.java))
             R.id.btn_11 -> startActivity(Intent(this, ScanIPActivity::class.java))
-            R.id.btn_12 -> startActivity(Intent(this, FFMPEGActivity::class.java))
+            R.id.btn_12 -> startActivity(Intent(this, VideoPlayActivity::class.java))
         }
     }
 }

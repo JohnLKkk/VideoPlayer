@@ -3,33 +3,57 @@ package com.example.testdemo.testModel.videoProcess
 import android.view.SurfaceView
 import android.view.View
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import com.example.testdemo.R
 
 /**
  * Created by Void on 2020/7/27 17:14
- *
  */
 class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClickListener {
     private lateinit var mPresenter: VideoPlayPresenter
+
+    //top_layout
     private var backIv: ImageView = mActivity.findViewById(R.id.backIv)
     private var videoNameTv: TextView = mActivity.findViewById(R.id.videoNameTv)
     private var settingIv: ImageView = mActivity.findViewById(R.id.settingIv)
+
     private var playIv: ImageView = mActivity.findViewById(R.id.playIV)
+    private var jumpTime: TextView = mActivity.findViewById(R.id.jumpTime)
     private val videoView: SurfaceView = mActivity.findViewById(R.id.videoView)
+
+    //bottom_layout
+    private val currentTime: TextView = mActivity.findViewById(R.id.currentTime)
+    private val endTime: TextView = mActivity.findViewById(R.id.endTime)
+    private val decodeType: TextView = mActivity.findViewById(R.id.decodeType)
+    private val videoScheduleView: SeekBar = mActivity.findViewById(R.id.videoScheduleView)
+    private val playBtn: ImageView = mActivity.findViewById(R.id.playBtn)
+    private val preBtn: ImageView = mActivity.findViewById(R.id.preBtn)
+    private val nextBtn: ImageView = mActivity.findViewById(R.id.nextBtn)
 
     init {
         backIv.setOnClickListener(this)
-        playIv.setOnClickListener(this)
         settingIv.setOnClickListener(this)
+
+        playIv.setOnClickListener(this)
+
+        decodeType.setOnClickListener(this)
+        playBtn.setOnClickListener(this)
+        preBtn.setOnClickListener(this)
+        nextBtn.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.backIv -> mActivity.finish()
-            R.id.playIV -> mPresenter.onClickPlay()
             R.id.settingIv -> {
             }
+            R.id.playIV -> mPresenter.onClickPlay()
+            R.id.decodeType -> {
+            }
+            R.id.playBtn -> mPresenter.changePlayState()
+            R.id.preBtn -> mPresenter.preVideo()
+            R.id.nextBtn -> mPresenter.nextVideo()
         }
     }
 

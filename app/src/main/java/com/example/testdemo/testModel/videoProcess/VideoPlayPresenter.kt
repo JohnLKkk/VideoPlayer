@@ -45,7 +45,20 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
         uiControl.setVideoName(playHandler.playFile?.name ?: "---")
         playHandler.start()
     }
-    fun onRelease(){
+
+    fun changePlayState() {
+
+    }
+
+    fun preVideo() {
+
+    }
+
+    fun nextVideo() {
+
+    }
+
+    fun onRelease() {
         playHandler.release()
     }
 }

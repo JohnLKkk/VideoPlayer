@@ -1,13 +1,16 @@
 package com.example.testdemo.testModel.popupWindow
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.PopupWindow
-import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
 import com.example.testdemo.base.BaseDefaultActivity
+
 
 class PopupWindowActivity : BaseDefaultActivity() {
     private lateinit var mPopupWindow: PopupWindow
@@ -21,7 +24,8 @@ class PopupWindowActivity : BaseDefaultActivity() {
                 FrameLayout.LayoutParams.WRAP_CONTENT
         )
         mPopupWindow.isOutsideTouchable=true
-//        mPopupWindow.showAtLocation(rootLayout, Gravity.CENTER, 0, 0)
+        mPopupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        mPopupWindow.elevation = 10f
     }
 
     override fun getLayoutID(): Int = R.layout.activity_popup_window

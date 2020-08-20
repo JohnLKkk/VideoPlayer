@@ -37,17 +37,14 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
             return
         }
         playHandler.prepare(videoPath)
-        playVideo()
     }
 
     private fun playVideo() {
         KLog.d("即将播放的文件路径：$videoPath")
-        uiControl.setVideoName(playHandler.playFile?.name ?: "---")
+        uiControl.setVideoName(playHandler.fileInfo.name)
+        uiControl.setPlayTime(2, playHandler.getCurrentTime())
+        uiControl.setPlayTime(3, playHandler.getMaxTime())
         playHandler.start()
-    }
-
-    fun changePlayState() {
-
     }
 
     fun preVideo() {

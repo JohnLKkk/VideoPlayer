@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.example.testdemo.R
 
 /**
@@ -46,12 +47,11 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.backIv -> mActivity.finish()
-            R.id.settingIv -> {
-            }
+            R.id.settingIv,
             R.id.playIV -> mPresenter.onClickPlay()
             R.id.decodeType -> {
             }
-            R.id.playBtn -> mPresenter.changePlayState()
+            R.id.playBtn -> changePlayState()
             R.id.preBtn -> mPresenter.preVideo()
             R.id.nextBtn -> mPresenter.nextVideo()
         }
@@ -66,7 +66,32 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
         videoNameTv.text = name
     }
 
-    fun onRelease() {
+    /**
+     * @param type 类型:
+     * 1设置跳转的显示时间 jumpTime
+     * 2设置当前播放的时间进度 currentTime
+     * 3设置结束播放的时间进度 endTime
+     * @param position 时间，单位秒
+     */
+    fun setPlayTime(type: Int, position: Int) {
+        when (type) {
+            1 -> jumpTime.text = position.toString()
+            2 -> currentTime.text = position.toString()
+            3 -> endTime.text = position.toString()
+            else -> return
+        }
+    }
 
+    fun onRelease() {
+    }
+
+    private fun changePlayState() {
+        if (mPresenter.playHandler.isPlaying()) {
+            playBtn.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_stop_play)
+            mPresenter.playHandler.stop()
+        } else {
+            playBtn.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_start_play)
+            mPresenter.playHandler.start()
+        }
     }
 }

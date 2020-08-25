@@ -4,7 +4,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.view.SurfaceHolder
-import java.io.File
+import com.example.testdemo.utlis.KLog
 
 /**
  * Created by Void on 2020/8/17 18:02
@@ -13,7 +13,7 @@ import java.io.File
 class PlayVideoHandler : SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
     private val mediaPlayer = MediaPlayer()
     private var surfaceHolder: SurfaceHolder? = null
-    val fileInfo=FileAttributes()
+    val fileInfo = FileAttributes()
 
     init {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
@@ -30,28 +30,33 @@ class PlayVideoHandler : SurfaceHolder.Callback, MediaPlayer.OnPreparedListener 
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
-        mediaPlayer.setDisplay(holder)
+        if (fileInfo.isValid) {
+            mediaPlayer.setDisplay(holder)
+            mediaPlayer.prepare()
+        }
+        KLog.e("surfaceCreated")
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
         start()
+        KLog.e("onPrepared")
     }
 
     fun setSurfaceHolder(holder: SurfaceHolder) {
         this.surfaceHolder = holder
         holder.addCallback(this)
+        KLog.e("setSurfaceHolder")
     }
 
     /**
      * 播放准备
      * 必须先调用prepare()后才能调用start()，否则播放异常
      */
-    fun prepare(path: String) {
+    fun setDataPath(path: String) {
         fileInfo.initData(path)
         try {
             mediaPlayer.reset()
             mediaPlayer.setDataSource(path)
-            mediaPlayer.prepare()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -77,9 +82,9 @@ class PlayVideoHandler : SurfaceHolder.Callback, MediaPlayer.OnPreparedListener 
 
     fun isPlaying(): Boolean = mediaPlayer.isPlaying
 
-    fun getCurrentTime():Int=mediaPlayer.currentPosition
+    fun getCurrentTime(): Int = mediaPlayer.currentPosition
 
-    fun getMaxTime():Int=mediaPlayer.currentPosition
+    fun getMaxTime(): Int = mediaPlayer.currentPosition
 
     fun release() {
         mediaPlayer.release()

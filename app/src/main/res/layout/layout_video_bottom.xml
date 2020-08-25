@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/x30"
+        android:layout_marginTop="@dimen/x10"
         android:orientation="horizontal">
 
         <TextView
@@ -45,7 +45,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x40"
+        android:layout_marginTop="@dimen/x50"
         android:layout_marginBottom="@dimen/x20">
 
         <ImageView

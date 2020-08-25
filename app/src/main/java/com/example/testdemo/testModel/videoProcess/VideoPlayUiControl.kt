@@ -27,7 +27,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     private val currentTime: TextView = mActivity.findViewById(R.id.currentTime)
     private val endTime: TextView = mActivity.findViewById(R.id.endTime)
     private val decodeType: TextView = mActivity.findViewById(R.id.decodeType)
-    private val videoScheduleView: SeekBar = mActivity.findViewById(R.id.videoScheduleView)
+    private val videoProgressView: SeekBar = mActivity.findViewById(R.id.videoScheduleView)
     private val playBtn: ImageView = mActivity.findViewById(R.id.playBtn)
     private val preBtn: ImageView = mActivity.findViewById(R.id.preBtn)
     private val nextBtn: ImageView = mActivity.findViewById(R.id.nextBtn)

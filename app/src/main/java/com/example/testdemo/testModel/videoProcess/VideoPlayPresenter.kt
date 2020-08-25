@@ -4,6 +4,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.view.SurfaceHolder
 import com.example.testdemo.utlis.KLog
@@ -20,7 +21,6 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
 
     private var videoPath = ""
 
-
     override fun selectCallback(path: String?) {
         if (path == null || path.isEmpty()) {
             KLog.e("视频文件路径为null！")
@@ -36,7 +36,7 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
             mActivity.openFileSelectTools(this)
             return
         }
-        playHandler.prepare(videoPath)
+        playHandler.setDataPath(videoPath)
     }
 
     private fun playVideo() {

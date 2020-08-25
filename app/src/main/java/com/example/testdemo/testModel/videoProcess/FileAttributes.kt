@@ -15,6 +15,7 @@ class FileAttributes {
     var path: String = ""
     var size: Long = 0L
     var fileType: String = ""
+    var isValid=false
     lateinit var playFile: File
     fun initData(path: String) {
         playFile = File(path)
@@ -25,6 +26,7 @@ class FileAttributes {
             name = substring(0, index)
             fileType = substring(index, length)
         }
+        isValid=true
     }
 
 }

@@ -66,14 +66,19 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
         videoNameTv.text = name
     }
 
+    fun onStartPlay() {
+        playIv.visibility = View.GONE
+    }
+
     /**
      * @param type 类型:
      * 1设置跳转的显示时间 jumpTime
      * 2设置当前播放的时间进度 currentTime
      * 3设置结束播放的时间进度 endTime
-     * @param position 时间，单位秒
+     * @param position 时间，单位 ms
      */
     fun setPlayTime(type: Int, position: Int) {
+
         when (type) {
             1 -> jumpTime.text = position.toString()
             2 -> currentTime.text = position.toString()
@@ -88,7 +93,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     private fun changePlayState() {
         if (mPresenter.playHandler.isPlaying()) {
             playBtn.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_stop_play)
-            mPresenter.playHandler.stop()
+            mPresenter.playHandler.pause()
         } else {
             playBtn.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_start_play)
             mPresenter.playHandler.start()

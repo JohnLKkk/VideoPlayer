@@ -3,6 +3,7 @@ package com.example.testdemo.testModel.videoProcess
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import com.example.testdemo.App
 import com.example.testdemo.R
 import com.example.testdemo.base.BaseDefaultActivity
@@ -20,6 +21,7 @@ class VideoPlayActivity : BaseDefaultActivity() {
         mPresenter = VideoPlayPresenter(this, uiControl)
         uiControl.setPresenter(mPresenter)
         setActionBar("视频处理", true)
+        if (!TextUtils.isEmpty(mPresenter.videoPath))mPresenter.onClickPlay()
     }
 
     override fun onDestroy() {

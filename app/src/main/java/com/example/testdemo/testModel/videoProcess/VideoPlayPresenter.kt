@@ -1,12 +1,7 @@
 package com.example.testdemo.testModel.videoProcess
 
-import android.media.AudioAttributes
-import android.media.AudioManager
-import android.media.MediaPlayer
 import android.os.Handler
-import android.os.Looper
 import android.text.TextUtils
-import android.view.SurfaceHolder
 import com.example.testdemo.utlis.KLog
 
 /**
@@ -15,11 +10,12 @@ import com.example.testdemo.utlis.KLog
  */
 class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
                          private val uiControl: VideoPlayUiControl) :
-        VideoPlayActivity.SelectFile {
+        VideoPlayActivity.SelectFile,
+        PlayStateListener {
     private val mainHandler = Handler()
-    val playHandler = PlayVideoHandler()
-
-    private var videoPath = ""
+    val playHandler = PlayVideoHandler(this)
+    var videoPath = ""
+//    var videoPath = "/storage/emulated/0/smallfoot.mp4"
 
     override fun selectCallback(path: String?) {
         if (path == null || path.isEmpty()) {
@@ -31,20 +27,34 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
         mainHandler.post { onClickPlay() }
     }
 
+    override fun onPlayStart() {
+        KLog.d("即将播放的文件路径：$videoPath")
+        uiControl.onStartPlay()
+        uiControl.setVideoName(playHandler.fileInfo.name)
+        mainHandler.postDelayed({
+            uiControl.setPlayTime(2, playHandler.getCurrentTime())
+            uiControl.setPlayTime(3, playHandler.getMaxTime())
+        },1000)
+    }
+
+    override fun onPlayPaused() {
+    }
+
+    override fun onPlayStop() {
+    }
+
+    override fun onPlayEnd() {
+    }
+
+    override fun onPlayRelease() {
+    }
+
     fun onClickPlay() {
         if (TextUtils.isEmpty(videoPath)) {//视频地址为空，进入选择路径流程
             mActivity.openFileSelectTools(this)
             return
         }
         playHandler.setDataPath(videoPath)
-    }
-
-    private fun playVideo() {
-        KLog.d("即将播放的文件路径：$videoPath")
-        uiControl.setVideoName(playHandler.fileInfo.name)
-        uiControl.setPlayTime(2, playHandler.getCurrentTime())
-        uiControl.setPlayTime(3, playHandler.getMaxTime())
-        playHandler.start()
     }
 
     fun preVideo() {

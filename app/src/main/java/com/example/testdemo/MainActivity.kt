@@ -23,6 +23,7 @@ import com.example.testdemo.testModel.testView.TestViewActivity
 import com.example.testdemo.testModel.viewpager.ViewPagerActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.util.*
 
 
 /**
@@ -52,7 +53,12 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_11.setOnClickListener(this)
         btn_12.setOnClickListener(this)
         setActionBar("测试模块")
-        startActivity(Intent(this, VideoPlayActivity::class.java))
+
+
+
+
+
+//        startActivity(Intent(this, VideoPlayActivity::class.java))
     }
 
     override fun getLayoutID(): Int = R.layout.activity_main

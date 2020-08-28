@@ -10,7 +10,8 @@ import com.example.testdemo.utlis.KLog
  * Created by Void on 2020/8/17 18:02
  * 播放助手
  */
-class PlayVideoHandler : SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
+class PlayVideoHandler(val playStateListener: PlayStateListener?) :
+        SurfaceHolder.Callback {
     private val mediaPlayer = MediaPlayer()
     private var surfaceHolder: SurfaceHolder? = null
     val fileInfo = FileAttributes()
@@ -20,7 +21,13 @@ class PlayVideoHandler : SurfaceHolder.Callback, MediaPlayer.OnPreparedListener 
         mediaPlayer.setAudioAttributes(AudioAttributes.Builder().apply {
             this.setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
         }.build())
-        mediaPlayer.setOnPreparedListener(this)
+        mediaPlayer.setOnPreparedListener {
+            start()
+            playStateListener?.onPlayStart()
+        }
+        mediaPlayer.setOnCompletionListener {
+            playStateListener?.onPlayEnd()
+        }
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
@@ -34,23 +41,14 @@ class PlayVideoHandler : SurfaceHolder.Callback, MediaPlayer.OnPreparedListener 
             mediaPlayer.setDisplay(holder)
             mediaPlayer.prepare()
         }
-        KLog.e("surfaceCreated")
-    }
-
-    override fun onPrepared(mp: MediaPlayer?) {
-        start()
-        KLog.e("onPrepared")
     }
 
     fun setSurfaceHolder(holder: SurfaceHolder) {
-        this.surfaceHolder = holder
         holder.addCallback(this)
-        KLog.e("setSurfaceHolder")
     }
 
     /**
      * 播放准备
-     * 必须先调用prepare()后才能调用start()，否则播放异常
      */
     fun setDataPath(path: String) {
         fileInfo.initData(path)
@@ -71,10 +69,11 @@ class PlayVideoHandler : SurfaceHolder.Callback, MediaPlayer.OnPreparedListener 
         }
     }
 
-    fun stop() {
+    fun pause() {
+        playStateListener?.onPlayPaused()
         if (!isPlaying()) return
         try {
-            mediaPlayer.stop()
+            mediaPlayer.pause()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -87,6 +86,7 @@ class PlayVideoHandler : SurfaceHolder.Callback, MediaPlayer.OnPreparedListener 
     fun getMaxTime(): Int = mediaPlayer.currentPosition
 
     fun release() {
+        mediaPlayer.stop()
         mediaPlayer.release()
         surfaceHolder?.removeCallback(this)
     }

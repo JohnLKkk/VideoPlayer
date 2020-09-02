@@ -52,6 +52,7 @@
         <activity android:name=".testModel.notification.NotificationActivity" />
         <activity android:name=".testModel.viewpager.ViewPagerActivity" />
         <activity android:name=".testModel.barrierFree.BarrierFreeActivity" />
+        <activity android:name=".testModel.onClickTest.ClickActivity" />
         <activity
             android:name=".testModel.testView.TestViewActivity"
             android:theme="@style/ActivityDialogStyle" />

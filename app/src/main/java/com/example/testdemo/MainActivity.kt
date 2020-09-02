@@ -15,6 +15,7 @@ import com.example.testdemo.testModel.barrierFree.BarrierFreeActivity
 import com.example.testdemo.testModel.broadcast.BroadcastActivity
 import com.example.testdemo.testModel.videoProcess.VideoPlayActivity
 import com.example.testdemo.testModel.notification.NotificationActivity
+import com.example.testdemo.testModel.onClickTest.ClickActivity
 import com.example.testdemo.testModel.permission.PermissionActivity
 import com.example.testdemo.testModel.popupWindow.PopupWindowActivity
 import com.example.testdemo.testModel.scanDevicesIP.ScanIPActivity
@@ -53,12 +54,7 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_11.setOnClickListener(this)
         btn_12.setOnClickListener(this)
         setActionBar("测试模块")
-
-
-
-
-
-//        startActivity(Intent(this, VideoPlayActivity::class.java))
+        startActivity(Intent(this, VideoPlayActivity::class.java))
     }
 
     override fun getLayoutID(): Int = R.layout.activity_main
@@ -74,19 +70,7 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
                 }
                 state = !state
             }
-            R.id.btn_1 -> {
-                val apkFile = File(Environment.getExternalStorageDirectory().path + "/wyt/update/103.apk")
-                val intent = Intent(Intent.ACTION_VIEW)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    val contentUri = FileProvider.getUriForFile(applicationContext, applicationContext.packageName + ".fileProvider", apkFile)
-                    intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
-                } else {
-                    intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive")
-                }
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-            }
+            R.id.btn_1 -> startActivity(Intent(this, ClickActivity::class.java))
             R.id.btn_2 -> startActivity(Intent(this, PopupWindowActivity::class.java))
             R.id.btn_3 -> startActivity(Intent(this, BroadcastActivity::class.java))
             R.id.btn_4 -> startActivity(Intent(this, TestViewActivity::class.java))

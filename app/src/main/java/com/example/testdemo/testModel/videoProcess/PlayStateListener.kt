@@ -10,4 +10,5 @@ interface PlayStateListener {
     fun onPlayStop()
     fun onPlayEnd()
     fun onPlayRelease()
+    fun onPlayTime(time:Int)
 }

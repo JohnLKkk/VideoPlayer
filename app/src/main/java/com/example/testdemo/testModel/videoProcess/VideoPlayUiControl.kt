@@ -7,11 +7,13 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
+import com.example.testdemo.utlis.TimeUtils
 
 /**
  * Created by Void on 2020/7/27 17:14
  */
-class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClickListener {
+class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClickListener,
+        SeekBar.OnSeekBarChangeListener {
     private lateinit var mPresenter: VideoPlayPresenter
 
     //top_layout
@@ -26,7 +28,6 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     //bottom_layout
     private val currentTime: TextView = mActivity.findViewById(R.id.currentTime)
     private val endTime: TextView = mActivity.findViewById(R.id.endTime)
-    private val decodeType: TextView = mActivity.findViewById(R.id.decodeType)
     private val videoProgressView: SeekBar = mActivity.findViewById(R.id.videoScheduleView)
     private val playBtn: ImageView = mActivity.findViewById(R.id.playBtn)
     private val preBtn: ImageView = mActivity.findViewById(R.id.preBtn)
@@ -38,7 +39,6 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
 
         playIv.setOnClickListener(this)
 
-        decodeType.setOnClickListener(this)
         playBtn.setOnClickListener(this)
         preBtn.setOnClickListener(this)
         nextBtn.setOnClickListener(this)
@@ -49,8 +49,6 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
             R.id.backIv -> mActivity.finish()
             R.id.settingIv,
             R.id.playIV -> mPresenter.onClickPlay()
-            R.id.decodeType -> {
-            }
             R.id.playBtn -> changePlayState()
             R.id.preBtn -> mPresenter.preVideo()
             R.id.nextBtn -> mPresenter.nextVideo()
@@ -71,6 +69,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     }
 
     /**
+     * 设置时间的显示
      * @param type 类型:
      * 1设置跳转的显示时间 jumpTime
      * 2设置当前播放的时间进度 currentTime
@@ -78,11 +77,11 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
      * @param position 时间，单位 ms
      */
     fun setPlayTime(type: Int, position: Int) {
-
+        val tmp=position/1000L
         when (type) {
-            1 -> jumpTime.text = position.toString()
-            2 -> currentTime.text = position.toString()
-            3 -> endTime.text = position.toString()
+            1 -> jumpTime.text = TimeUtils.formatTimeS(tmp)
+            2 -> currentTime.text = TimeUtils.formatTimeS(tmp)
+            3 -> endTime.text = TimeUtils.formatTimeS(tmp)
             else -> return
         }
     }
@@ -98,5 +97,17 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
             playBtn.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_start_play)
             mPresenter.playHandler.start()
         }
+    }
+
+    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        TODO("Not yet implemented")
     }
 }

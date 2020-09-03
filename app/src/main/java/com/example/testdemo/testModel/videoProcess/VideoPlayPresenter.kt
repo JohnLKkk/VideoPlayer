@@ -1,6 +1,7 @@
 package com.example.testdemo.testModel.videoProcess
 
 import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import com.example.testdemo.utlis.KLog
 
@@ -12,10 +13,11 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
                          private val uiControl: VideoPlayUiControl) :
         VideoPlayActivity.SelectFile,
         PlayStateListener {
-    private val mainHandler = Handler()
+    private val mainHandler = Handler(Looper.getMainLooper())
     val playHandler = PlayVideoHandler(this)
-    var videoPath = ""
-//    var videoPath = "/storage/emulated/0/smallfoot.mp4"
+
+    //    var videoPath = ""
+    var videoPath = "/storage/emulated/0/smallfoot.mp4"
 
     override fun selectCallback(path: String?) {
         if (path == null || path.isEmpty()) {
@@ -34,7 +36,7 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
         mainHandler.postDelayed({
             uiControl.setPlayTime(2, playHandler.getCurrentTime())
             uiControl.setPlayTime(3, playHandler.getMaxTime())
-        },1000)
+        }, 1000)
     }
 
     override fun onPlayPaused() {
@@ -47,6 +49,12 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
     }
 
     override fun onPlayRelease() {
+    }
+
+    override fun onPlayTime(time: Int) {
+        mainHandler.post {
+            uiControl.setPlayTime(2, time)
+        }
     }
 
     fun onClickPlay() {

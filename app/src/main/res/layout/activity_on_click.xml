@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:focusable="true"
-    android:orientation="vertical"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     android:windowSoftInputMode="stateVisible|adjustResize">
 
     <EditText
@@ -19,7 +19,7 @@
         android:textColor="@android:color/black" />
 
     <Button
-        android:id="@+id/btn_1"
+        android:id="@+id/onClickTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="点击测试" />

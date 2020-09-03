@@ -2,18 +2,13 @@ package com.example.testdemo
 
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.example.testdemo.base.BaseDefaultActivity
 import com.example.testdemo.testModel.audioRecorder.AudioRecorderActivity
 import com.example.testdemo.testModel.barrierFree.BarrierFreeActivity
 import com.example.testdemo.testModel.broadcast.BroadcastActivity
-import com.example.testdemo.testModel.videoProcess.VideoPlayActivity
 import com.example.testdemo.testModel.notification.NotificationActivity
 import com.example.testdemo.testModel.onClickTest.ClickActivity
 import com.example.testdemo.testModel.permission.PermissionActivity
@@ -21,10 +16,9 @@ import com.example.testdemo.testModel.popupWindow.PopupWindowActivity
 import com.example.testdemo.testModel.scanDevicesIP.ScanIPActivity
 import com.example.testdemo.testModel.startPhoneApp.StartPhoneAppActivity
 import com.example.testdemo.testModel.testView.TestViewActivity
+import com.example.testdemo.testModel.videoProcess.VideoPlayActivity
 import com.example.testdemo.testModel.viewpager.ViewPagerActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
-import java.util.*
 
 
 /**

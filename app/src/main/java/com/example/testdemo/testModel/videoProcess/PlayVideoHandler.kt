@@ -10,10 +10,11 @@ import com.example.testdemo.utlis.KLog
  * Created by Void on 2020/8/17 18:02
  * 播放助手
  */
-class PlayVideoHandler(val playStateListener: PlayStateListener?) :
-        SurfaceHolder.Callback {
+class PlayVideoHandler(private val playStateListener: PlayStateListener?) : SurfaceHolder.Callback {
     private val mediaPlayer = MediaPlayer()
     private var surfaceHolder: SurfaceHolder? = null
+    private var listenerThread: ListenerPlayTime? = null
+    private var isReady = false
     val fileInfo = FileAttributes()
 
     init {
@@ -23,6 +24,11 @@ class PlayVideoHandler(val playStateListener: PlayStateListener?) :
         }.build())
         mediaPlayer.setOnPreparedListener {
             start()
+            isReady = true
+            if (listenerThread == null) {
+                listenerThread = ListenerPlayTime()
+                listenerThread?.start()
+            }
             playStateListener?.onPlayStart()
         }
         mediaPlayer.setOnCompletionListener {
@@ -60,6 +66,7 @@ class PlayVideoHandler(val playStateListener: PlayStateListener?) :
         }
     }
 
+    @Synchronized
     fun start() {
         if (isPlaying()) return
         try {
@@ -69,6 +76,7 @@ class PlayVideoHandler(val playStateListener: PlayStateListener?) :
         }
     }
 
+    @Synchronized
     fun pause() {
         playStateListener?.onPlayPaused()
         if (!isPlaying()) return
@@ -79,15 +87,36 @@ class PlayVideoHandler(val playStateListener: PlayStateListener?) :
         }
     }
 
+    @Synchronized
     fun isPlaying(): Boolean = mediaPlayer.isPlaying
 
+    @Synchronized
     fun getCurrentTime(): Int = mediaPlayer.currentPosition
 
-    fun getMaxTime(): Int = mediaPlayer.currentPosition
+    @Synchronized
+    fun getMaxTime(): Int = mediaPlayer.duration
 
     fun release() {
+        isReady = false
         mediaPlayer.stop()
         mediaPlayer.release()
         surfaceHolder?.removeCallback(this)
     }
+
+    inner class ListenerPlayTime : Thread() {
+        override fun run() {
+            super.run()
+            while (isReady) {
+                if (playStateListener == null) return
+                playStateListener.onPlayTime(getCurrentTime())
+                sleep(500)
+            }
+        }
+    }
+
+//    interface PlayStateListener {
+//
+//        fun onPlayTimeListener()
+//    }
+
 }

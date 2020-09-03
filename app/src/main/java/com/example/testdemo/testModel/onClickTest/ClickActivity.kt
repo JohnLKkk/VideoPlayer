@@ -14,7 +14,7 @@ class ClickActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_click)
-        btn_1.setOnClickListener { onInputTest() }
+        onClickTest.setOnClickListener { onInputTest() }
     }
 
     fun onTestClick() {

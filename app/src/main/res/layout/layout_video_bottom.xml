@@ -37,8 +37,10 @@
             android:layout_toStartOf="@id/endTime"
             android:layout_toEndOf="@id/currentTime"
             android:paddingStart="@dimen/x30"
+            android:paddingTop="@dimen/x10"
             android:paddingEnd="@dimen/x40"
-            android:progress="100" />
+            android:paddingBottom="@dimen/x10"
+            android:progress="0" />
     </RelativeLayout>
 
     <RelativeLayout

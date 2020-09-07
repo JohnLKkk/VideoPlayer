@@ -86,6 +86,10 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) : Surf
             e.printStackTrace()
         }
     }
+    @Synchronized
+    fun seekTo(time:Int){
+        mediaPlayer.seekTo(time)
+    }
 
     @Synchronized
     fun isPlaying(): Boolean = mediaPlayer.isPlaying
@@ -101,6 +105,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) : Surf
         mediaPlayer.stop()
         mediaPlayer.release()
         surfaceHolder?.removeCallback(this)
+
     }
 
     inner class ListenerPlayTime : Thread() {

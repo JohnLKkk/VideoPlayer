@@ -7,21 +7,18 @@ package com.example.testdemo.utlis
 object TimeUtils {
     @JvmStatic
     fun formatTimeS(seconds: Long): String? {
-        var temp: Int
         val sb = StringBuffer()
         if (seconds > 3600) {
-            temp = (seconds / 3600).toInt()
+            val temp = (seconds / 3600).toInt()
             sb.append(if (seconds / 3600 < 10) "0$temp:" else "$temp:")
-            temp = (seconds % 3600 / 60).toInt()
-            temp=changeSeconds(seconds, temp, sb)
+            changeSeconds(seconds, seconds % 3600 / 60, sb)
         } else {
-            temp = (seconds % 3600 / 60).toInt()
-            temp=changeSeconds(seconds, temp, sb)
+            changeSeconds(seconds, seconds % 3600 / 60, sb)
         }
         return sb.toString()
     }
 
-    private fun changeSeconds(seconds: Long, temp: Int, sb: StringBuffer): Int {
+    private fun changeSeconds(seconds: Long, temp: Long, sb: StringBuffer): Int {
         sb.append(if (temp < 10) "0$temp:" else "$temp:")
         val tmp: Int = (seconds % 3600 % 60).toInt()
         sb.append(if (tmp < 10) "0$tmp" else "" + tmp)

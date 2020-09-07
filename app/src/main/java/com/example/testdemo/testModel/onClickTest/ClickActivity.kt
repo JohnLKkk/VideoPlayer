@@ -1,8 +1,12 @@
 package com.example.testdemo.testModel.onClickTest
 
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
+import com.example.testdemo.utlis.KLog
 import kotlinx.android.synthetic.main.activity_on_click.*
 
 /**
@@ -10,7 +14,6 @@ import kotlinx.android.synthetic.main.activity_on_click.*
  *
  */
 class ClickActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_click)
@@ -52,4 +55,18 @@ class ClickActivity : AppCompatActivity() {
     private fun onInputTest() {
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        val action = event?.actionMasked ?: -1
+        event?.action
+        val index = event?.actionIndex ?: -1
+        when (action) {
+            MotionEvent.ACTION_DOWN,
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_POINTER_DOWN,
+            MotionEvent.ACTION_POINTER_UP -> {
+                KLog.e("action:$action;index:$index")
+            }
+        }
+        return false
+    }
 }

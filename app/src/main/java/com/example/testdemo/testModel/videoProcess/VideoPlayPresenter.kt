@@ -76,4 +76,20 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
     fun onRelease() {
         playHandler.release()
     }
+
+    /**
+     * 跳转到选中的时间
+     * @param time 进度百分比  0-100
+     * */
+    fun goSelectedTime(time: Int) {
+        if (time < 0 || time > 100) {
+            KLog.e("目标进度百分比无效")
+            return
+        }
+        val tmp = playHandler.getMaxTime() * time / 100
+        playHandler.seekTo(tmp)
+        uiControl.setPlayTime(2, tmp)
+        KLog.d("当前时间索引：$time")
+    }
+
 }

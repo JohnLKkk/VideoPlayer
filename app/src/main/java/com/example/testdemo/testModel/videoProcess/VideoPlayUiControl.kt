@@ -1,5 +1,7 @@
 package com.example.testdemo.testModel.videoProcess
 
+import android.os.Handler
+import android.os.Looper
 import android.view.SurfaceView
 import android.view.View
 import android.widget.ImageView
@@ -7,6 +9,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
+import com.example.testdemo.utlis.KLog
 import com.example.testdemo.utlis.TimeUtils
 
 /**
@@ -32,6 +35,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     private val playBtn: ImageView = mActivity.findViewById(R.id.playBtn)
     private val preBtn: ImageView = mActivity.findViewById(R.id.preBtn)
     private val nextBtn: ImageView = mActivity.findViewById(R.id.nextBtn)
+    private val mHandler = Handler(Looper.getMainLooper())
 
     init {
         backIv.setOnClickListener(this)
@@ -42,6 +46,8 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
         playBtn.setOnClickListener(this)
         preBtn.setOnClickListener(this)
         nextBtn.setOnClickListener(this)
+
+        videoProgressView.setOnSeekBarChangeListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -77,9 +83,17 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
      * @param position 时间，单位 ms
      */
     fun setPlayTime(type: Int, position: Int) {
-        val tmp=position/1000L
+        val tmp = position / 1000L
         when (type) {
-            1 -> jumpTime.text = TimeUtils.formatTimeS(tmp)
+            1 -> {
+                mHandler.removeCallbacksAndMessages(null)
+                jumpTime.visibility = View.VISIBLE
+                jumpTime.text = TimeUtils.formatTimeS(tmp)
+                //一段时间后隐藏
+                mHandler.postDelayed({
+                    jumpTime.visibility = View.GONE
+                }, 2000)
+            }
             2 -> currentTime.text = TimeUtils.formatTimeS(tmp)
             3 -> endTime.text = TimeUtils.formatTimeS(tmp)
             else -> return
@@ -100,14 +114,20 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-        TODO("Not yet implemented")
+        if (seekBar == null) return
+        val tmp = seekBar.progress
+        if (tmp == 0) return
+        val time = mPresenter.playHandler.getMaxTime() *tmp / 100
+        setPlayTime(1, time)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
-        TODO("Not yet implemented")
+        if (seekBar == null) return
+        setPlayTime(1, seekBar.progress)
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
-        TODO("Not yet implemented")
+        if (seekBar == null) return
+        mPresenter.goSelectedTime(seekBar.progress)
     }
 }

@@ -94,7 +94,18 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
                     jumpTime.visibility = View.GONE
                 }, 2000)
             }
-            2 -> currentTime.text = TimeUtils.formatTimeS(tmp)
+            2 -> {
+                currentTime.text = TimeUtils.formatTimeS(tmp)
+                val maxTime = mPresenter.playHandler.getMaxTime().toDouble()
+                when {
+                    position == 0 -> videoProgressView.progress = 0
+                    position > maxTime -> videoProgressView.progress = 100
+                    else -> {
+                        videoProgressView.progress = (position / maxTime * 100).toInt()
+                        KLog.e("maxTime:$maxTime;position:$position;pro:${position / maxTime * 100}")
+                    }
+                }
+            }
             3 -> endTime.text = TimeUtils.formatTimeS(tmp)
             else -> return
         }
@@ -114,10 +125,10 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-        if (seekBar == null) return
+        if (seekBar == null||!fromUser) return
         val tmp = seekBar.progress
         if (tmp == 0) return
-        val time = mPresenter.playHandler.getMaxTime() *tmp / 100
+        val time = mPresenter.playHandler.getMaxTime() * tmp / 100
         setPlayTime(1, time)
     }
 

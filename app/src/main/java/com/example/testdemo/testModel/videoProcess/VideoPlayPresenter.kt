@@ -91,5 +91,4 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
         uiControl.setPlayTime(2, tmp)
         KLog.d("当前时间索引：$time")
     }
-
 }

@@ -10,5 +10,10 @@ interface PlayStateListener {
     fun onPlayStop()
     fun onPlayEnd()
     fun onPlayRelease()
+
+    /**
+     * 更新播放时间
+     * @param time 时间,单位ms
+     */
     fun onPlayTime(time:Int)
 }

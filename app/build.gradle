@@ -35,7 +35,7 @@ android {
         main {
             res.srcDirs += ['../commonRes/dimen']
             // 指定jni库的存放目录为libs
-            jniLibs.srcDirs = ['libs']
+//            jniLibs.srcDirs = ['libs']
             // 指定存放native代码的目录，这里指定为jni和cpp皆可
             jni.srcDirs = ['src/main/jni', 'src/main/cpp/']
 //            res.srcDirs+=['faceResource/v2']
@@ -44,24 +44,20 @@ android {
     }
     externalNativeBuild {
         cmake {
-            path "src/main/cpp/CMakeLists.txt"
-            version "3.10.2"
+            path "CMakeLists.txt"
+            //version "3.10.2"
         }
     }
 }
 repositories {
-    flatDir {
-        dirs 'libs'
-    }
     maven { url 'https://dl.bintray.com/jenly/maven' }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
 //    implementation project(path: ':videolibrary')
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:29.0.3'
     implementation 'androidx.core:core-ktx:1.3.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -82,4 +78,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'io.reactivex:rxjava:1.0.14'
     implementation 'io.reactivex:rxandroid:1.0.1'
+//    implementation project(':Live')
 }

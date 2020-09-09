@@ -1,3 +1,4 @@
 include ':app'
 //include ':videolibrary'
-include ':library-test-aidl'
+//include ':library-test-aidl'
+//include ':Live'

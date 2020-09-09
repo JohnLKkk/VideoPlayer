@@ -1,9 +1,6 @@
 package com.example.testdemo.testModel.onClickTest
 
 import android.os.Bundle
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
 import com.example.testdemo.utlis.KLog
@@ -20,6 +17,8 @@ class ClickActivity : AppCompatActivity() {
         onClickTest.setOnClickListener { onInputTest() }
     }
 
+    private external fun stringFromJNI():String
+
     fun onTestClick() {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            startForegroundService(Intent().apply {
@@ -34,39 +33,14 @@ class ClickActivity : AppCompatActivity() {
 //                this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 //            })
 //        }
-//        startActivity(Intent().apply {
-//            setClassName("com.robot.app_ai", "com.robot.app_ai.ui.AuthActivity")
-//            this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//        })
-//        val apkFile = File(Environment.getExternalStorageDirectory().path + "/wyt/update/103.apk")
-//        val intent = Intent(Intent.ACTION_VIEW)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//            val contentUri = FileProvider.getUriForFile(applicationContext, applicationContext.packageName + ".fileProvider", apkFile)
-//            intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
-//        } else {
-//            intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive")
-//        }
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//        startActivity(intent)
-//        YunStudyVideoManager.getInstance().analyzeText("我想看小学一年级语文知识点字母")
     }
 
     private fun onInputTest() {
+        KLog.d(stringFromJNI())
     }
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        val action = event?.actionMasked ?: -1
-        event?.action
-        val index = event?.actionIndex ?: -1
-        when (action) {
-            MotionEvent.ACTION_DOWN,
-            MotionEvent.ACTION_UP,
-            MotionEvent.ACTION_POINTER_DOWN,
-            MotionEvent.ACTION_POINTER_UP -> {
-                KLog.e("action:$action;index:$index")
-            }
+    companion object{
+        init {
+            System.loadLibrary("native-lib")
         }
-        return false
     }
 }

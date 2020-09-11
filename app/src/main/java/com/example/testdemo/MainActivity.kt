@@ -48,8 +48,8 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_11.setOnClickListener(this)
         btn_12.setOnClickListener(this)
         setActionBar("测试模块")
-        startActivity(Intent(this, ClickActivity::class.java))
-//        startActivity(Intent(this, VideoPlayActivity::class.java))
+//        startActivity(Intent(this, ClickActivity::class.java))
+        startActivity(Intent(this, VideoPlayActivity::class.java))
     }
 
     override fun getLayoutID(): Int = R.layout.activity_main

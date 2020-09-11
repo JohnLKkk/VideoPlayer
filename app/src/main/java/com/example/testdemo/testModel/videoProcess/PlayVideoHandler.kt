@@ -4,36 +4,24 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.view.SurfaceHolder
-import com.example.testdemo.utlis.KLog
+import com.example.testdemo.testModel.videoProcess.decoder.PlayStateCallback
+import com.example.testdemo.testModel.videoProcess.decoder.VideoDecoder
+import com.example.testdemo.testModel.videoProcess.decoder.VideoHardHandler
+import com.example.testdemo.testModel.videoProcess.decoder.VideoSoftHandler
 
 /**
  * Created by Void on 2020/8/17 18:02
  * 播放助手
  */
-class PlayVideoHandler(private val playStateListener: PlayStateListener?) : SurfaceHolder.Callback {
-    private val mediaPlayer = MediaPlayer()
+class PlayVideoHandler(private val playStateListener: PlayStateListener?) : PlayStateCallback,SurfaceHolder.Callback {
     private var surfaceHolder: SurfaceHolder? = null
     private var listenerThread: ListenerPlayTime? = null
+    private var sDecoder = VideoSoftHandler(this)
+    private var hDecoder = VideoHardHandler(this)
     private var isReady = false
     val fileInfo = FileAttributes()
 
     init {
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        mediaPlayer.setAudioAttributes(AudioAttributes.Builder().apply {
-            this.setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
-        }.build())
-        mediaPlayer.setOnPreparedListener {
-            start()
-            isReady = true
-            if (listenerThread == null) {
-                listenerThread = ListenerPlayTime()
-                listenerThread?.start()
-            }
-            playStateListener?.onPlayStart()
-        }
-        mediaPlayer.setOnCompletionListener {
-            playStateListener?.onPlayEnd()
-        }
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
@@ -43,14 +31,17 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) : Surf
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
-        if (fileInfo.isValid) {
-            mediaPlayer.setDisplay(holder)
-            mediaPlayer.prepare()
-        }
+        getDecoderHandler().setDisPlay(holder,fileInfo)
     }
 
     fun setSurfaceHolder(holder: SurfaceHolder) {
         holder.addCallback(this)
+    }
+
+    fun getDecoderHandler(): VideoDecoder = if (true) {
+        sDecoder
+    } else {
+        hDecoder
     }
 
     /**
@@ -58,37 +49,23 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) : Surf
      */
     fun setDataPath(path: String) {
         fileInfo.initData(path)
-        try {
-            mediaPlayer.reset()
-            mediaPlayer.setDataSource(path)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        getDecoderHandler().setDataSource(path)
     }
 
     @Synchronized
     fun start() {
-        if (isPlaying()) return
-        try {
-            mediaPlayer.start()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        getDecoderHandler().start()
     }
 
     @Synchronized
     fun pause() {
         playStateListener?.onPlayPaused()
-        if (!isPlaying()) return
-        try {
-            mediaPlayer.pause()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        getDecoderHandler().pause()
     }
+
     @Synchronized
-    fun seekTo(time:Int){
-        mediaPlayer.seekTo(time)
+    fun seekTo(time: Int) {
+        getDecoderHandler().seekTo(time)
     }
 
     @Synchronized
@@ -119,9 +96,17 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) : Surf
         }
     }
 
-//    interface PlayStateListener {
-//
-//        fun onPlayTimeListener()
-//    }
+    override fun onPrepared() {
+        start()
+        isReady = true
+        if (listenerThread == null) {
+            listenerThread = ListenerPlayTime()
+            listenerThread?.start()
+        }
+        playStateListener?.onPlayStart()
+    }
 
+    override fun onCompletion() {
+        playStateListener?.onPlayEnd()
+    }
 }

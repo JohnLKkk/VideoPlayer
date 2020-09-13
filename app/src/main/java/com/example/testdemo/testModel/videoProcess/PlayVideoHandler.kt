@@ -1,13 +1,11 @@
 package com.example.testdemo.testModel.videoProcess
 
-import android.media.AudioAttributes
-import android.media.AudioManager
-import android.media.MediaPlayer
 import android.view.SurfaceHolder
 import com.example.testdemo.testModel.videoProcess.decoder.PlayStateCallback
 import com.example.testdemo.testModel.videoProcess.decoder.VideoDecoder
 import com.example.testdemo.testModel.videoProcess.decoder.VideoHardHandler
 import com.example.testdemo.testModel.videoProcess.decoder.VideoSoftHandler
+import com.example.testdemo.utlis.KLog
 
 /**
  * Created by Void on 2020/8/17 18:02
@@ -20,9 +18,6 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) : Play
     private var hDecoder = VideoHardHandler(this)
     private var isReady = false
     val fileInfo = FileAttributes()
-
-    init {
-    }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
     }
@@ -39,16 +34,19 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) : Play
     }
 
     fun getDecoderHandler(): VideoDecoder = if (true) {
-        sDecoder
-    } else {
         hDecoder
+    } else {
+        sDecoder
     }
 
     /**
      * 播放准备
      */
     fun setDataPath(path: String) {
-        fileInfo.initData(path)
+        if (!fileInfo.initData(path)){
+            KLog.e("文件信息初始化失败！")
+            return
+        }
         getDecoderHandler().setDataSource(path)
     }
 
@@ -69,18 +67,17 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) : Play
     }
 
     @Synchronized
-    fun isPlaying(): Boolean = mediaPlayer.isPlaying
+    fun isPlaying(): Boolean = getDecoderHandler().isPlaying()
 
     @Synchronized
-    fun getCurrentTime(): Int = mediaPlayer.currentPosition
+    fun getCurrentTime(): Int =  getDecoderHandler().getPlayTimeIndex(1)
 
     @Synchronized
-    fun getMaxTime(): Int = mediaPlayer.duration
+    fun getMaxTime(): Int =  getDecoderHandler().getPlayTimeIndex(2)
 
     fun release() {
         isReady = false
-        mediaPlayer.stop()
-        mediaPlayer.release()
+        getDecoderHandler().release()
         surfaceHolder?.removeCallback(this)
 
     }

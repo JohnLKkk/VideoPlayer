@@ -8,8 +8,6 @@ import com.example.testdemo.testModel.videoProcess.FileAttributes
  *
  */
 abstract class VideoDecoder {
-    abstract fun getDecoderHandler(): VideoDecoder
-
     abstract fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes)
 
     abstract fun setDataSource(path: String)
@@ -28,6 +26,6 @@ abstract class VideoDecoder {
      * 获取播放时间数据
      * @param type 1当前播放进度 2最大播放长度
      */
-    abstract fun getPlayTimeIndex(type: Int)
+    abstract fun getPlayTimeIndex(type: Int):Int
 
 }

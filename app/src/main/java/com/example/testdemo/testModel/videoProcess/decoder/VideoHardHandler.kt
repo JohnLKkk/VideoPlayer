@@ -1,5 +1,8 @@
 package com.example.testdemo.testModel.videoProcess.decoder
 
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.view.SurfaceHolder
 import com.example.testdemo.testModel.videoProcess.FileAttributes
 
@@ -8,45 +11,66 @@ import com.example.testdemo.testModel.videoProcess.FileAttributes
  *
  */
 class VideoHardHandler(callback: PlayStateCallback) : VideoDecoder() {
-    companion object {
-        init {
-            System.loadLibrary("media-handle")
-        }
-    }
-//    external fun play(filePath: String, surface: Any): Int
+    private val mediaPlayer = MediaPlayer()
 
-    override fun getDecoderHandler(): VideoDecoder {
-        TODO("Not yet implemented")
+    init {
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        mediaPlayer.setAudioAttributes(AudioAttributes.Builder().apply {
+            this.setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+        }.build())
+        mediaPlayer.setOnPreparedListener { callback.onPrepared() }
+        mediaPlayer.setOnCompletionListener { callback.onCompletion() }
     }
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
-        TODO("Not yet implemented")
+//        if (fileInfo.isValid) {
+            mediaPlayer.setDisplay(holder)
+//        mediaPlayer.prepareAsync()
+//        ｝
     }
 
     override fun setDataSource(path: String) {
-        TODO("Not yet implemented")
+        try {
+            mediaPlayer.reset()
+            mediaPlayer.setDataSource(path)
+            mediaPlayer.prepareAsync()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun start() {
-        TODO("Not yet implemented")
+        if (isPlaying()) return
+        try {
+            mediaPlayer.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun pause() {
-        TODO("Not yet implemented")
+        if (!isPlaying()) return
+        try {
+            mediaPlayer.pause()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun seekTo(time: Int) {
-        TODO("Not yet implemented")
+        mediaPlayer.seekTo(time)
     }
 
-    override fun isPlaying(): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isPlaying(): Boolean =mediaPlayer.isPlaying
 
-    override fun getPlayTimeIndex(type: Int) {
+    override fun getPlayTimeIndex(type: Int): Int = when (type) {
+        1 -> mediaPlayer.currentPosition
+        2 -> mediaPlayer.duration
+        else -> 0
     }
 
     override fun release() {
-        TODO("Not yet implemented")
+        mediaPlayer.stop()
+        mediaPlayer.release()
     }
 }

@@ -102,7 +102,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
                     position > maxTime -> videoProgressView.progress = 100
                     else -> {
                         videoProgressView.progress = (position / maxTime * 100).toInt()
-                        KLog.e("maxTime:$maxTime;position:$position;pro:${position / maxTime * 100}")
+//                        KLog.e("maxTime:$maxTime;position:$position;pro:${position / maxTime * 100}")
                     }
                 }
             }

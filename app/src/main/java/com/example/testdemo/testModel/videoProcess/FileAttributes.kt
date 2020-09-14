@@ -17,16 +17,23 @@ class FileAttributes {
     var fileType: String = ""
     var isValid=false
     lateinit var playFile: File
-    fun initData(path: String) {
+
+    /**
+     * @param path 路径
+     * @return 文件信息解析结果  true成功
+     */
+    fun initData(path: String) :Boolean{
+        if (this.path==path&&isValid)return true
         playFile = File(path)
-        this.path = path
-        size = playFile.length()
         playFile.name.run {
             val index = lastIndexOf(".")
+            if (index==-1)return false
             name = substring(0, index)
             fileType = substring(index, length)
         }
+        this.path = path
+        size = playFile.length()
         isValid=true
+        return true
     }
-
 }

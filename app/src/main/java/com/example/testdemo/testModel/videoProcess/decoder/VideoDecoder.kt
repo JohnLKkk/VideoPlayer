@@ -8,7 +8,10 @@ import com.example.testdemo.testModel.videoProcess.FileAttributes
  *
  */
 abstract class VideoDecoder {
+<<<<<<< HEAD
 
+=======
+>>>>>>> bbb9dddb01896cb9d07394470f57fe532c3c48aa
     abstract fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes)
 
     abstract fun setDataSource(path: String)

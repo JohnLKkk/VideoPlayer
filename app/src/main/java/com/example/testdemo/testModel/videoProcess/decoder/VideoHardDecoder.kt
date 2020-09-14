@@ -10,8 +10,9 @@ import com.example.testdemo.testModel.videoProcess.FileAttributes
  * Created by Void on 2020/9/9 20:20
  *
  */
-class VideoSoftHandler(callback: PlayStateCallback) : VideoDecoder() {
+class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
     private val mediaPlayer = MediaPlayer()
+
     init {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
         mediaPlayer.setAudioAttributes(AudioAttributes.Builder().apply {
@@ -20,8 +21,6 @@ class VideoSoftHandler(callback: PlayStateCallback) : VideoDecoder() {
         mediaPlayer.setOnPreparedListener { callback.onPrepared() }
         mediaPlayer.setOnCompletionListener { callback.onCompletion() }
     }
-
-    override fun getDecoderHandler(): VideoDecoder = this
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
         if (fileInfo.isValid) {
@@ -62,14 +61,15 @@ class VideoSoftHandler(callback: PlayStateCallback) : VideoDecoder() {
     }
 
     override fun release() {
-        TODO("Not yet implemented")
+        mediaPlayer.stop()
+        mediaPlayer.release()
     }
 
-    override fun isPlaying(): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isPlaying(): Boolean = mediaPlayer.isPlaying
 
-    override fun getPlayTimeIndex(type: Int) {
-        TODO("Not yet implemented")
+    override fun getPlayTimeIndex(type: Int): Int = when (type) {
+        1 -> mediaPlayer.currentPosition
+        2 -> mediaPlayer.duration
+        else -> -1
     }
 }

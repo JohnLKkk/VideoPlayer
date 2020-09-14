@@ -35,6 +35,8 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     private val playBtn: ImageView = mActivity.findViewById(R.id.playBtn)
     private val preBtn: ImageView = mActivity.findViewById(R.id.preBtn)
     private val nextBtn: ImageView = mActivity.findViewById(R.id.nextBtn)
+    private val decodeTypeTv: DecodeOptionTextView = mActivity.findViewById(R.id.decodeTypeTv)
+
     private val mHandler = Handler(Looper.getMainLooper())
 
     init {
@@ -46,7 +48,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
         playBtn.setOnClickListener(this)
         preBtn.setOnClickListener(this)
         nextBtn.setOnClickListener(this)
-
+        decodeTypeTv.setOnClickListener(this)
         videoProgressView.setOnSeekBarChangeListener(this)
     }
 

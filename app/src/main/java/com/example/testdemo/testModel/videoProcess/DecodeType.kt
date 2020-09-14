@@ -5,7 +5,7 @@ package com.example.testdemo.testModel.videoProcess
  * 解码类型
  */
 enum class DecodeType {
-    HARD,//硬解码
-    FFMPEG, //ffmpeg解码
+    HARDDecoder,//硬解码
+    FFMPEGDecoder, //ffmpeg解码
     OTHER //不存在的解码类型
 }

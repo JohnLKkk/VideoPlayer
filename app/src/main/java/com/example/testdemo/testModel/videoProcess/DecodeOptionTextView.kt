@@ -7,10 +7,8 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.setPadding
 import com.example.testdemo.R
 import com.example.testdemo.utlis.KLog
-import kotlinx.android.synthetic.main.activity_start_phone_app.view.*
 import java.util.*
 
 /**
@@ -22,7 +20,7 @@ class DecodeOptionTextView : AppCompatTextView, View.OnClickListener,
     private lateinit var mPopupWindow: PopupWindow
     private var mContext: Context
     private val mAdapter = MyAdapter()
-    private var currentDecodeType = DecodeType.HARD
+    private var currentDecodeType = DecodeType.HARDDecoder
     private var isInitEnd = false
 
     constructor(mContext: Context) : this(mContext, null)
@@ -48,8 +46,8 @@ class DecodeOptionTextView : AppCompatTextView, View.OnClickListener,
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         KLog.e("onItemClick---------,item:" + mAdapter.getItem(position))
         currentDecodeType = when (mAdapter.getItem(position)) {
-            "硬解码" -> DecodeType.HARD
-            "FFMPEG" -> DecodeType.FFMPEG
+            "硬解码" -> DecodeType.HARDDecoder
+            "FFMPEG" -> DecodeType.FFMPEGDecoder
             else -> DecodeType.OTHER
         }
         text = mAdapter.getItem(position)

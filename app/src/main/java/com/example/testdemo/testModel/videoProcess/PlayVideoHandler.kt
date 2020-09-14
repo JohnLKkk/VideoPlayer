@@ -3,14 +3,9 @@ package com.example.testdemo.testModel.videoProcess
 import android.view.SurfaceHolder
 import com.example.testdemo.testModel.videoProcess.decoder.PlayStateCallback
 import com.example.testdemo.testModel.videoProcess.decoder.VideoDecoder
-<<<<<<< HEAD
 import com.example.testdemo.testModel.videoProcess.decoder.VideoHardDecoder
 import com.example.testdemo.testModel.videoProcess.decoder.VideoFFMPEGDecoder
-=======
-import com.example.testdemo.testModel.videoProcess.decoder.VideoHardHandler
-import com.example.testdemo.testModel.videoProcess.decoder.VideoSoftHandler
 import com.example.testdemo.utlis.KLog
->>>>>>> bbb9dddb01896cb9d07394470f57fe532c3c48aa
 
 /**
  * Created by Void on 2020/8/17 18:02
@@ -61,23 +56,16 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
         holder.addCallback(this)
     }
 
-<<<<<<< HEAD
     fun setDecoderType(decoder: DecodeType) {
         this.decoderType = decoder
-=======
-    fun getDecoderHandler(): VideoDecoder = if (true) {
-        hDecoder
-    } else {
-        sDecoder
->>>>>>> bbb9dddb01896cb9d07394470f57fe532c3c48aa
     }
 
     /**
      * 播放准备
      */
     fun setDataPath(path: String) {
-        if (!fileInfo.initData(path)){
-            KLog.e("文件信息初始化失败！")
+        if (!fileInfo.initData(path)) {
+            KLog.e("文件信息初始化失败！path:$path")
             return
         }
         getDecoderHandler().setDataSource(path)
@@ -103,22 +91,18 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     fun isPlaying(): Boolean = getDecoderHandler().isPlaying()
 
     @Synchronized
-<<<<<<< HEAD
     fun getCurrentTime(): Int = getDecoderHandler().getPlayTimeIndex(1)
 
     @Synchronized
     fun getMaxTime(): Int = getDecoderHandler().getPlayTimeIndex(2)
-=======
-    fun getCurrentTime(): Int =  getDecoderHandler().getPlayTimeIndex(1)
-
-    @Synchronized
-    fun getMaxTime(): Int =  getDecoderHandler().getPlayTimeIndex(2)
->>>>>>> bbb9dddb01896cb9d07394470f57fe532c3c48aa
 
     fun release() {
         isReady = false
         getDecoderHandler().release()
         surfaceHolder?.removeCallback(this)
+        if (listenerThread?.isInterrupted == true) {
+            listenerThread?.interrupt()
+        }
     }
 
     inner class ListenerPlayTime : Thread() {

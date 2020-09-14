@@ -3,6 +3,7 @@ package com.example.testdemo.testModel.onClickTest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -17,15 +18,18 @@ import kotlinx.android.synthetic.main.activity_on_click.*
  *
  */
 class ClickActivity : AppCompatActivity() {
-    val aa=Uri.parse("content://com.android.providers.media.documents/document/video%3A61884")
+    val a1=Uri.parse("content://com.android.providers.media.documents/document/video%3A61884")
+    val a2=Uri.parse("content://com.android.providers.media.documents/document/video%3A10")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_click)
         onClickTest.setOnClickListener { onTestClick() }
-        KLog.e("$aa---------")
+        startActivityForResult(Intent.createChooser(
+                Intent(Intent.ACTION_GET_CONTENT).apply {
+                    type = "*/*"
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                }, "选择视频文件"), 1001)
     }
-
-//    private external fun stringFromJNI():String
 
     fun onTestClick() {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -41,14 +45,17 @@ class ClickActivity : AppCompatActivity() {
 //                this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 //            })
 //        }
-        val bb=FileTools.getFilePathByUri(aa)
-        KLog.e("aa:$aa ;bb:$bb")
-
+//        val bb=FileTools.getFilePathByUri(a1)
+        val bb=FileTools.getPath(this,a2)
+        KLog.e("aa:$a2 ;bb:$bb")
     }
 
     private fun onInputTest() {
 //        KLog.d(stringFromJNI())
     }
+
+//    private external fun stringFromJNI():String
+
 //    companion object{
 //        init {
 //            System.loadLibrary("native-lib")

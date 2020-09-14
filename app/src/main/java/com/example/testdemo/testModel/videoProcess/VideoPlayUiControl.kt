@@ -9,7 +9,6 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
-import com.example.testdemo.utlis.KLog
 import com.example.testdemo.utlis.TimeUtils
 
 /**

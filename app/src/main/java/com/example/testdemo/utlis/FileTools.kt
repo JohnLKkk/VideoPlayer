@@ -18,7 +18,7 @@ import com.example.testdemo.App
  *
  */
 object FileTools {
-
+//content://com.android.providers.media.documents/document/video%3A10
     fun getPath(context: Context, uri: Uri): String? {
         if ("content" == uri.scheme) {
             val projection = arrayOf("_data")
@@ -42,32 +42,32 @@ object FileTools {
     }
 
     fun getFilePathByUri(uri: Uri): String? {
-        // ÒÔ file:// ¿ªÍ·µÄ
+        // ä»¥ file:// å¼€å¤´çš„
         if (ContentResolver.SCHEME_FILE == uri.scheme) {
             return uri.path
         }
-        // ÒÔ/storage¿ªÍ·µÄÒ²Ö±½Ó·µ»Ø
+        // ä»¥/storageå¼€å¤´çš„ä¹Ÿç›´æ¥è¿”å›
         if (isOtherDocument(uri)) {
             return uri.path
         }
-        // °æ±¾¼æÈİµÄ»ñÈ¡£¡
+        // ç‰ˆæœ¬å…¼å®¹çš„è·å–ï¼
         var path = getFilePathByUri_BELOWAPI11(uri)
         if (path != null) {
-            KLog.d("getFilePathByUri_BELOWAPI11»ñÈ¡µ½µÄÂ·¾¶Îª£º$path")
+            KLog.d("getFilePathByUri_BELOWAPI11è·å–åˆ°çš„è·¯å¾„ä¸ºï¼š$path")
             return path
         }
         path = getFilePathByUri_API11to18(uri)
         if (path != null) {
-            KLog.d("getFilePathByUri_API11to18»ñÈ¡µ½µÄÂ·¾¶Îª£º$path")
+            KLog.d("getFilePathByUri_API11to18è·å–åˆ°çš„è·¯å¾„ä¸ºï¼š$path")
             return path
         }
         path = getFilePathByUri_API19(uri)
-        KLog.d("getFilePathByUri_API19»ñÈ¡µ½µÄÂ·¾¶Îª£º$path")
+        KLog.d("getFilePathByUri_API19è·å–åˆ°çš„è·¯å¾„ä¸ºï¼š$path")
         return path
     }
 
     private fun getFilePathByUri_BELOWAPI11(uri: Uri): String? {
-        // ÒÔ content:// ¿ªÍ·µÄ£¬±ÈÈç content://media/extenral/images/media/17766
+        // ä»¥ content:// å¼€å¤´çš„ï¼Œæ¯”å¦‚ content://media/extenral/images/media/17766
         if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
             var path: String? = null
             val projection = arrayOf(MediaStore.Images.Media.DATA)
@@ -101,7 +101,7 @@ object FileTools {
     }
 
     private fun getFilePathByUri_API19(uri: Uri): String? {
-        // 4.4¼°Ö®ºóµÄ ÊÇÒÔ content:// ¿ªÍ·µÄ£¬±ÈÈç content://com.android.providers.media.documents/document/image%3A235700
+        // 4.4åŠä¹‹åçš„ æ˜¯ä»¥ content:// å¼€å¤´çš„ï¼Œæ¯”å¦‚ content://com.android.providers.media.documents/document/image%3A235700
         if (ContentResolver.SCHEME_CONTENT == uri.scheme && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (DocumentsContract.isDocumentUri(App.context, uri)) {
                 if (isExternalStorageDocument(uri)) {
@@ -118,13 +118,13 @@ object FileTools {
                         // This is for checking SD Card
                     }
                 } else if (isDownloadsDocument(uri)) {
-                    //ÏÂÔØÄÚÈİÌá¹©ÕßÊ±Ó¦µ±ÅĞ¶ÏÏÂÔØ¹ÜÀíÆ÷ÊÇ·ñ±»½ûÓÃ
+                    //ä¸‹è½½å†…å®¹æä¾›è€…æ—¶åº”å½“åˆ¤æ–­ä¸‹è½½ç®¡ç†å™¨æ˜¯å¦è¢«ç¦ç”¨
                     val stateCode = App.context.packageManager.getApplicationEnabledSetting("com.android.providers.downloads")
                     if (stateCode != 0 && stateCode != 1) {
                         return null
                     }
                     var id = DocumentsContract.getDocumentId(uri)
-                    // Èç¹û³öÏÖÕâ¸öRAWµØÖ·£¬ÎÒÃÇÔò¿ÉÒÔÖ±½Ó·µ»Ø!
+                    // å¦‚æœå‡ºç°è¿™ä¸ªRAWåœ°å€ï¼Œæˆ‘ä»¬åˆ™å¯ä»¥ç›´æ¥è¿”å›!
                     if (id.startsWith("raw:")) {
                         return id.replaceFirst("raw:".toRegex(), "")
                     }
@@ -135,7 +135,7 @@ object FileTools {
                         }
                     }
                     var contentUri = Uri.parse("content://downloads/public_downloads")
-                    KLog.d("²âÊÔ´òÓ¡Uri: $uri")
+                    KLog.d("æµ‹è¯•æ‰“å°Uri: $uri")
                     try {
                         contentUri = ContentUris.withAppendedId(contentUri, id.toLong())
                     } catch (e: java.lang.Exception) {
@@ -143,7 +143,7 @@ object FileTools {
                     }
                     var path = getDataColumn(contentUri, null, null)
                     if (path != null) return path
-                    // ¼æÈİÄ³Ğ©ÌØÊâÇé¿öÏÂµÄÎÄ¼ş¹ÜÀíÆ÷!
+                    // å…¼å®¹æŸäº›ç‰¹æ®Šæƒ…å†µä¸‹çš„æ–‡ä»¶ç®¡ç†å™¨!
                     val fileName = getFileNameByUri(uri)
                     if (fileName != null) {
                         path = Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName
@@ -219,7 +219,7 @@ object FileTools {
     }
 
     private fun isOtherDocument(uri: Uri?): Boolean {
-        // ÒÔ/storage¿ªÍ·µÄÒ²Ö±½Ó·µ»Ø
+        // ä»¥/storageå¼€å¤´çš„ä¹Ÿç›´æ¥è¿”å›
         if (uri != null && uri.path != null) {
             val path = uri.path
             if (path!!.startsWith("/storage")) {

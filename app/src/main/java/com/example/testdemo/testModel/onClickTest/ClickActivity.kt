@@ -18,8 +18,9 @@ import kotlinx.android.synthetic.main.activity_on_click.*
  *
  */
 class ClickActivity : AppCompatActivity() {
-    val a1=Uri.parse("content://com.android.providers.media.documents/document/video%3A61884")
-    val a2=Uri.parse("content://com.android.providers.media.documents/document/video%3A10")
+    //    val a1 = Uri.parse("content://com.android.providers.media.documents/document/video%3A61884")
+//    val a2 = Uri.parse("content://com.android.providers.media.documents/document/video%3A49480")
+    lateinit var a3: Uri
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_click)
@@ -29,6 +30,17 @@ class ClickActivity : AppCompatActivity() {
                     type = "*/*"
                     addCategory(Intent.CATEGORY_OPENABLE)
                 }, "选择视频文件"), 1001)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1001) {
+            val uri = data?.data ?: return
+            KLog.e("选择视频的路径:$uri")
+            a3 = uri
+//            selectFileCallback?.selectCallback(FileTools.getPath(applicationContext, uri))
+//            selectFileCallback?.selectCallback(uri.toString())
+        }
     }
 
     fun onTestClick() {
@@ -46,8 +58,8 @@ class ClickActivity : AppCompatActivity() {
 //            })
 //        }
 //        val bb=FileTools.getFilePathByUri(a1)
-        val bb=FileTools.getPath(this,a2)
-        KLog.e("aa:$a2 ;bb:$bb")
+        val bb = FileTools.getFilePathByUri(applicationContext,a3)
+        KLog.e("aa:$a3; bb:$bb")
     }
 
     private fun onInputTest() {

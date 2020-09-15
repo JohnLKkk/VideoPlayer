@@ -60,8 +60,7 @@ class VideoPlayActivity : BaseDefaultActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == selectFileResultCode) {
             val uri = data?.data ?: return
-            selectFileCallback?.selectCallback(FileTools.getPath(applicationContext, uri))
-//            selectFileCallback?.selectCallback(uri.toString())
+            selectFileCallback?.selectCallback(FileTools.getFilePathByUri(applicationContext, uri))
         }
     }
 

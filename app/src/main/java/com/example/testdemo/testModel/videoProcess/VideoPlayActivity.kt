@@ -38,7 +38,7 @@ class VideoPlayActivity : BaseDefaultActivity() {
         mPresenter = VideoPlayPresenter(this, uiControl)
         uiControl.setPresenter(mPresenter)
         setActionBar("视频处理", true)
-//        if (!TextUtils.isEmpty(mPresenter.videoPath)&&checkPermission()) mPresenter.onClickPlay()
+        if (!TextUtils.isEmpty(mPresenter.videoPath)&&checkPermission()) mPresenter.onClickPlay()
     }
 
     override fun onDestroy() {

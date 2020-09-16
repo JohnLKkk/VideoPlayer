@@ -23,10 +23,10 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
     }
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
-//        if (fileInfo.isValid) {
-        mediaPlayer.setDisplay(holder)
-//            mediaPlayer.prepareAsync()
-//        }
+        if (fileInfo.isValid) {
+            mediaPlayer.setDisplay(holder)
+            mediaPlayer.prepareAsync()
+        }
     }
 
     override fun setDataSource(path: String) {
@@ -49,7 +49,7 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
     }
 
     override fun pause() {
-        if (!isPlaying()||isRelease) return
+        if (!isPlaying() || isRelease) return
         try {
             mediaPlayer.pause()
         } catch (e: Exception) {
@@ -58,7 +58,7 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
     }
 
     override fun seekTo(time: Int) {
-        if (isRelease)return
+        if (isRelease) return
         mediaPlayer.seekTo(time)
     }
 
@@ -69,7 +69,7 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
     }
 
     override fun isPlaying(): Boolean {
-        if (isRelease)return false
+        if (isRelease) return false
         return mediaPlayer.isPlaying
     }
 

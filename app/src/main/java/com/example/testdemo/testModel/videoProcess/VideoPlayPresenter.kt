@@ -12,12 +12,13 @@ import com.example.testdemo.utlis.KLog
 class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
                          private val uiControl: VideoPlayUiControl) :
         VideoPlayActivity.SelectFile,
-        PlayStateListener {
+        PlayStateListener ,
+        DecodeOptionTextView.ClickItemCallback{
     private val mainHandler = Handler(Looper.getMainLooper())
     val playHandler = PlayVideoHandler(this)
 
-        var videoPath = ""
-//    var videoPath = "/storage/emulated/0/Download/smallfoot.mp4"
+//        var videoPath = ""
+    var videoPath = "/storage/emulated/0/Download/smallfoot.mp4"
 
     override fun selectCallback(path: String?) {
         if (path == null || path.isEmpty()) {
@@ -27,6 +28,10 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
         videoPath = path
         KLog.d("选中的文件路径是：$videoPath")
         mainHandler.post { onClickPlay() }
+    }
+
+    override fun onClickCallback(type: DecodeType) {
+        playHandler.setDecoderType(type)
     }
 
     override fun onPlayStart() {

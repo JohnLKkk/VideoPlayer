@@ -14,10 +14,12 @@ import java.util.*
 /**
  * Created by Void on 2020/9/2 15:34
  */
-class DecodeOptionTextView : AppCompatTextView, View.OnClickListener,
+class DecodeOptionTextView : AppCompatTextView,
+        View.OnClickListener,
         AdapterView.OnItemClickListener,
         ViewTreeObserver.OnGlobalLayoutListener {
     private lateinit var mPopupWindow: PopupWindow
+    private var callback: ClickItemCallback?=null
     private var mContext: Context
     private val mAdapter = MyAdapter()
     private var currentDecodeType = DecodeType.HARDDecoder
@@ -52,6 +54,7 @@ class DecodeOptionTextView : AppCompatTextView, View.OnClickListener,
         }
         text = mAdapter.getItem(position)
         mPopupWindow.dismiss()
+        callback?.onClickCallback(currentDecodeType)
     }
 
     override fun onGlobalLayout() {
@@ -114,6 +117,9 @@ class DecodeOptionTextView : AppCompatTextView, View.OnClickListener,
         return tmp
     }
 
+    fun setClickCallback(clickItemCallback: ClickItemCallback){
+        this.callback=clickItemCallback
+    }
     /**
      * 返回当前选择的解码类型
      * @see DecodeType
@@ -155,5 +161,9 @@ class DecodeOptionTextView : AppCompatTextView, View.OnClickListener,
 //            items.clear()
 //            items.addAll(s)
 //        }
+    }
+
+    open interface ClickItemCallback{
+        fun onClickCallback(type:DecodeType);
     }
 }

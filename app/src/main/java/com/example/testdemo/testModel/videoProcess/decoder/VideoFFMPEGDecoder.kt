@@ -1,6 +1,8 @@
 package com.example.testdemo.testModel.videoProcess.decoder
 
 import android.view.SurfaceHolder
+import com.example.testdemo.App
+import com.example.testdemo.R
 import com.example.testdemo.testModel.videoProcess.FileAttributes
 
 /**
@@ -8,20 +10,24 @@ import com.example.testdemo.testModel.videoProcess.FileAttributes
  *
  */
 class VideoFFMPEGDecoder(callback: PlayStateCallback) : VideoDecoder() {
-//    companion object {
-//        init {
-//            System.loadLibrary("media-handle")
-//        }
-//    }
 
-//    external fun play(filePath: String, surface: Any): Int
-
-//    external fun stringFromJNI(): String
+    private var holder: SurfaceHolder? = null
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
+        if (fileInfo.isValid) {
+            this.holder = holder
+        }
     }
 
     override fun setDataSource(path: String) {
+        if (holder == null) return
+        Thread {
+            try {
+                filter(path, holder!!.surface, filters[5])
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
     }
 
     override fun start() {
@@ -41,5 +47,30 @@ class VideoFFMPEGDecoder(callback: PlayStateCallback) : VideoDecoder() {
         return 0
     }
 
-    override fun release() {}
+    override fun release() {
+        destroy()
+    }
+
+    //region  ------------ffmpeg decoder
+    external fun play(filePath: String, surface: Any): Int
+
+    external fun setPlayRate(playRate: Float)
+
+    external fun filter(filePath: String, surface: Any, filterType: String): Int
+
+    external fun again()
+
+    external fun destroy()
+
+    external fun playAudio(play: Boolean)
+
+    external fun stringFromJNI(): String
+
+    //endregion
+
+    companion object {
+        init {
+            System.loadLibrary("media-handle")
+        }
+    }
 }

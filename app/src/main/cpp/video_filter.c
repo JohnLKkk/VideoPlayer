@@ -106,7 +106,7 @@ int init_filters(const char *filters_descr) {
     ret = avfilter_graph_create_filter(&buffersrc_ctx, buffersrc, "in",
                                        args, NULL, filter_graph);
     if (ret < 0) {
-        LOGE(TAG, "Cannot create buffer source\n");
+        LOGE(TAG, "Cannot create buffer source\n")
         goto end;
     }
 
@@ -114,14 +114,14 @@ int init_filters(const char *filters_descr) {
     ret = avfilter_graph_create_filter(&buffersink_ctx, buffersink, "out",
                                        NULL, NULL, filter_graph);
     if (ret < 0) {
-        LOGE(TAG, "Cannot create buffer sink\n");
+        LOGE(TAG, "Cannot create buffer sink\n")
         goto end;
     }
 
     ret = av_opt_set_int_list(buffersink_ctx, "pix_fmts", pix_fmts,
                               AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN);
     if (ret < 0) {
-        LOGE(TAG, "Cannot set output pixel format\n");
+        LOGE(TAG, "Cannot set output pixel format\n")
         goto end;
     }
 
@@ -151,15 +151,15 @@ int init_filters(const char *filters_descr) {
 
 //init player
 int open_input(JNIEnv *env, const char *file_name, jobject surface) {
-    LOGI(TAG, "open file:%s\n", file_name);
+    LOGI(TAG, "open file:%s\n", file_name)
     av_register_all();
     pFormatCtx = avformat_alloc_context();
     if (avformat_open_input(&pFormatCtx, file_name, NULL, NULL) != 0) {
-        LOGE(TAG, "Couldn't open file:%s\n", file_name);
+        LOGE(TAG, "Couldn't open file:%s\n", file_name)
         return -1;
     }
     if (avformat_find_stream_info(pFormatCtx, NULL) < 0) {
-        LOGE(TAG, "Couldn't find stream information.");
+        LOGE(TAG, "Couldn't find stream information.")
         return -1;
     }
 
@@ -171,18 +171,18 @@ int open_input(JNIEnv *env, const char *file_name, jobject surface) {
         }
     }
     if (video_stream_index == -1) {
-        LOGE(TAG, "couldn't find a video stream.");
+        LOGE(TAG, "couldn't find a video stream.")
         return -1;
     }
 
     pCodecCtx = pFormatCtx->streams[video_stream_index]->codec;
     AVCodec *pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
     if (pCodec == NULL) {
-        LOGE(TAG, "couldn't find Codec.");
+        LOGE(TAG, "couldn't find Codec.")
         return -1;
     }
     if (avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
-        LOGE(TAG, "Couldn't open codec.");
+        LOGE(TAG, "Couldn't open codec.")
         return -1;
     }
 
@@ -192,7 +192,7 @@ int open_input(JNIEnv *env, const char *file_name, jobject surface) {
     pFrame = av_frame_alloc();
     pFrameRGBA = av_frame_alloc();
     if (pFrameRGBA == NULL || pFrame == NULL) {
-        LOGE(TAG, "Couldn't allocate video frame.");
+        LOGE(TAG, "Couldn't allocate video frame.")
         return -1;
     }
     int numBytes = av_image_get_buffer_size(AV_PIX_FMT_RGBA, pCodecCtx->width, pCodecCtx->height,
@@ -219,19 +219,23 @@ int init_audio(JNIEnv *env, jclass jthiz) {
     int i;
     for (i = 0; i < pFormatCtx->nb_streams; i++) {
         if (pFormatCtx->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO) {
+            LOGE("--------init_audio----------", "%s", pFormatCtx->streams[i]->codec->sub_charenc)
             audio_stream_index = i;
             break;
         }
     }
-
+    if (audio_stream_index == -1) {
+        LOGE(TAG, "没有找到音频解码器")
+        return -1;
+    }
     audioCodecCtx = pFormatCtx->streams[audio_stream_index]->codec;
     AVCodec *codec = avcodec_find_decoder(audioCodecCtx->codec_id);
     if (codec == NULL) {
-        LOGE(TAG, "could not find audio decoder");
+        LOGE(TAG, "could not find audio decoder")
         return -1;
     }
     if (avcodec_open2(audioCodecCtx, codec, NULL) < 0) {
-        LOGE(TAG, "could not open audio decoder");
+        LOGE(TAG, "could not open audio decoder")
         return -1;
     }
 
@@ -252,13 +256,13 @@ int init_audio(JNIEnv *env, jclass jthiz) {
 
     jclass player_class = (*env)->GetObjectClass(env, jthiz);
     if (!player_class) {
-        LOGE(TAG, "player_class not found...");
+        LOGE(TAG, "player_class not found...")
         return -1;
     }
     jmethodID audio_track_method = (*env)->GetMethodID(env, player_class, "createAudioTrack",
                                                        "(II)Landroid/media/AudioTrack;");
     if (!audio_track_method) {
-        LOGE(TAG, "audio_track_method not found...");
+        LOGE(TAG, "audio_track_method not found...")
         return -1;
     }
     audio_track = (*env)->CallObjectMethod(env, jthiz, audio_track_method, out_sample_rate,
@@ -302,30 +306,29 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
     const char *filter_descr = (*env)->GetStringUTFChars(env, filterDescr, JNI_FALSE);
     //open input file
     if (!is_playing) {
-        LOGI(TAG, "open_input...");
+        LOGI(TAG, "open_input...")
         if ((ret = open_input(env, file_name, surface)) < 0) {
-            LOGE(TAG, "Couldn't allocate video frame.");
+            LOGE(TAG, "Couldn't allocate video frame.")
             goto end;
         }
         //register filter
         avfilter_register_all();
         filter_frame = av_frame_alloc();
         if (filter_frame == NULL) {
-            LOGE(TAG, "Couldn't allocate filter frame.");
+            LOGE(TAG, "Couldn't allocate filter frame.")
             ret = -1;
             goto end;
         }
         //init audio decoder
-        if ((ret = init_audio(env, thiz)) < 0) {
-            LOGE(TAG, "Couldn't init_audio.");
-            goto end;
-        }
-
+//        if ((ret = init_audio(env, thiz)) < 0) {
+//            LOGE(TAG, "Couldn't init_audio.")
+//            goto end;
+//        }
     }
 
     //init filter
     if ((ret = init_filters(filter_descr)) < 0) {
-        LOGE(TAG, "init_filter error, ret=%d\n", ret);
+        LOGE(TAG, "init_filter error, ret=%d\n", ret)
         goto end;
     }
 
@@ -347,7 +350,7 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
                 //add frame to filter_graph
                 if (av_buffersrc_add_frame_flags(buffersrc_ctx, pFrame,
                                                  AV_BUFFERSRC_FLAG_KEEP_REF) < 0) {
-                    LOGE(TAG, "Error while feeding the filter_graph\n");
+                    LOGE(TAG, "Error while feeding the filter_graph\n")
                     break;
                 }
                 //take frame from filter graph
@@ -404,10 +407,10 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
     ANativeWindow_release(nativeWindow);
     (*env)->ReleaseStringUTFChars(env, filePath, file_name);
     (*env)->ReleaseStringUTFChars(env, filterDescr, filter_descr);
-    LOGE(TAG, "do release...");
+    LOGE(TAG, "do release...")
     again:
     again = 0;
-    LOGE(TAG, "play again...");
+    LOGE(TAG, "play again...")
     return ret;
 }
 
@@ -415,7 +418,7 @@ VIDEO_PLAYER_FUNC(void, again) {
     again = 1;
 }
 
-VIDEO_PLAYER_FUNC(void, release) {
+VIDEO_PLAYER_FUNC(void, destroy) {
     release = 1;
 }
 

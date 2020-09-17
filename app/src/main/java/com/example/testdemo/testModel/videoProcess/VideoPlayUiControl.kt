@@ -14,7 +14,8 @@ import com.example.testdemo.utlis.TimeUtils
 /**
  * Created by Void on 2020/7/27 17:14
  */
-class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClickListener,
+class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
+        View.OnClickListener,
         SeekBar.OnSeekBarChangeListener {
     private lateinit var mPresenter: VideoPlayPresenter
 
@@ -34,7 +35,6 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     private val playBtn: ImageView = mActivity.findViewById(R.id.playBtn)
     private val preBtn: ImageView = mActivity.findViewById(R.id.preBtn)
     private val nextBtn: ImageView = mActivity.findViewById(R.id.nextBtn)
-    private val decodeTypeTv: DecodeOptionTextView = mActivity.findViewById(R.id.decodeTypeTv)
 
     private val mHandler = Handler(Looper.getMainLooper())
 
@@ -47,7 +47,6 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
         playBtn.setOnClickListener(this)
         preBtn.setOnClickListener(this)
         nextBtn.setOnClickListener(this)
-        decodeTypeTv.setOnClickListener(this)
         videoProgressView.setOnSeekBarChangeListener(this)
     }
 
@@ -64,7 +63,10 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
 
     fun setPresenter(presenter: VideoPlayPresenter) {
         this.mPresenter = presenter
-        mPresenter.playHandler.setSurfaceHolder(videoView.holder)
+        (mActivity.findViewById(R.id.decodeTypeTv) as DecodeOptionTextView).apply {
+            setClickCallback(mPresenter)
+        }
+        videoView.holder.addCallback(mPresenter.playHandler)
     }
 
     fun setVideoName(name: String) {
@@ -126,7 +128,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) : View.OnClic
     }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-        if (seekBar == null||!fromUser) return
+        if (seekBar == null || !fromUser) return
         val tmp = seekBar.progress
         if (tmp == 0) return
         val time = mPresenter.playHandler.getMaxTime() * tmp / 100

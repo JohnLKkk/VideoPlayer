@@ -30,6 +30,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--录音权限-->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 接收开机广播需要的权限 -->
     <uses-permission-sdk-23 android:name="android.permission.INTERNET" />
@@ -48,6 +51,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".testModel.videoProcess.VideoPlayActivity"
+            android:exported="true"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="sensorLandscape" />
         <activity android:name=".testModel.testAIDL.AIDLActivity" />

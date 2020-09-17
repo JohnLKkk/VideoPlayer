@@ -18,8 +18,10 @@ object AppCode {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+//            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.MODIFY_AUDIO_SETTINGS
     )
+
     //region ------------------ 一些通用的值
     //获取麦克风失败时最大的尝试次数
     const val tryGetRecorderFailMaxCount = 10

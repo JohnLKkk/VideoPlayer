@@ -52,20 +52,19 @@ class VideoFFMPEGDecoder(callback: PlayStateCallback) : VideoDecoder() {
     }
 
     //region  ------------ffmpeg decoder
-    external fun play(filePath: String, surface: Any): Int
+    private external fun play(filePath: String, surface: Any): Int
 
-    external fun setPlayRate(playRate: Float)
+    private external fun setPlayRate(playRate: Float)
 
-    external fun filter(filePath: String, surface: Any, filterType: String): Int
+    private external fun filter(filePath: String, surface: Any, filterType: String): Int
 
-    external fun again()
+    private external fun again()
 
-    external fun destroy()
+    private external fun destroy()
 
-    external fun playAudio(play: Boolean)
+    private external fun playAudio(play: Boolean)
 
-    external fun stringFromJNI(): String
-
+    private external fun stringFromJNI(): String
     //endregion
 
     companion object {

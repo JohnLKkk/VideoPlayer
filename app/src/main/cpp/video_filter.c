@@ -219,7 +219,6 @@ int init_audio(JNIEnv *env, jclass jthiz) {
     int i;
     for (i = 0; i < pFormatCtx->nb_streams; i++) {
         if (pFormatCtx->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO) {
-            LOGE("--------init_audio----------", "%s", pFormatCtx->streams[i]->codec->sub_charenc)
             audio_stream_index = i;
             break;
         }
@@ -229,6 +228,10 @@ int init_audio(JNIEnv *env, jclass jthiz) {
         return -1;
     }
     audioCodecCtx = pFormatCtx->streams[audio_stream_index]->codec;
+    if (audioCodecCtx == NULL) {
+        LOGE(TAG, "没有找到音频解码器")
+        return -1;
+    }
     AVCodec *codec = avcodec_find_decoder(audioCodecCtx->codec_id);
     if (codec == NULL) {
         LOGE(TAG, "could not find audio decoder")
@@ -320,10 +323,10 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
             goto end;
         }
         //init audio decoder
-//        if ((ret = init_audio(env, thiz)) < 0) {
-//            LOGE(TAG, "Couldn't init_audio.")
+        if ((ret = init_audio(env, thiz)) < 0) {
+            LOGE(TAG, "Couldn't init_audio.")
 //            goto end;
-//        }
+        }
     }
 
     //init filter
@@ -397,8 +400,12 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
     avfilter_free(buffersink_ctx);
     avfilter_graph_free(&filter_graph);
     avcodec_close(audioCodecCtx);
-    free(buffer);
+    if (!buffer) {
+        free(buffer);
+    }
     free(sws_ctx);
+
+        LOGE(TAG,"windowBuffer:%c",windowBuffer)
     free(&windowBuffer);
     free(out_buffer);
     free(audio_swr_ctx);

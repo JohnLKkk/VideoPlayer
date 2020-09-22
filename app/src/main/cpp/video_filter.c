@@ -165,9 +165,9 @@ int open_input(JNIEnv *env, const char *file_name, jobject surface) {
 
     int i;
     for (i = 0; i < pFormatCtx->nb_streams; i++) {
-        if (pFormatCtx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO
-            && video_stream_index < 0) {
+        if (pFormatCtx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
             video_stream_index = i;
+            break;
         }
     }
     if (video_stream_index == -1) {
@@ -187,6 +187,10 @@ int open_input(JNIEnv *env, const char *file_name, jobject surface) {
     }
 
     nativeWindow = ANativeWindow_fromSurface(env, surface);
+    if (!nativeWindow) {
+        LOGE(TAG, "nativeWindow is null...");
+        return -1;
+    }
     ANativeWindow_setBuffersGeometry(nativeWindow, pCodecCtx->width, pCodecCtx->height,
                                      WINDOW_FORMAT_RGBA_8888);
     pFrame = av_frame_alloc();
@@ -325,7 +329,7 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
         //init audio decoder
         if ((ret = init_audio(env, thiz)) < 0) {
             LOGE(TAG, "Couldn't init_audio.")
-//            goto end;
+            goto end;
         }
     }
 
@@ -404,9 +408,9 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
         free(buffer);
     }
     free(sws_ctx);
-
-        LOGE(TAG,"windowBuffer:%c",windowBuffer)
-    free(&windowBuffer);
+    if (&windowBuffer != 0) {
+        free(&windowBuffer);
+    }
     free(out_buffer);
     free(audio_swr_ctx);
     free(audio_track);

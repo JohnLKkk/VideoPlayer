@@ -1,8 +1,11 @@
 package com.example.testdemo.testModel.videoProcess.decoder
 
+import android.media.AudioAttributes
+import android.media.AudioFormat
+import android.media.AudioManager
+import android.media.AudioTrack
+import android.os.Build
 import android.view.SurfaceHolder
-import com.example.testdemo.App
-import com.example.testdemo.R
 import com.example.testdemo.testModel.videoProcess.FileAttributes
 
 /**
@@ -66,6 +69,40 @@ class VideoFFMPEGDecoder(callback: PlayStateCallback) : VideoDecoder() {
 
     private external fun stringFromJNI(): String
     //endregion
+    /**
+     * 创建音轨
+     *
+     * @param sampleRate 采样率
+     * @param channels   频道
+     */
+    fun createAudioTrack(sampleRate: Int, channels: Int): AudioTrack? {
+        val audioFormat = AudioFormat.ENCODING_PCM_16BIT
+        val channelConfig: Int = when (channels) {
+            1 -> AudioFormat.CHANNEL_OUT_MONO
+            2 -> AudioFormat.CHANNEL_OUT_STEREO
+            else -> AudioFormat.CHANNEL_OUT_STEREO
+        }
+        val bufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return AudioTrack.Builder()
+                    .setAudioAttributes(AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setLegacyStreamType(AudioManager.STREAM_MUSIC)
+                            .build())
+                    .setAudioFormat(AudioFormat.Builder()
+                            .setEncoding(audioFormat)
+                            .setSampleRate(sampleRate)
+                            .setChannelMask(channelConfig)
+                            .build())
+                    .setTransferMode(AudioTrack.MODE_STREAM)
+                    .setBufferSizeInBytes(bufferSizeInBytes)
+                    .build()
+        } else {
+            return AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat,
+                    bufferSizeInBytes, AudioTrack.MODE_STREAM)
+        }
+    }
 
     companion object {
         init {

@@ -29,14 +29,16 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
     private val videoView: SurfaceView = mActivity.findViewById(R.id.videoView)
 
     //bottom_layout
-    private val currentTime: TextView = mActivity.findViewById(R.id.currentTime)
-    private val endTime: TextView = mActivity.findViewById(R.id.endTime)
+    private val playTime: TextView = mActivity.findViewById(R.id.playTime)
     private val videoProgressView: SeekBar = mActivity.findViewById(R.id.videoScheduleView)
     private val playBtn: ImageView = mActivity.findViewById(R.id.playBtn)
     private val preBtn: ImageView = mActivity.findViewById(R.id.preBtn)
     private val nextBtn: ImageView = mActivity.findViewById(R.id.nextBtn)
 
     private val mHandler = Handler(Looper.getMainLooper())
+
+    private var currentTime = ""
+    private var endTime = ""
 
     init {
         backIv.setOnClickListener(this)
@@ -95,10 +97,12 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
                 //一段时间后隐藏
                 mHandler.postDelayed({
                     jumpTime.visibility = View.GONE
-                }, 2000)
+                }, 1000)
+                return
             }
             2 -> {
-                currentTime.text = TimeUtils.formatTimeS(tmp)
+                if (jumpTime.visibility != View.GONE) return
+                currentTime = TimeUtils.formatTimeS(tmp)
                 val maxTime = mPresenter.playHandler.getMaxTime().toDouble()
                 when {
                     position == 0 -> videoProgressView.progress = 0
@@ -109,9 +113,10 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
                     }
                 }
             }
-            3 -> endTime.text = TimeUtils.formatTimeS(tmp)
+            3 -> endTime = TimeUtils.formatTimeS(tmp)
             else -> return
         }
+        playTime.text = mActivity.getString(R.string.playTime, currentTime, endTime)
     }
 
     fun onRelease() {

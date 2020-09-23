@@ -408,9 +408,7 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
         free(buffer);
     }
     free(sws_ctx);
-    if (&windowBuffer != 0) {
-        free(&windowBuffer);
-    }
+    free(&windowBuffer);
     free(out_buffer);
     free(audio_swr_ctx);
     free(audio_track);

@@ -1,58 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
     android:background="@color/video_top_black">
 
-    <RelativeLayout
+    <com.example.testdemo.testModel.videoProcess.VideoPreviewBar
+        android:id="@+id/videoPreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x10"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/currentTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="@string/defaultStartTime"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/x20" />
-
-        <TextView
-            android:id="@+id/endTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="@string/defaultStartTime"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/x20" />
-
-        <SeekBar
-            android:id="@+id/videoScheduleView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/endTime"
-            android:layout_toEndOf="@id/currentTime"
-            android:paddingStart="@dimen/x30"
-            android:paddingTop="@dimen/x10"
-            android:paddingEnd="@dimen/x40"
-            android:paddingBottom="@dimen/x10"
-            android:progress="0" />
-    </RelativeLayout>
+        android:layout_alignParentTop="true" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/x50"
-        android:layout_marginBottom="@dimen/x20">
+        android:layout_below="@id/videoPreview"
+        android:layout_marginBottom="@dimen/x10"
+        android:paddingTop="@dimen/x10"
+        android:paddingBottom="@dimen/x10">
+
+        <TextView
+            android:id="@+id/playTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/x100"
+            android:text="@string/defaultPlayTime"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/x20" />
 
         <ImageView
             android:id="@+id/playBtn"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginStart="@dimen/x30"
             android:layout_marginEnd="@dimen/x30"
@@ -61,7 +41,7 @@
         <ImageView
             android:id="@+id/preBtn"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@id/playBtn"
             android:background="@drawable/ic_pre" />
@@ -69,14 +49,14 @@
         <ImageView
             android:id="@+id/nextBtn"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/playBtn"
             android:background="@drawable/ic_next" />
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/x50"
@@ -93,4 +73,4 @@
                 android:textSize="20sp" />
         </FrameLayout>
     </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>

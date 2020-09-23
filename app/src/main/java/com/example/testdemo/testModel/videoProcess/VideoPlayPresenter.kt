@@ -17,8 +17,8 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
     private val mainHandler = Handler(Looper.getMainLooper())
     val playHandler = PlayVideoHandler(this)
 
-//        var videoPath = ""
-    var videoPath = "/storage/emulated/0/Download/smallfoot.mp4"
+        var videoPath = ""
+//    var videoPath = "/storage/emulated/0/Download/smallfoot.mp4"
 
     override fun selectCallback(path: String?) {
         if (path == null || path.isEmpty()) {

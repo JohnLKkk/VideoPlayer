@@ -6,7 +6,7 @@ package com.example.testdemo.utlis
  */
 object TimeUtils {
     @JvmStatic
-    fun formatTimeS(seconds: Long): String? {
+    fun formatTimeS(seconds: Long): String {
         val sb = StringBuffer()
         if (seconds > 3600) {
             val temp = (seconds / 3600).toInt()

@@ -18,7 +18,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     private var listenerThread: ListenerPlayTime? = null
     private var sDecoder = VideoFFMPEGDecoder(this)
     private var hDecoder = VideoHardDecoder(this)
-    private var decoderType = DecodeType.FFMPEGDecoder
+    private var decoderType = DecodeType.HARDDecoder
     private var isReady = false
     val fileInfo = FileAttributes()
 

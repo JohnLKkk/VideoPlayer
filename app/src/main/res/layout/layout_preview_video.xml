@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextureView
+        android:id="@+id/videoPreviewView"
+        android:layout_width="@dimen/x80"
+        android:layout_height="@dimen/x60"
+        android:layout_above="@id/videoScheduleView" />
+
+    <SeekBar
+        android:id="@+id/videoScheduleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/x80"
+        android:paddingEnd="@dimen/x80"
+        android:paddingBottom="@dimen/x10"
+        android:progress="0" />
+</RelativeLayout>

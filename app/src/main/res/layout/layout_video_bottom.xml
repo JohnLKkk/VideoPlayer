@@ -2,20 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    android:background="@color/video_top_black">
+    android:layout_gravity="bottom">
 
     <com.example.testdemo.testModel.videoProcess.VideoPreviewBar
         android:id="@+id/videoPreview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
+        android:layout_above="@id/tmp" />
 
     <RelativeLayout
+        android:id="@+id/tmp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/videoPreview"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/x10"
+        android:background="@color/video_top_black"
         android:paddingTop="@dimen/x10"
         android:paddingBottom="@dimen/x10">
 

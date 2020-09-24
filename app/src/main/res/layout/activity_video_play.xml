@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/shape_ai_face_bg"
-        android:text="@string/defaultPlayTime"
+        android:text="@string/defaultPlayTime_"
         android:textColor="@android:color/white"
         android:textSize="45sp"
         android:visibility="gone"
@@ -42,6 +42,6 @@
     <include
         layout="@layout/layout_video_bottom"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x100"
+        android:layout_height="@dimen/x200"
         android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>

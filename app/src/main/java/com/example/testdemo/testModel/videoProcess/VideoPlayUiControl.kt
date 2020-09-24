@@ -5,7 +5,6 @@ import android.os.Looper
 import android.view.SurfaceView
 import android.view.View
 import android.widget.ImageView
-import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
@@ -16,7 +15,7 @@ import com.example.testdemo.utlis.TimeUtils
  */
 class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
         View.OnClickListener,
-        SeekBar.OnSeekBarChangeListener {
+        VideoPreviewBar.ProgressCallback {
     private lateinit var mPresenter: VideoPlayPresenter
 
     //top_layout
@@ -30,7 +29,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
 
     //bottom_layout
     private val playTime: TextView = mActivity.findViewById(R.id.playTime)
-    private val videoProgressView: SeekBar = mActivity.findViewById(R.id.videoScheduleView)
+    private val videoPreview: VideoPreviewBar = mActivity.findViewById(R.id.videoPreview)
     private val playBtn: ImageView = mActivity.findViewById(R.id.playBtn)
     private val preBtn: ImageView = mActivity.findViewById(R.id.preBtn)
     private val nextBtn: ImageView = mActivity.findViewById(R.id.nextBtn)
@@ -49,7 +48,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
         playBtn.setOnClickListener(this)
         preBtn.setOnClickListener(this)
         nextBtn.setOnClickListener(this)
-        videoProgressView.setOnSeekBarChangeListener(this)
+        videoPreview.callback = this
     }
 
     override fun onClick(v: View?) {
@@ -105,10 +104,10 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
                 currentTime = TimeUtils.formatTimeS(tmp)
                 val maxTime = mPresenter.playHandler.getMaxTime().toDouble()
                 when {
-                    position == 0 -> videoProgressView.progress = 0
-                    position > maxTime -> videoProgressView.progress = 100
+                    position == 0 -> videoPreview.setProgress(0)
+                    position > maxTime -> videoPreview.setProgress(100)
                     else -> {
-                        videoProgressView.progress = (position / maxTime * 100).toInt()
+                        videoPreview.setProgress((position / maxTime * 100).toInt())
 //                        KLog.e("maxTime:$maxTime;position:$position;pro:${position / maxTime * 100}")
                     }
                 }
@@ -132,21 +131,15 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
         }
     }
 
-    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-        if (seekBar == null || !fromUser) return
-        val tmp = seekBar.progress
-        if (tmp == 0) return
-        val time = mPresenter.playHandler.getMaxTime() * tmp / 100
-        setPlayTime(1, time)
+    override fun onChangeProgress(index: Int, fromUser: Boolean) {
+        setPlayTime(1, mPresenter.playHandler.getMaxTime() * index / 100)
     }
 
-    override fun onStartTrackingTouch(seekBar: SeekBar?) {
-        if (seekBar == null) return
-        setPlayTime(1, seekBar.progress)
-    }
-
-    override fun onStopTrackingTouch(seekBar: SeekBar?) {
-        if (seekBar == null) return
-        mPresenter.goSelectedTime(seekBar.progress)
+    override fun onTouchCallback(type: Int, index: Int) {
+        if (type == 0) {
+            setPlayTime(1, index)
+        } else {
+            mPresenter.goSelectedTime(index)
+        }
     }
 }

@@ -4,21 +4,14 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom">
 
-    <com.example.testdemo.testModel.videoProcess.VideoPreviewBar
-        android:id="@+id/videoPreview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/tmp" />
-
     <RelativeLayout
         android:id="@+id/tmp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/x10"
         android:background="@color/video_top_black"
-        android:paddingTop="@dimen/x10"
-        android:paddingBottom="@dimen/x10">
+        android:paddingTop="@dimen/x20"
+        android:paddingBottom="@dimen/x20">
 
         <TextView
             android:id="@+id/playTime"
@@ -74,4 +67,11 @@
                 android:textSize="20sp" />
         </FrameLayout>
     </RelativeLayout>
+
+    <com.example.testdemo.testModel.videoProcess.VideoPreviewBar
+        android:id="@+id/videoPreview"
+        android:layout_width="match_parent"
+        android:translationY="@dimen/x12"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tmp"/>
 </RelativeLayout>

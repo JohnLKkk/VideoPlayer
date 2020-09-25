@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.TextureView
 import android.widget.RelativeLayout
 import android.widget.SeekBar
+import androidx.core.content.ContextCompat
 import com.example.testdemo.R
 
 /**
@@ -30,9 +31,17 @@ class VideoPreviewBar(context: Context, attributeSet: AttributeSet) :
         videoProgressView.setOnSeekBarChangeListener(this)
     }
 
+    /**
+     * 设置进度条的进度
+     * @param index 1-99
+     * 注：因为UI的问题，当进度为0、100时，UI不好看，所以最小和最大进度分别是1和99
+     */
     fun setProgress(index: Int) {
-        if (index < 0 || index > 100) return
-        videoProgressView.progress = index
+        when {
+            index <= 1 -> videoProgressView.progress = 1
+            index >= 99 -> videoProgressView.progress = 99
+            else -> videoProgressView.progress = index
+        }
     }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -42,11 +51,13 @@ class VideoPreviewBar(context: Context, attributeSet: AttributeSet) :
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
         if (seekBar == null) return
         callback?.onTouchCallback(0, seekBar.progress)
+        videoProgressView.progressDrawable = ContextCompat.getDrawable(context, R.drawable.ic_video_seekbar_pre_bg)
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
         if (seekBar == null) return
         callback?.onTouchCallback(1, seekBar.progress)
+        videoProgressView.progressDrawable = ContextCompat.getDrawable(context, R.drawable.ic_video_seekbar_bg)
     }
 
     interface ProgressCallback {

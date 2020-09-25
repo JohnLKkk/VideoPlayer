@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    android:columnCount="2"
-    tools:context=".testModel.testView.TestViewActivity">
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_bg1" />
+        android:id="@+id/tmp1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x200"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/black" />
 
-    <com.example.testdemo.testModel.testView.BitmapView
-        android:layout_width="500dp"
-        android:layout_height="500dp"
-        android:layout_gravity="center" />
-</FrameLayout>
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tmp1"
+        android:maxHeight="2dp"
+        android:paddingStart="@dimen/x150"
+        android:paddingEnd="@dimen/x150"
+        android:progressDrawable="@drawable/ic_video_seekbar_bg"
+        android:thumb="@drawable/ic_progress_bg"
+        android:translationY="@dimen/x10" />
+</RelativeLayout>

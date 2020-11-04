@@ -21,10 +21,6 @@ class VideoPreviewBar(context: Context, attributeSet: AttributeSet) :
     var callback: ProgressCallback? = null
 
     init {
-        initView()
-    }
-
-    private fun initView() {
         val view = LayoutInflater.from(context).inflate(R.layout.layout_preview_video, this)
         textureView = view.findViewById(R.id.videoPreviewView)
         videoProgressView = view.findViewById(R.id.videoScheduleView)

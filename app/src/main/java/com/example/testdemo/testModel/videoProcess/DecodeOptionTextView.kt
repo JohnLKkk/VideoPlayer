@@ -8,7 +8,9 @@ import android.widget.*
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
+import com.example.testdemo.utlis.AppCode
 import com.example.testdemo.utlis.KLog
+import com.example.testdemo.utlis.SPUtils
 import java.util.*
 
 /**
@@ -32,6 +34,7 @@ class DecodeOptionTextView : AppCompatTextView,
         mAdapter.addItem("FFMPEG")
         setOnClickListener(this)
         viewTreeObserver.addOnGlobalLayoutListener(this)
+        SPUtils.saveString(AppCode.currentDecodeType,currentDecodeType.toString())
     }
 
     override fun onClick(v: View?) {
@@ -163,7 +166,7 @@ class DecodeOptionTextView : AppCompatTextView,
 //        }
     }
 
-    open interface ClickItemCallback{
+    interface ClickItemCallback{
         fun onClickCallback(type:DecodeType);
     }
 }

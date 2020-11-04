@@ -25,11 +25,11 @@ class ClickActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_click)
         onClickTest.setOnClickListener { onTestClick() }
-        startActivityForResult(Intent.createChooser(
-                Intent(Intent.ACTION_GET_CONTENT).apply {
-                    type = "*/*"
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                }, "选择视频文件"), 1001)
+//        startActivityForResult(Intent.createChooser(
+//                Intent(Intent.ACTION_GET_CONTENT).apply {
+//                    type = "*/*"
+//                    addCategory(Intent.CATEGORY_OPENABLE)
+//                }, "选择视频文件"), 1001)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -58,19 +58,22 @@ class ClickActivity : AppCompatActivity() {
 //            })
 //        }
 //        val bb=FileTools.getFilePathByUri(a1)
-        val bb = FileTools.getFilePathByUri(applicationContext,a3)
-        KLog.e("aa:$a3; bb:$bb")
+//        val bb = FileTools.getFilePathByUri(applicationContext,a3)
+//        KLog.e("aa:$a3; bb:$bb")
     }
 
     private fun onInputTest() {
-//        KLog.d(stringFromJNI())
+        try {
+            KLog.d(stringFromJNI())
+        }catch (e:Exception){
+        }
     }
 
-//    private external fun stringFromJNI():String
+    private external fun stringFromJNI():String
 
-//    companion object{
-//        init {
-//            System.loadLibrary("native-lib")
-//        }
-//    }
+    companion object{
+        init {
+            System.loadLibrary("media-handle")
+        }
+    }
 }

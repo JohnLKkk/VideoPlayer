@@ -5,7 +5,9 @@ import com.example.testdemo.testModel.videoProcess.decoder.PlayStateCallback
 import com.example.testdemo.testModel.videoProcess.decoder.VideoDecoder
 import com.example.testdemo.testModel.videoProcess.decoder.VideoHardDecoder
 import com.example.testdemo.testModel.videoProcess.decoder.VideoFFMPEGDecoder
+import com.example.testdemo.utlis.AppCode
 import com.example.testdemo.utlis.KLog
+import com.example.testdemo.utlis.SPUtils
 
 /**
  * Created by Void on 2020/8/17 18:02
@@ -53,6 +55,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     }
 
     fun setDecoderType(decoder: DecodeType) {
+        SPUtils.saveString(AppCode.currentDecodeType,decoder.toString())
         this.decoderType = decoder
     }
 

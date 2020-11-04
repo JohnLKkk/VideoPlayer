@@ -404,7 +404,7 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
     avfilter_free(buffersink_ctx);
     avfilter_graph_free(&filter_graph);
     avcodec_close(audioCodecCtx);
-    if (!buffer) {
+    if (buffer==NULL) {
         free(buffer);
     }
     free(sws_ctx);

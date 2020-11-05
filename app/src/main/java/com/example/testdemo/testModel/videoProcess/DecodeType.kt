@@ -3,11 +3,13 @@ package com.example.testdemo.testModel.videoProcess
 /**
  * Created by Void on 2020/9/3 14:43
  * 解码类型
+ * @param code 该类型的string格式
+ * @param cn 改类型用于展示给用户看的所对应的文本
  */
-enum class DecodeType(private var str: String) {
-    HARDDecoder("HARDDecoder"),//硬解码
-    FFMPEGDecoder("FFMPEGDecoder"), //ffmpeg解码
-    OTHER("OTHER"); //不存在的解码类型
+enum class DecodeType(private var code: String, val cn: String) {
+    HARDDecoder("HARDDecoder", "硬解码"),//硬解码
+    FFMPEGDecoder("FFMPEGDecoder", "FFMPEG"), //ffmpeg解码
+    OTHER("OTHER", "未知"); //不存在的解码类型
 
-    override fun toString(): String = str
+    override fun toString(): String = code
 }

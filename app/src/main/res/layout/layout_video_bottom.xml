@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_gravity="bottom">
 
     <RelativeLayout
         android:id="@+id/tmp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:background="@color/video_top_black"
-        android:paddingTop="@dimen/x20"
-        android:paddingBottom="@dimen/x20">
+        android:background="@color/video_top_black">
 
         <TextView
             android:id="@+id/playTime"
@@ -50,7 +48,7 @@
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/x50"
@@ -61,6 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
+                android:paddingStart="@dimen/x20"
+                android:paddingEnd="@dimen/x20"
                 android:gravity="center_vertical|end"
                 android:text="@string/decodeType"
                 android:textColor="@android:color/white"

@@ -3,7 +3,10 @@ package com.example.testdemo.testModel.videoProcess
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.view.*
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.*
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
@@ -21,7 +24,7 @@ class DecodeOptionTextView : AppCompatTextView,
         AdapterView.OnItemClickListener,
         ViewTreeObserver.OnGlobalLayoutListener {
     private lateinit var mPopupWindow: PopupWindow
-    private var callback: ClickItemCallback?=null
+    private var callback: ClickItemCallback? = null
     private var mContext: Context
     private val mAdapter = MyAdapter()
     private var currentDecodeType = DecodeType.HARDDecoder
@@ -30,11 +33,10 @@ class DecodeOptionTextView : AppCompatTextView,
     constructor(mContext: Context) : this(mContext, null)
     constructor(mContext: Context, attrs: AttributeSet?) : super(mContext, attrs) {
         this.mContext = mContext
-        mAdapter.addItem("硬解码")
-        mAdapter.addItem("FFMPEG")
+        mAdapter.addItem(DecodeType.HARDDecoder)
+        mAdapter.addItem(DecodeType.HARDDecoder)
         setOnClickListener(this)
         viewTreeObserver.addOnGlobalLayoutListener(this)
-        SPUtils.saveString(AppCode.currentDecodeType,currentDecodeType.toString())
     }
 
     override fun onClick(v: View?) {
@@ -50,14 +52,9 @@ class DecodeOptionTextView : AppCompatTextView,
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         KLog.e("onItemClick---------,item:" + mAdapter.getItem(position))
-        currentDecodeType = when (mAdapter.getItem(position)) {
-            "硬解码" -> DecodeType.HARDDecoder
-            "FFMPEG" -> DecodeType.FFMPEGDecoder
-            else -> DecodeType.OTHER
-        }
-        text = mAdapter.getItem(position)
+        currentDecodeType = mAdapter.getItemDT(position)
+        setText(currentDecodeType)
         mPopupWindow.dismiss()
-        callback?.onClickCallback(currentDecodeType)
     }
 
     override fun onGlobalLayout() {
@@ -86,6 +83,13 @@ class DecodeOptionTextView : AppCompatTextView,
                 android.R.drawable.screen_background_light_transparent
         ))
         isInitEnd = true
+        //初始化当前解码类型
+        //获取之前选择的解码类型
+        currentDecodeType = when (SPUtils.getString(AppCode.currentDecodeType, "")) {
+            "FFMPEGDecoder" -> DecodeType.FFMPEGDecoder
+            "HARDDecoder" -> DecodeType.HARDDecoder
+            else -> DecodeType.OTHER
+        }
         viewTreeObserver.removeOnGlobalLayoutListener(this)
     }
 
@@ -120,17 +124,22 @@ class DecodeOptionTextView : AppCompatTextView,
         return tmp
     }
 
-    fun setClickCallback(clickItemCallback: ClickItemCallback){
-        this.callback=clickItemCallback
+    fun setClickCallback(clickItemCallback: ClickItemCallback) {
+        this.callback = clickItemCallback
+        setText(currentDecodeType)
     }
-    /**
-     * 返回当前选择的解码类型
-     * @see DecodeType
-     */
-    fun getDecodeType(): DecodeType = currentDecodeType
+
+    private fun setText(decodeType: DecodeType) {
+        text = decodeType.cn
+        callback?.onClickCallback(currentDecodeType)
+    }
+
+    interface ClickItemCallback {
+        fun onClickCallback(type: DecodeType)
+    }
 
     inner class MyAdapter : BaseAdapter() {
-        private val items = LinkedList<String>()
+        private val items = LinkedList<DecodeType>()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             return LinearLayout(mContext).apply {
@@ -150,13 +159,15 @@ class DecodeOptionTextView : AppCompatTextView,
             }
         }
 
-        override fun getItem(position: Int): String = items[position]
+        override fun getItem(position: Int): String = items[position].cn
 
         override fun getItemId(position: Int): Long = 0
 
         override fun getCount(): Int = items.size
 
-        fun addItem(s: String) {
+        fun getItemDT(position: Int): DecodeType = items[position]
+
+        fun addItem(s: DecodeType) {
             items.add(s)
         }
 
@@ -164,9 +175,5 @@ class DecodeOptionTextView : AppCompatTextView,
 //            items.clear()
 //            items.addAll(s)
 //        }
-    }
-
-    interface ClickItemCallback{
-        fun onClickCallback(type:DecodeType);
     }
 }

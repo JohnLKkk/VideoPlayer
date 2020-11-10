@@ -1,0 +1,53 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+apply from: rootProject.ext.projectRootPath + '/buildSource/Dependencies.gradle'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildTools
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.targetSdk
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    testApi rootProject.ext.junit
+    androidTestApi rootProject.ext.ext_junit
+    androidTestApi rootProject.ext.espresso_core
+    api rootProject.ext.kotlin_stdlib
+    api rootProject.ext.core_ktx
+    api rootProject.ext.constraint_layout
+    api rootProject.ext.constraintlayout
+    api rootProject.ext.appcompat
+    api rootProject.ext.gson
+    api rootProject.ext.material
+    api rootProject.ext.glide
+    api rootProject.ext.okhttp
+    api rootProject.ext.okhttp_urlconnection
+    api rootProject.ext.okio
+    api rootProject.ext.recyclerview
+    api rootProject.ext.app_joint_core
+}

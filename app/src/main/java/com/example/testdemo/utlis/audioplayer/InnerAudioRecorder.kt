@@ -6,8 +6,10 @@ import android.media.MediaRecorder
 import android.os.Build
 import android.os.Process
 import com.example.testdemo.BuildConfig
-import com.example.testdemo.utlis.AppCode
-import com.example.testdemo.utlis.KLog
+import com.yoy.v_Base.utils.AppCode
+import com.yoy.v_Base.utils.KLog
+import com.yoy.v_Base.utils.audioplayer.InnerAudioRecorder
+import com.yoy.v_Base.utils.audioplayer.PcmFileUtil
 import java.util.*
 
 /**

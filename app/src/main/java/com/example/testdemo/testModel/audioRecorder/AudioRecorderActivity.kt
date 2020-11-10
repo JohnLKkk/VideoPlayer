@@ -4,14 +4,13 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
 import com.example.testdemo.base.BaseDefaultActivity
-import com.example.testdemo.utlis.KLog
+import com.yoy.v_Base.utils.KLog
 import com.example.testdemo.utlis.ToastUtils
-import com.example.testdemo.utlis.audioplayer.PcmFileUtil
+import com.yoy.v_Base.utils.audioplayer.PcmFileUtil
 import com.example.testdemo.utlis.audioplayer.SimpleAudioTrack
 
 class AudioRecorderActivity : BaseDefaultActivity(), InnerAudioRecorder.AudioRecorderListener {

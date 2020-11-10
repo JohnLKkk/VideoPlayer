@@ -5,7 +5,6 @@ import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import com.example.testdemo.base.BaseDefaultActivity
 import com.example.testdemo.testModel.audioRecorder.AudioRecorderActivity
 import com.example.testdemo.testModel.barrierFree.BarrierFreeActivity
 import com.example.testdemo.testModel.broadcast.BroadcastActivity
@@ -16,10 +15,10 @@ import com.example.testdemo.testModel.popupWindow.PopupWindowActivity
 import com.example.testdemo.testModel.scanDevicesIP.ScanIPActivity
 import com.example.testdemo.testModel.startPhoneApp.StartPhoneAppActivity
 import com.example.testdemo.testModel.testView.TestViewActivity
-import com.example.testdemo.testModel.videoProcess.VideoPlayActivity
+import com.example.testdemo.testModel.videoProcessing.VideoPlayActivity
 import com.example.testdemo.testModel.viewpager.ViewPagerActivity
+import com.yoy.v_Base.ui.BaseDefaultActivity
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 /**
  * 该项目主要用于测试模块，这个项目不应该依赖于任何项目;

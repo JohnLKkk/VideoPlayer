@@ -1,11 +1,7 @@
 package com.yoy.videoplayer
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import com.yoy.v_Base.ui.BaseDefaultActivity
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
+class MainActivity : BaseDefaultActivity() {
+    override fun getLayoutID(): Int = R.layout.activity_main
 }

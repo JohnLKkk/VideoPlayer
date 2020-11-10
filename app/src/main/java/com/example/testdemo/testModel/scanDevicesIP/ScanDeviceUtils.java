@@ -3,7 +3,7 @@ package com.example.testdemo.testModel.scanDevicesIP;
 import android.util.Log;
 
 import com.example.testdemo.BuildConfig;
-import com.example.testdemo.utlis.KLog;
+import com.yoy.v_Base.utils.KLog;
 import com.google.gson.Gson;
 
 import java.net.Inet4Address;

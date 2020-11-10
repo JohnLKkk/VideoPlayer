@@ -1,16 +1,11 @@
 package com.example.testdemo.testModel.onClickTest
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.DialogCompat
 import com.example.testdemo.R
-import com.example.testdemo.utlis.FileTools
-import com.example.testdemo.utlis.KLog
+import com.yoy.v_Base.utils.KLog
 import kotlinx.android.synthetic.main.activity_on_click.*
 
 /**

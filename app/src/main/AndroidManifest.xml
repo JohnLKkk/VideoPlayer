@@ -50,7 +50,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".testModel.videoProcess.VideoPlayActivity"
+            android:name=".testModel.videoProcessing.VideoPlayActivity"
             android:exported="true"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="sensorLandscape" />

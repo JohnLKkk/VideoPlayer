@@ -6,11 +6,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
 import com.example.testdemo.base.BaseDefaultActivity
-import com.example.testdemo.utlis.KLog
-import kotlinx.android.synthetic.main.activity_broadcast.*
+import com.yoy.v_Base.utils.KLog
 
 class BroadcastActivity : BaseDefaultActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

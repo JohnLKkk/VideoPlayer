@@ -11,13 +11,12 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
 import com.example.testdemo.base.BaseDefaultActivity
-import com.example.testdemo.utlis.AppCode
-import com.example.testdemo.utlis.KLog
+import com.yoy.v_Base.utils.AppCode
+import com.yoy.v_Base.utils.KLog
 import com.example.testdemo.utlis.ToastUtils
 
 class PermissionActivity : BaseDefaultActivity() {

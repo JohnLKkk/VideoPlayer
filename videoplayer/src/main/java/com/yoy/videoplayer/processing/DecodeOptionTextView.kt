@@ -10,7 +10,6 @@ import android.view.ViewTreeObserver
 import android.widget.*
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import com.example.testdemo.R
 import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.SPUtils

@@ -6,13 +6,13 @@ import android.media.AudioManager
 import android.media.AudioTrack
 import android.os.Build
 import android.view.SurfaceHolder
-import com.example.testdemo.testModel.videoProcessing.FileAttributes
+import com.yoy.videoplayer.processing.FileAttributes
 
 /**
  * Created by Void on 2020/9/9 20:20
  *
  */
-class VideoFFMPEGDecoder(callback: PlayStateCallback) : VideoDecoder() {
+class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder() {
 
     private var holder: SurfaceHolder? = null
 
@@ -20,6 +20,7 @@ class VideoFFMPEGDecoder(callback: PlayStateCallback) : VideoDecoder() {
         if (fileInfo.isValid) {
             this.holder = holder
         }
+
     }
 
     override fun setDataSource(path: String) {
@@ -34,6 +35,7 @@ class VideoFFMPEGDecoder(callback: PlayStateCallback) : VideoDecoder() {
     }
 
     override fun start() {
+
     }
 
     override fun pause() {
@@ -52,6 +54,7 @@ class VideoFFMPEGDecoder(callback: PlayStateCallback) : VideoDecoder() {
 
     override fun release() {
         destroy()
+        callback.onCompletion()
     }
 
     //region  ------------ffmpeg decoder
@@ -99,6 +102,7 @@ class VideoFFMPEGDecoder(callback: PlayStateCallback) : VideoDecoder() {
                     .setBufferSizeInBytes(bufferSizeInBytes)
                     .build()
         } else {
+            @Suppress("DEPRECATION")
             return AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat,
                     bufferSizeInBytes, AudioTrack.MODE_STREAM)
         }

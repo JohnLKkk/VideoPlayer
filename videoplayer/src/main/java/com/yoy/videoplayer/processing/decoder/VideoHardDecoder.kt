@@ -4,7 +4,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.view.SurfaceHolder
-import com.example.testdemo.testModel.videoProcessing.FileAttributes
+import com.yoy.videoplayer.processing.FileAttributes
 
 /**
  * Created by Void on 2020/9/9 20:20

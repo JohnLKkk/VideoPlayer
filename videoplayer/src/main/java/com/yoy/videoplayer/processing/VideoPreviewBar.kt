@@ -16,8 +16,8 @@ import com.yoy.videoplayer.R
 class VideoPreviewBar(context: Context, attributeSet: AttributeSet) :
         RelativeLayout(context, attributeSet),
         SeekBar.OnSeekBarChangeListener {
-    private lateinit var textureView: TextureView
-    private lateinit var videoProgressView: SeekBar
+    private var textureView: TextureView
+    private var videoProgressView: SeekBar
     var callback: ProgressCallback? = null
 
     init {

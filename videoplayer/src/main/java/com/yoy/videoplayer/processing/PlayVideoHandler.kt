@@ -1,13 +1,13 @@
 package com.yoy.videoplayer.processing
 
 import android.view.SurfaceHolder
-import com.example.testdemo.testModel.videoProcessing.decoder.PlayStateCallback
-import com.example.testdemo.testModel.videoProcessing.decoder.VideoDecoder
-import com.example.testdemo.testModel.videoProcessing.decoder.VideoHardDecoder
-import com.example.testdemo.testModel.videoProcessing.decoder.VideoFFMPEGDecoder
 import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.SPUtils
+import com.yoy.videoplayer.processing.decoder.PlayStateCallback
+import com.yoy.videoplayer.processing.decoder.VideoDecoder
+import com.yoy.videoplayer.processing.decoder.VideoFFMPEGDecoder
+import com.yoy.videoplayer.processing.decoder.VideoHardDecoder
 
 /**
  * Created by Void on 2020/8/17 18:02

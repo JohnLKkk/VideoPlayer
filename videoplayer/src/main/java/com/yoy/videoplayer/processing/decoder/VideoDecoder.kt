@@ -1,9 +1,8 @@
 package com.yoy.videoplayer.processing.decoder
 
 import android.view.SurfaceHolder
-import com.example.testdemo.App
-import com.example.testdemo.R
-import com.example.testdemo.testModel.videoProcessing.FileAttributes
+import com.yoy.videoplayer.R
+import com.yoy.videoplayer.VideoApplication
 import com.yoy.videoplayer.processing.FileAttributes
 
 /**
@@ -25,15 +24,15 @@ abstract class VideoDecoder {
 
     //vflip is up and down, hflip is left and right
     protected val txtArray = arrayOf(
-            App.context.getString(R.string.filter_sketch),
-            App.context.getString(R.string.filter_distinct),
-            App.context.getString(R.string.filter_warming),
-            App.context.getString(R.string.filter_edge),
-            App.context.getString(R.string.filter_division),
-            App.context.getString(R.string.filter_equalize),
-            App.context.getString(R.string.filter_rectangle),
-            App.context.getString(R.string.filter_flip),
-            App.context.getString(R.string.filter_sharpening)
+            VideoApplication.context.getString(R.string.filter_sketch),
+            VideoApplication.context.getString(R.string.filter_distinct),
+            VideoApplication.context.getString(R.string.filter_warming),
+            VideoApplication.context.getString(R.string.filter_edge),
+            VideoApplication.context.getString(R.string.filter_division),
+            VideoApplication.context.getString(R.string.filter_equalize),
+            VideoApplication.context.getString(R.string.filter_rectangle),
+            VideoApplication.context.getString(R.string.filter_flip),
+            VideoApplication.context.getString(R.string.filter_sharpening)
     )
 
     //是否已经被释放

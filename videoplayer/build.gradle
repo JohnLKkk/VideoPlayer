@@ -1,7 +1,4 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-}
+applyPlugin(project,false)
 
 android {
     compileSdkVersion 29

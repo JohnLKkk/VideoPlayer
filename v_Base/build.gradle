@@ -1,8 +1,4 @@
-plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-}
-apply from: rootProject.ext.projectRootPath + '/buildSource/Dependencies.gradle'
+applyPlugin(project,false)
 
 android {
     compileSdkVersion rootProject.ext.compileSdk

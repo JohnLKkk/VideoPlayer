@@ -1,0 +1,28 @@
+/**
+ * build.gradle应用插件
+ * @param project 目标模块
+ * @param isApp true：application，false：library
+ * @return
+ */
+ext.applyPlugin = { Project project, boolean isApp ->
+    if (isApp) {
+        project.plugins.apply('com.android.application')
+        project.plugins.apply('app-joint')
+    } else {
+        project.plugins.apply('com.android.library')
+    }
+    project.plugins.apply('kotlin-android')
+    project.plugins.apply('kotlin-android-extensions')
+    project.plugins.apply('kotlin-kapt')
+//    project.apply(from: "${rootDir.path}/baseBuild.gradle")
+}
+
+/**
+ * 添加默认的依赖
+ */
+ext.addDefDeps = { DependencyHandler handler ->
+    handler.add('implementation', fileTree(include: ['*.jar'], dir: 'libs'))
+    handler.add('testImplementation', Deps.junit)
+    handler.add('androidTestImplementation', Deps.runner)
+    handler.add('androidTestImplementation', Deps.espresso)
+}

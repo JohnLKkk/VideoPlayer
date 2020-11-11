@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.annotation.UiThread;
 
+import com.yoy.v_Base.BuildConfig;
+
 public final class ToastUtils {
 
     private static Toast toast;

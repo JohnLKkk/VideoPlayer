@@ -2,9 +2,8 @@ package com.example.testdemo.testModel.scanDevicesIP
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
-import com.example.testdemo.base.BaseDefaultActivity
+import com.yoy.v_Base.ui.BaseDefaultActivity
 import kotlin.concurrent.thread
 
 class ScanIPActivity : BaseDefaultActivity() {

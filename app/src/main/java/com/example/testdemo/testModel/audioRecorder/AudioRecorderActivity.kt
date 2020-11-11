@@ -7,11 +7,11 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.testdemo.R
-import com.example.testdemo.base.BaseDefaultActivity
+import com.yoy.v_Base.ui.BaseDefaultActivity
 import com.yoy.v_Base.utils.KLog
-import com.example.testdemo.utlis.ToastUtils
+import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.v_Base.utils.audioplayer.PcmFileUtil
-import com.example.testdemo.utlis.audioplayer.SimpleAudioTrack
+import com.yoy.v_Base.utils.audioplayer.SimpleAudioTrack
 
 class AudioRecorderActivity : BaseDefaultActivity(), InnerAudioRecorder.AudioRecorderListener {
     private val TAG = "Test-AudioRecorder-"

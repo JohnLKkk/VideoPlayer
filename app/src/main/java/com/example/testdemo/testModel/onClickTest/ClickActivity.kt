@@ -58,17 +58,6 @@ class ClickActivity : AppCompatActivity() {
     }
 
     private fun onInputTest() {
-        try {
-            KLog.d(stringFromJNI())
-        }catch (e:Exception){
-        }
     }
 
-    private external fun stringFromJNI():String
-
-    companion object{
-        init {
-            System.loadLibrary("media-handle")
-        }
-    }
 }

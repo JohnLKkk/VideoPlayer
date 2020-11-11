@@ -2,7 +2,7 @@ package com.example.testdemo.testModel.testView
 
 import android.os.Bundle
 import com.example.testdemo.R
-import com.example.testdemo.base.BaseDefaultActivity
+import com.yoy.v_Base.ui.BaseDefaultActivity
 
 class TestViewActivity : BaseDefaultActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

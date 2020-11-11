@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom">
+
+    <RelativeLayout
+        android:id="@+id/tmp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@color/video_top_black">
+
+        <TextView
+            android:id="@+id/playTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/x100"
+            android:text="@string/defaultPlayTime"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/x20" />
+
+        <ImageView
+            android:id="@+id/playBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/x30"
+            android:layout_marginEnd="@dimen/x30"
+            android:background="@drawable/ic_start_play" />
+
+        <ImageView
+            android:id="@+id/preBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/playBtn"
+            android:background="@drawable/ic_pre" />
+
+        <ImageView
+            android:id="@+id/nextBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/playBtn"
+            android:background="@drawable/ic_next" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/x50"
+            android:layout_toEndOf="@id/nextBtn">
+
+            <com.yoy.videoplayer.processing.DecodeOptionTextView
+                android:id="@+id/decodeTypeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:paddingStart="@dimen/x20"
+                android:paddingEnd="@dimen/x20"
+                android:gravity="center_vertical|end"
+                android:text="@string/decodeType"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <com.yoy.videoplayer.processing.VideoPreviewBar
+        android:id="@+id/videoPreview"
+        android:layout_width="match_parent"
+        android:translationY="@dimen/x12"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tmp"/>
+</RelativeLayout>

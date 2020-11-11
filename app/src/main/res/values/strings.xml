@@ -1,19 +1,5 @@
 <resources>
     <string name="app_name">TestExample</string>
     <string name="description">用于支持语音鼠标相关的功能。关闭此服务后将无法正常响应相关的按键功能。</string>
-    <string name="selectVideoPath">选择视频</string>
-    <string name="defaultPlayTime_">00:00</string>
-    <string name="defaultPlayTime">00:00 / 00:00</string>
-    <string name="playTime">%s / %s</string>
-    <string name="decodeType">硬解码</string>
 
-    <string name="filter_sketch">素描</string>
-    <string name="filter_distinct">鲜明</string>
-    <string name="filter_warming">暖蓝</string>
-    <string name="filter_edge">边缘</string>
-    <string name="filter_division">九宫格</string>
-    <string name="filter_equalize">均衡</string>
-    <string name="filter_rectangle">矩形</string>
-    <string name="filter_flip">翻转</string>
-    <string name="filter_sharpening">锐化</string>
 </resources>

@@ -5,11 +5,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import com.example.testdemo.R
-import com.example.testdemo.base.BaseDefaultActivity
+import com.yoy.v_Base.ui.BaseDefaultActivity
 
 
 class PopupWindowActivity : BaseDefaultActivity() {

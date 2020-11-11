@@ -1,17 +1,26 @@
-applyPlugin(project,false)
+applyPlugin(project,true)
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "30.0.2"
+    compileSdkVersion rootProject.ext.compileSdk
+    buildToolsVersion rootProject.ext.buildTools
 
     defaultConfig {
         applicationId "com.yoy.videoplayer"
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.targetSdk
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions -Wno-deprecated-declarations"
+                cFlags "-DSTDC_HEADERS"
+            }
+        }
+        ndk { // 声明编译的架构类型，指定为armeabi-v7a即可
+            abiFilters "armeabi-v7a","arm64-v8a"
+        }
     }
 
     buildTypes {
@@ -24,9 +33,22 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        main {
+            // 指定存放native代码的目录，这里指定为jni和cpp皆可
+            jni.srcDirs = ['src/main/jni', 'src/main/cpp/']
+        }
+    }
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+            version "3.10.2"
+        }
+    }
+    ndkVersion "21.0.6113669"
 }
 
 dependencies {

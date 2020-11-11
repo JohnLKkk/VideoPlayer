@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.example.testdemo.R
-import com.example.testdemo.base.BaseDefaultActivity
+import com.yoy.v_Base.ui.BaseDefaultActivity
 import java.io.*
 import java.net.*
 import kotlin.concurrent.thread

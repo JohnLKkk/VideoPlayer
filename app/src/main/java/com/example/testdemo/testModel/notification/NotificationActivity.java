@@ -13,12 +13,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.testdemo.R;
-import com.example.testdemo.base.BaseDefaultActivity;
-
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import com.example.testdemo.R;
+import com.yoy.v_Base.ui.BaseDefaultActivity;
 
 public class NotificationActivity extends BaseDefaultActivity {
     private NotificationManager manager;

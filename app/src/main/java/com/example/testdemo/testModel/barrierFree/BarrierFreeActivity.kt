@@ -5,9 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
-import com.example.testdemo.base.BaseDefaultActivity
+import com.yoy.v_Base.ui.BaseDefaultActivity
 import kotlinx.android.synthetic.main.activity_barrier_free.*
 
 class BarrierFreeActivity : BaseDefaultActivity() {

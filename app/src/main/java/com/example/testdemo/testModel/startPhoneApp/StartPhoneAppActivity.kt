@@ -6,10 +6,9 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
-import com.example.testdemo.base.BaseDefaultActivity
-import com.example.testdemo.utlis.ToastUtils
+import com.yoy.v_Base.ui.BaseDefaultActivity
+import com.yoy.v_Base.utils.ToastUtils
 import kotlinx.android.synthetic.main.activity_start_phone_app.*
 
 class StartPhoneAppActivity : BaseDefaultActivity() {

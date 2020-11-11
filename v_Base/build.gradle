@@ -24,15 +24,20 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        main {
+            res.srcDirs += ['../commonRes/dimen']
+        }
+    }
     kotlinOptions {
         jvmTarget = '1.8'
     }
 }
 
 dependencies {
-    testApi rootProject.ext.junit
-    androidTestApi rootProject.ext.ext_junit
-    androidTestApi rootProject.ext.espresso_core
+    testImplementation rootProject.ext.junit
+    androidTestImplementation rootProject.ext.ext_junit
+    androidTestImplementation rootProject.ext.espresso_core
     api rootProject.ext.kotlin_stdlib
     api rootProject.ext.core_ktx
     api rootProject.ext.constraint_layout

@@ -2,11 +2,10 @@ package com.example.testdemo.testModel.viewpager;
 
 import android.os.Bundle;
 
-import com.example.testdemo.R;
-import com.example.testdemo.base.BaseDefaultActivity;
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
+
+import com.example.testdemo.R;
+import com.yoy.v_Base.ui.BaseDefaultActivity;
 
 public class ViewPagerActivity extends BaseDefaultActivity {
 

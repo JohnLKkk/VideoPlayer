@@ -11,15 +11,4 @@
         android:layout_height="@dimen/x200"
         android:layout_alignParentBottom="true"
         android:background="@android:color/black" />
-
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/tmp1"
-        android:maxHeight="2dp"
-        android:paddingStart="@dimen/x150"
-        android:paddingEnd="@dimen/x150"
-        android:progressDrawable="@drawable/ic_video_seekbar_bg"
-        android:thumb="@drawable/ic_progress_bg"
-        android:translationY="@dimen/x10" />
 </RelativeLayout>

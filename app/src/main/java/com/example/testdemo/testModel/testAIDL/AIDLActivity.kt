@@ -4,14 +4,13 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
 import com.example.testdemo.IAppAIDLTest
 import com.example.testdemo.R
-import com.example.testdemo.base.BaseDefaultActivity
+import com.yoy.v_Base.ui.BaseDefaultActivity
 
 class AIDLActivity : BaseDefaultActivity() {
     private val str = "com.example.library_test_aidl.hello"

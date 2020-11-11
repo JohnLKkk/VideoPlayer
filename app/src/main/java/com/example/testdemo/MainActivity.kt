@@ -15,7 +15,6 @@ import com.example.testdemo.testModel.popupWindow.PopupWindowActivity
 import com.example.testdemo.testModel.scanDevicesIP.ScanIPActivity
 import com.example.testdemo.testModel.startPhoneApp.StartPhoneAppActivity
 import com.example.testdemo.testModel.testView.TestViewActivity
-import com.example.testdemo.testModel.videoProcessing.VideoPlayActivity
 import com.example.testdemo.testModel.viewpager.ViewPagerActivity
 import com.yoy.v_Base.ui.BaseDefaultActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,10 +44,8 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_9.setOnClickListener(this)
         btn_10.setOnClickListener(this)
         btn_11.setOnClickListener(this)
-        btn_12.setOnClickListener(this)
         setActionBar("测试模块")
 //        startActivity(Intent(this, ClickActivity::class.java))
-        startActivity(Intent(this, VideoPlayActivity::class.java))
     }
 
     override fun getLayoutID(): Int = R.layout.activity_main
@@ -75,7 +72,6 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
             R.id.btn_9 -> startActivity(Intent(this, PermissionActivity::class.java))
             R.id.btn_10 -> startActivity(Intent(this, StartPhoneAppActivity::class.java))
             R.id.btn_11 -> startActivity(Intent(this, ScanIPActivity::class.java))
-            R.id.btn_12 -> startActivity(Intent(this, VideoPlayActivity::class.java))
         }
     }
 }

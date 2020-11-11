@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="x_150">150dp</dimen>
-    <dimen name="x_180">180dp</dimen>
-    <dimen name="x_200">200dp</dimen>
-    <dimen name="x_240">240dp</dimen>
-    <dimen name="x_360">360dp</dimen>
-</resources>

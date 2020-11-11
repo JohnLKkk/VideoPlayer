@@ -19,7 +19,7 @@
     (JNIEnv *env, jobject thiz, ##__VA_ARGS__)\
 
 #define VIDEO_PLAYER_FUNC(RETURN_TYPE, FUNC_NAME, ...) \
-    JNIEXPORT RETURN_TYPE JNICALL Java_com_example_testdemo_testModel_videoProcess_decoder_VideoFFMPEGDecoder_ ## FUNC_NAME \
+    JNIEXPORT RETURN_TYPE JNICALL Java_com_yoy_videoplayer_processing_decoder_VideoFFMPEGDecoder_ ## FUNC_NAME \
     (JNIEnv *env, jobject thiz, ##__VA_ARGS__)\
 
 #define MEDIA_PLAYER_FUNC(RETURN_TYPE, FUNC_NAME, ...) \

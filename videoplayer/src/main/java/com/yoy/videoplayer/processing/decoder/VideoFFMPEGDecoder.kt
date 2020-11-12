@@ -5,6 +5,7 @@ import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
 import android.os.Build
+import android.text.TextUtils
 import android.view.SurfaceHolder
 import com.yoy.videoplayer.processing.FileAttributes
 
@@ -16,14 +17,17 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
 
     private var holder: SurfaceHolder? = null
 
+    private var vPath = ""
+
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
         if (fileInfo.isValid) {
             this.holder = holder
+            if (!TextUtils.isEmpty(vPath)) setDataSource(vPath)
         }
-
     }
 
     override fun setDataSource(path: String) {
+        vPath = path
         if (holder == null) return
         Thread {
             try {
@@ -53,8 +57,8 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     }
 
     override fun release() {
-        destroy()
-        callback.onCompletion()
+//        destroy()
+//        callback.onCompletion()
     }
 
     //region  ------------ffmpeg decoder

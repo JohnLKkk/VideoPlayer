@@ -53,7 +53,7 @@ class DecodeOptionTextView : AppCompatTextView,
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         KLog.e("onItemClick---------,item:" + mAdapter.getItem(position))
         currentDecodeType = mAdapter.getItemDT(position)
-        setText(currentDecodeType)
+        setTextAndDecodeType(currentDecodeType)
         mPopupWindow.dismiss()
     }
 
@@ -126,12 +126,12 @@ class DecodeOptionTextView : AppCompatTextView,
 
     fun setClickCallback(clickItemCallback: ClickItemCallback) {
         this.callback = clickItemCallback
-        setText(currentDecodeType)
+        setTextAndDecodeType(currentDecodeType)
     }
 
-    private fun setText(decodeType: DecodeType) {
+    fun setTextAndDecodeType(decodeType: DecodeType) {
         text = decodeType.cn
-        callback?.onClickCallback(currentDecodeType)
+        callback?.onClickCallback(decodeType)
     }
 
     interface ClickItemCallback {

@@ -8,20 +8,21 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.yoy.v_Base.ui.BaseDefaultActivity
 import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.FileTools
 import com.yoy.v_Base.utils.KLog
-import com.yoy.v_Base.ui.BaseDefaultActivity
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoplayer.R
 import com.yoy.videoplayer.VideoApplication
 
 class VideoPlayActivity : BaseDefaultActivity() {
     private val basePermissions = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.RECORD_AUDIO
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+//            Manifest.permission.RECORD_AUDIO
     )
     private var permissionDialog: AlertDialog? = null
     private lateinit var uiControl: VideoPlayUiControl
@@ -67,7 +68,7 @@ class VideoPlayActivity : BaseDefaultActivity() {
             for (i in permissions.indices) {
                 var resultStr = ""
                 when (permissions[i]) {
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE ->
+                    Manifest.permission.READ_EXTERNAL_STORAGE ->
                         resultStr = if (grantResults[i] == PackageManager.PERMISSION_GRANTED) "" else "读写权限获取失败"
                     Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.MODIFY_AUDIO_SETTINGS ->
@@ -82,7 +83,7 @@ class VideoPlayActivity : BaseDefaultActivity() {
 
     private fun checkPermission(): Boolean {
         for (a in basePermissions) {
-            if (ContextCompat.checkSelfPermission(this, a) == PackageManager.PERMISSION_GRANTED) return true
+            if (ContextCompat.checkSelfPermission(this, a) == PackageManager.PERMISSION_GRANTED) break
             KLog.d("AuthActivity#checkPermission", "没有读写或录音权限，请求权限")
             if (permissionDialog == null) {
                 permissionDialog = AlertDialog.Builder(this)
@@ -109,6 +110,7 @@ class VideoPlayActivity : BaseDefaultActivity() {
             permissionDialog?.show()
             return false
         }
+        Log.i("checkPermission","AuthActivity#checkPermission-拿到所有权限")
         return true
     }
 

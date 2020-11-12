@@ -15,7 +15,7 @@ object AppCode {
     * 如:WakeupService 也会有需要判断权限的情况。这是历史代码遗留的问题，不方便且没时间修改。
     * */
     val basePermissions = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.READ_PHONE_STATE,
 //            Manifest.permission.ACCESS_COARSE_LOCATION,

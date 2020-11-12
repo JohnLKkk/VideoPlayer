@@ -46,7 +46,7 @@ class PermissionActivity : BaseDefaultActivity() {
             for (i in permissions.indices) {
                 var resultStr = ""
                 when (permissions[i]) {
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE -> resultStr = if (grantResults[i] == PackageManager.PERMISSION_GRANTED) "" else "读写权限获取失败"
+                    Manifest.permission.READ_EXTERNAL_STORAGE -> resultStr = if (grantResults[i] == PackageManager.PERMISSION_GRANTED) "" else "读写权限获取失败"
                     Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.MODIFY_AUDIO_SETTINGS -> resultStr = if (grantResults[i] == PackageManager.PERMISSION_GRANTED) "" else "录音权限获取失败，没有基础权限无法继续！"
                     Manifest.permission.READ_PHONE_STATE -> resultStr = if (grantResults[i] == PackageManager.PERMISSION_GRANTED) "" else "请求设备识别码权限失败，无法通过授权！"

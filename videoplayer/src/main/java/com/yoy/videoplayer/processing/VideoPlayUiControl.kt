@@ -33,6 +33,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
     private val playBtn: ImageView = mActivity.findViewById(R.id.playBtn)
     private val preBtn: ImageView = mActivity.findViewById(R.id.preBtn)
     private val nextBtn: ImageView = mActivity.findViewById(R.id.nextBtn)
+    private var decodeTypeTv: DecodeOptionTextView = mActivity.findViewById(R.id.decodeTypeTv)
 
     private val mHandler = Handler(Looper.getMainLooper())
 
@@ -64,9 +65,8 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
 
     fun setPresenter(presenter: VideoPlayPresenter) {
         this.mPresenter = presenter
-        (mActivity.findViewById(R.id.decodeTypeTv) as DecodeOptionTextView).apply {
-            setClickCallback(mPresenter)
-        }
+        decodeTypeTv.setClickCallback(mPresenter)
+        decodeTypeTv.setTextAndDecodeType(DecodeType.FFMPEGDecoder)
         videoView.holder.addCallback(mPresenter.playHandler)
     }
 

@@ -79,7 +79,7 @@ class AudioRecorderActivity : BaseDefaultActivity(), InnerAudioRecorder.AudioRec
     private fun checkPermission(): Boolean {
         val permissions = arrayOf(
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.SYSTEM_ALERT_WINDOW
         )

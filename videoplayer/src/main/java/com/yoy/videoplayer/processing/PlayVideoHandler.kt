@@ -35,7 +35,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     }
 
     override fun onPrepared() {
-        start()
+        plStart()
         isReady = true
         if (listenerThread == null) {
             listenerThread = ListenerPlayTime()
@@ -48,6 +48,9 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
         playStateListener?.onPlayEnd()
     }
 
+    override fun onPlayCancel() {
+    }
+
     private fun getDecoderHandler(): VideoDecoder = when (decoderType) {
         DecodeType.FFMPEGDecoder -> sDecoder
         DecodeType.HARDDecoder -> hDecoder
@@ -55,7 +58,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     }
 
     fun setDecoderType(decoder: DecodeType) {
-        SPUtils.saveString(AppCode.currentDecodeType,decoder.toString())
+        SPUtils.saveString(AppCode.currentDecodeType, decoder.toString())
         this.decoderType = decoder
     }
 
@@ -70,13 +73,23 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
         getDecoderHandler().setDataSource(path)
     }
 
+    fun release() {
+        isReady = false
+        getDecoderHandler().release()
+        surfaceHolder?.removeCallback(this)
+        if (listenerThread?.isInterrupted == true) {
+            listenerThread?.interrupt()
+        }
+    }
+
+    //region 播放控制或播放信息获取
     @Synchronized
-    fun start() {
+    fun plStart() {
         getDecoderHandler().start()
     }
 
     @Synchronized
-    fun pause() {
+    fun plPause() {
         playStateListener?.onPlayPaused()
         getDecoderHandler().pause()
     }
@@ -94,16 +107,11 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
 
     @Synchronized
     fun getMaxTime(): Int = getDecoderHandler().getPlayTimeIndex(2)
+    //endregion
 
-    fun release() {
-        isReady = false
-        getDecoderHandler().release()
-        surfaceHolder?.removeCallback(this)
-        if (listenerThread?.isInterrupted == true) {
-            listenerThread?.interrupt()
-        }
-    }
-
+    /**
+     * 播放时间更新线程
+     */
     inner class ListenerPlayTime : Thread() {
         override fun run() {
             super.run()

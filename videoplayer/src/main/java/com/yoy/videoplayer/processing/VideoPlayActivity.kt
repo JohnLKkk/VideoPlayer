@@ -43,8 +43,8 @@ class VideoPlayActivity : BaseDefaultActivity() {
         super.onDestroy()
         try {
             permissionDialog?.dismiss()
-            mPresenter.onRelease()
             uiControl.onRelease()
+            mPresenter.onRelease()
         }catch (e:Exception){
             //Ignore
         }

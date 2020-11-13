@@ -20,10 +20,9 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     private var vPath = ""
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
-        if (fileInfo.isValid) {
-            this.holder = holder
-            if (!TextUtils.isEmpty(vPath)) setDataSource(vPath)
-        }
+        if (!fileInfo.isValid) return
+        this.holder = holder
+        if (!TextUtils.isEmpty(vPath)) setDataSource(vPath)
     }
 
     override fun setDataSource(path: String) {
@@ -57,25 +56,10 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     }
 
     override fun release() {
+        holder = null
 //        destroy()
-//        callback.onCompletion()
+        callback.onCompletion()
     }
-
-    //region  ------------ffmpeg decoder
-    private external fun play(filePath: String, surface: Any): Int
-
-    private external fun setPlayRate(playRate: Float)
-
-    private external fun filter(filePath: String, surface: Any, filterType: String): Int
-
-    private external fun again()
-
-    private external fun destroy()
-
-    private external fun playAudio(play: Boolean)
-
-    private external fun stringFromJNI(): String
-    //endregion
     /**
      * 创建音轨
      *
@@ -111,6 +95,28 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
                     bufferSizeInBytes, AudioTrack.MODE_STREAM)
         }
     }
+
+    //region  ------------ffmpeg decoder
+    private external fun play(filePath: String, surface: Any): Int
+
+    private external fun setPlayRate(playRate: Float)
+
+    private external fun filter(filePath: String, surface: Any, filterType: String): Int
+
+    /**
+     * 停止播放，但不释放资源，一般用于切换滤镜等
+     */
+    private external fun again()
+
+    /**
+     * 停止播放并释放资源
+     */
+    private external fun destroy()
+
+    private external fun playAudio(play: Boolean)
+
+    private external fun stringFromJNI(): String
+    //endregion
 
     companion object {
         init {

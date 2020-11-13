@@ -14,4 +14,9 @@ interface PlayStateCallback {
      * 播放结束
      */
     fun onCompletion()
+
+    /**
+     * 播放取消、终止
+     */
+    fun onPlayCancel()
 }

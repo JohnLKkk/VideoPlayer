@@ -119,15 +119,16 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
     }
 
     fun onRelease() {
+        videoView.holder.removeCallback(mPresenter.playHandler)
     }
 
     private fun changePlayState() {
         if (mPresenter.playHandler.isPlaying()) {
             playBtn.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_stop_play)
-            mPresenter.playHandler.pause()
+            mPresenter.playHandler.plPause()
         } else {
             playBtn.background = ContextCompat.getDrawable(mActivity, R.drawable.ic_start_play)
-            mPresenter.playHandler.start()
+            mPresenter.playHandler.plStart()
         }
     }
 

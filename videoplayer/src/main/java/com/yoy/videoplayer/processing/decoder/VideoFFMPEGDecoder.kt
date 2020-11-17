@@ -57,7 +57,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
 
     override fun release() {
         holder = null
-//        destroy()
+        destroy()
         callback.onCompletion()
     }
     /**

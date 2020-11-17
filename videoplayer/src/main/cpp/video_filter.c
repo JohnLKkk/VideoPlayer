@@ -344,6 +344,7 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
     AVPacket packet;
 
     while (av_read_frame(pFormatCtx, &packet) >= 0 && !release) {
+        LOGD(TAG,"视频处理中……")
         //switch filter
         if (again) {
             goto again;
@@ -408,6 +409,7 @@ VIDEO_PLAYER_FUNC(jint, filter, jstring filePath, jobject surface, jstring filte
         free(buffer);
     }
     free(sws_ctx);
+    LOGI(TAG,"width:%d ;height:%d",windowBuffer.width,windowBuffer.height)
     free(&windowBuffer);
     free(out_buffer);
     free(audio_swr_ctx);

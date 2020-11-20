@@ -1,4 +1,4 @@
-applyPlugin(project,false)
+applyPlugin(project, false)
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -10,6 +10,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        buildConfigField "Integer", "AUTH_TYPE", '1'
     }
 
     buildTypes {

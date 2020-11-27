@@ -1,7 +1,6 @@
-package com.yoy.testdemo
+package com.yoy.videoplayer
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.testdemo.gg.AdManager
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -14,6 +13,5 @@ import org.junit.runner.RunWith
 class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
-        AdManager.onOpenActionAdd()
     }
 }

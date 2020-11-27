@@ -56,4 +56,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':v_Base')
+    testImplementation rootProject.ext.junit
+    androidTestImplementation rootProject.ext.ext_junit
 }

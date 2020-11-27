@@ -71,7 +71,7 @@ class NetRequestObj(var url: String, var requestCallback: NetWorkManager.Request
     fun containsKeyHeader(keyStr: String) = requestHeader.containsKey(keyStr)
 
     override fun toString(): String {
-        var output = "url:\"$url\"; "
+        var output = "url:\"$url\"; \n"
         for (s in data)
             output += s.key + ":" + s.value + "; \n"
         return output

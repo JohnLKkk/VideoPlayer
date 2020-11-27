@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#33000000">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent">
+
+        <FrameLayout
+            android:id="@+id/advertisingView"
+            android:layout_width="@dimen/x640"
+            android:layout_height="@dimen/x400"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/darker_gray">
+
+            <TextView
+                android:id="@+id/adTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="@dimen/x25"
+                tools:text="测试" />
+
+            <ImageView
+                android:id="@+id/adImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/advertisingView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/x40">
+
+            <Button
+                android:id="@+id/goAdvertisingBtn"
+                style="@style/AdvertisingView_Btn"
+                android:layout_marginEnd="@dimen/x50"
+                android:background="@drawable/ic_go_advertising_btn"
+                android:text="进入活动" />
+
+            <Button
+                android:id="@+id/cancelBtn"
+                style="@style/AdvertisingView_Btn"
+                android:layout_marginStart="@dimen/x50"
+                android:background="@drawable/ic_cancel_btn"
+                android:text="我知道了" />
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

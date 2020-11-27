@@ -4,6 +4,7 @@ import android.util.Log
 import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
+import java.nio.charset.Charset
 import java.util.concurrent.LinkedBlockingDeque
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -16,8 +17,7 @@ import java.util.concurrent.TimeUnit
 class NetWorkManager : Callback {
     private val TAG = NetWorkManager::class.java.simpleName
     private var threadPoolExecutor = ThreadPoolExecutor(
-        3, 10, 120
-        , TimeUnit.SECONDS, LinkedBlockingDeque<Runnable>()
+            3, 10, 120, TimeUnit.SECONDS, LinkedBlockingDeque()
     )
     private var requestList = HashMap<Call, NetRequestObj>()
     private var okHttpClient = OkHttpClient()
@@ -36,7 +36,7 @@ class NetWorkManager : Callback {
         addHeader(request, netRequestObj)
         request.url(netRequestObj.url)
         request.post(addBody(netRequestObj))
-        println(netRequestObj.toString())
+        Log.d(TAG, netRequestObj.toString())
         val call = okHttpClient.newCall(request.build())
         requestList[call] = netRequestObj
         threadPoolExecutor.execute {
@@ -85,7 +85,7 @@ class NetWorkManager : Callback {
      * 添加请求参数
      */
     private fun addBody(netRequestObj: NetRequestObj): FormBody {
-        val formBody = FormBody.Builder()
+        val formBody = FormBody.Builder(Charset.defaultCharset())
         if (netRequestObj.isEncode)
             for (s in netRequestObj.getData())
                 formBody.addEncoded(s.key, s.value)

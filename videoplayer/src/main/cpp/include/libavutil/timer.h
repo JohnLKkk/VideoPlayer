@@ -30,7 +30,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-#include "ffmpeg/config.h"
+#include "config.h"
 
 #if HAVE_MACH_MACH_TIME_H
 #include <mach/mach_time.h>
@@ -38,17 +38,15 @@
 
 #include "log.h"
 
-//TODO
-#include "libavutil/arm/timer.h"
-//#if   ARCH_AARCH64
-//#   include "aarch64/timer.h"
-//#elif ARCH_ARM
-//#   include "arm/timer.h"
-//#elif ARCH_PPC
-//#   include "ppc/timer.h"
-//#elif ARCH_X86
-//#   include "x86/timer.h"
-//#endif
+#if   ARCH_AARCH64
+#   include "aarch64/timer.h"
+#elif ARCH_ARM
+#   include "arm/timer.h"
+#elif ARCH_PPC
+#   include "ppc/timer.h"
+#elif ARCH_X86
+#   include "x86/timer.h"
+#endif
 
 #if !defined(AV_READ_TIME)
 #   if HAVE_GETHRTIME

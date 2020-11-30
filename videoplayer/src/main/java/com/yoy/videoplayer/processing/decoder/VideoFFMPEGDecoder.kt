@@ -30,7 +30,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
         if (holder == null) return
         Thread {
             try {
-                filter(path, holder!!.surface, filters[5])
+                playVideo(path, holder!!.surface)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -57,9 +57,10 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
 
     override fun release() {
         holder = null
-        destroy()
+        mDestroy()
         callback.onCompletion()
     }
+
     /**
      * 创建音轨
      *
@@ -97,25 +98,30 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     }
 
     //region  ------------ffmpeg decoder
-    private external fun play(filePath: String, surface: Any): Int
+//    private external fun play(filePath: String, surface: Any): Int
 
-    private external fun setPlayRate(playRate: Float)
+//    private external fun setPlayRate(playRate: Float)
 
-    private external fun filter(filePath: String, surface: Any, filterType: String): Int
+//    private external fun filter(filePath: String, surface: Any, filterType: String): Int
 
     /**
      * 停止播放，但不释放资源，一般用于切换滤镜等
      */
-    private external fun again()
+//    private external fun again()
 
     /**
      * 停止播放并释放资源
      */
-    private external fun destroy()
+//    private external fun destroy()
 
-    private external fun playAudio(play: Boolean)
+//    private external fun playAudio(play: Boolean)
+
 
     private external fun stringFromJNI(): String
+
+    private external fun playVideo(vPath: String, surface: Any): Int
+
+    private external fun mDestroy()
     //endregion
 
     companion object {

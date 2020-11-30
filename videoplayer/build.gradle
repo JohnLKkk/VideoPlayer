@@ -1,4 +1,4 @@
-applyPlugin(project,true)
+applyPlugin(project, true)
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -12,6 +12,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
         externalNativeBuild {
             cmake {
                 cppFlags "-frtti -fexceptions -Wno-deprecated-declarations"
@@ -55,7 +56,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':v_Base')
     testImplementation rootProject.ext.junit
     androidTestImplementation rootProject.ext.ext_junit
+    androidTestImplementation rootProject.ext.app_joint_core
+    androidTestImplementation rootProject.ext.runner
+    implementation project(':v_Base')
 }

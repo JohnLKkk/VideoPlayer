@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Janne Grunau <janne-libav@jannau.net>
+ * Copyright (c) 2002-2004 Michael Niedermayer <michaelni@gmx.at>
  *
  * This file is part of FFmpeg.
  *
@@ -18,27 +18,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef AVUTIL_AARCH64_TIMER_H
-#define AVUTIL_AARCH64_TIMER_H
+#ifndef AVUTIL_REVERSE_H
+#define AVUTIL_REVERSE_H
 
 #include <stdint.h>
-#include "ffmpeg/config.h"
 
-#if HAVE_INLINE_ASM
+extern const uint8_t ff_reverse[256];
 
-#define AV_READ_TIME read_time
-
-static inline uint64_t read_time(void)
-{
-    uint64_t cycle_counter;
-    __asm__ volatile(
-        "isb                   \t\n"
-        "mrs %0, pmccntr_el0       "
-        : "=r"(cycle_counter) :: "memory" );
-
-    return cycle_counter;
-}
-
-#endif /* HAVE_INLINE_ASM */
-
-#endif /* AVUTIL_AARCH64_TIMER_H */
+#endif /* AVUTIL_REVERSE_H */

@@ -103,7 +103,6 @@
 -keep public class * extends android.preference.Preference
 -keep public class * extends android.view.View
 -keep public class com.android.vending.licensing.ILicensingService
--keep class android.support.** {*;}
 
 #不要混淆MyBean的所有属性与方法
 #-keepclasseswithmembers class BaseApplication {

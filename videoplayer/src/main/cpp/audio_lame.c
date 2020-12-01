@@ -1,5 +1,5 @@
 
-#include "include/lame/lame.h"
+#include "lame/lame.h"
 #include <jni.h>
 #include "ffmpeg_jni_define.h"
 

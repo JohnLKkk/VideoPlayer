@@ -7,7 +7,7 @@
 int isRelease;
 
 int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
-    isRelease=0;
+    isRelease = 0;
     //初始化所有组件
     av_register_all();
     //分配一个AVFormatContext结构
@@ -22,7 +22,7 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
         LOGE("Could not find stream information");
         goto end_line;
     }
-    //4.查找视频轨
+    //4.查找视频轨(视频数据类型)
     for (int index = 0; index < pFormatCtx->nb_streams; index++) {
         if (pFormatCtx->streams[index]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
             videoIndex = index;
@@ -58,10 +58,11 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     out_buffer = (uint8_t *) av_malloc(bufferSize * sizeof(uint8_t));
     av_image_fill_arrays(pFrameRGBA->data, pFrameRGBA->linesize, out_buffer, AV_PIX_FMT_RGBA,
                          width, height, 1);
+    //创建SwsContext用于缩放、转换操作
     sws_ctx = sws_getContext(width, height, vCodecCtx->pix_fmt,
                              width, height, AV_PIX_FMT_RGBA, SWS_BILINEAR, nullptr, nullptr,
                              nullptr);
-    //默认为RGB565
+    //更改窗口缓冲区的格式和大小。
     if (ANativeWindow_setBuffersGeometry(nativeWindow, width, height, WINDOW_FORMAT_RGBA_8888) <
         0) {
         LOGE("Could not set buffers geometry");
@@ -71,44 +72,44 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     //读取帧
     while (av_read_frame(pFormatCtx, vPacket) >= 0) {
         if (isRelease)break;
-        LOGI("vPacket->stream_index：%d ;isRelease:%d", vPacket->stream_index, isRelease);
-        if (vPacket->stream_index == videoIndex) {
-            //视频解码
-            if (avcodec_send_packet(vCodecCtx, vPacket) != 0) {
-                return -1;
-            }
-            while (avcodec_receive_frame(vCodecCtx, vFrame) == 0) {
-                if (isRelease)break;
-                LOGI("接收帧 ;isRelease:%d", isRelease);
-                //转化格式
-                sws_scale(sws_ctx, (const uint8_t *const *) vFrame->data, vFrame->linesize,
-                          0,
-                          vCodecCtx->height,
-                          pFrameRGBA->data, pFrameRGBA->linesize);
-                if (ANativeWindow_lock(nativeWindow, &windowBuffer, nullptr) < 0) {
-                    LOGE("cannot lock window");
-                } else {
-                    //逐行复制
-                    auto *bufferBits = (uint8_t *) windowBuffer.bits;
-                    for (int h = 0; h < height; h++) {
-                        memcpy(bufferBits + h * windowBuffer.stride * 4,
-                               out_buffer + h * pFrameRGBA->linesize[0],
-                               pFrameRGBA->linesize[0]);
-                    }
-                    ANativeWindow_unlockAndPost(nativeWindow);
+        if (vPacket->stream_index != videoIndex) continue;
+        //视频解码
+        if (avcodec_send_packet(vCodecCtx, vPacket) != 0) break;
+        //从解码器接收返回的帧数据
+        while (avcodec_receive_frame(vCodecCtx, vFrame) == 0) {
+            if (isRelease)break;
+            //转化格式
+            sws_scale(sws_ctx, (const uint8_t *const *) vFrame->data, vFrame->linesize,
+                      0,
+                      vCodecCtx->height,
+                      pFrameRGBA->data, pFrameRGBA->linesize);
+            if (ANativeWindow_lock(nativeWindow, &windowBuffer, nullptr) >= 0) {
+                //逐行复制
+                auto *bufferBits = (uint8_t *) windowBuffer.bits;
+                for (int h = 0; h < height; h++) {
+                    memcpy(bufferBits + h * windowBuffer.stride * 4,
+                           out_buffer + h * pFrameRGBA->linesize[0],
+                           pFrameRGBA->linesize[0]);
                 }
+                ANativeWindow_unlockAndPost(nativeWindow);
+            } else {
+                LOGE("cannot lock window");
             }
         }
         av_packet_unref(vPacket);
     }
     //释放内存
     sws_freeContext(sws_ctx);
-    end_line:
 
+    end_line:
     av_free(vPacket);
-    av_free(pFrameRGBA);
+    av_frame_free(&vFrame);
+    av_frame_free(&pFrameRGBA);
     avcodec_close(vCodecCtx);
     avformat_close_input(&pFormatCtx);
+    avformat_free_context(pFormatCtx);
+    avcodec_free_context(&vCodecCtx);
+    ANativeWindow_release(nativeWindow);
     return 0;
 }
 

@@ -39,12 +39,16 @@ class VideoPlayActivity : BaseDefaultActivity() {
         if (!TextUtils.isEmpty(mPresenter.videoPath)&&checkPermission()) mPresenter.onClickPlay()
     }
 
+    override fun onStop() {
+        super.onStop()
+        mPresenter.onRelease()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         try {
             permissionDialog?.dismiss()
             uiControl.onRelease()
-            mPresenter.onRelease()
         }catch (e:Exception){
             //Ignore
         }

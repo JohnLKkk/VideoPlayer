@@ -39,13 +39,13 @@
 #include "log.h"
 
 #if   ARCH_AARCH64
-#   include "aarch64/timer.h"
+#   include "libavutil/aarch64/timer.h"
 #elif ARCH_ARM
-#   include "arm/timer.h"
+#   include "libavutil/arm/timer.h"
 #elif ARCH_PPC
-#   include "ppc/timer.h"
+#   include "libavutil/ppc/timer.h"
 #elif ARCH_X86
-#   include "x86/timer.h"
+#   include "libavutil/x86/timer.h"
 #endif
 
 #if !defined(AV_READ_TIME)

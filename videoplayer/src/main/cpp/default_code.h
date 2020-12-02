@@ -5,7 +5,7 @@
 #ifndef TESTEXAMPLE_DEFAULT_CODE_H
 #define TESTEXAMPLE_DEFAULT_CODE_H
 
-#include "my/logger.h"
+#include "logger.h"
 
 #define VIDEO_PLAYER_FUNC(RETURN_TYPE, FUNC_NAME, ...) \
     JNIEXPORT RETURN_TYPE JNICALL Java_com_yoy_videoplayer_processing_decoder_VideoFFMPEGDecoder_ ## FUNC_NAME \

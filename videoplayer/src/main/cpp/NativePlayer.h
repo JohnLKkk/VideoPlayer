@@ -14,6 +14,10 @@ extern "C" {
 #include "libavformat/avformat.h"
 #include "libavutil/imgutils.h"
 #include "libswscale/swscale.h"
+#include "libavfilter/avfilter.h"
+#include "libavutil/opt.h"
+#include <libavfilter/buffersrc.h>
+#include <libavfilter/buffersink.h>
 
 #ifdef __cplusplus
 }
@@ -26,7 +30,7 @@ class NativePlayer {
     int videoIndex = -1;
 
     AVPacket *vPacket = NULL;
-    AVFrame *vFrame = NULL, *pFrameRGBA = NULL;
+    AVFrame *vFrame = NULL, *pFrameRGBA = NULL, *filter_frame = NULL;
     AVCodecContext *vCodecCtx = NULL;
     SwsContext *sws_ctx = NULL;
     AVFormatContext *pFormatCtx = NULL;
@@ -34,7 +38,13 @@ class NativePlayer {
     ANativeWindow_Buffer windowBuffer;
 
     AVCodec *vCodec = NULL;
+
+    AVFilterContext *buffersink_ctx;
+    AVFilterContext *buffersrc_ctx;
+    AVFilterGraph *filter_graph;
 public:
+    int init_filters(const char *filters_descr);
+
     int playVideo(const char *vPath, ANativeWindow *nativeWindow);
 
     void mDestroy();

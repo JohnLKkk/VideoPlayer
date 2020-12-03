@@ -1,4 +1,4 @@
-package com.yoy.videoplayer.processing.decoder
+package com.yoy.videoPlayer.processing.decoder
 
 import android.media.AudioAttributes
 import android.media.AudioFormat
@@ -7,7 +7,7 @@ import android.media.AudioTrack
 import android.os.Build
 import android.text.TextUtils
 import android.view.SurfaceHolder
-import com.yoy.videoplayer.processing.FileAttributes
+import com.yoy.videoPlayer.processing.FileAttributes
 
 /**
  * Created by Void on 2020/9/9 20:20

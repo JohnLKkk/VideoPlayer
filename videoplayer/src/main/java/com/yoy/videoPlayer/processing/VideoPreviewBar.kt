@@ -1,4 +1,4 @@
-package com.yoy.videoplayer.processing
+package com.yoy.videoPlayer.processing
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,7 +7,7 @@ import android.view.TextureView
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
-import com.yoy.videoplayer.R
+import com.yoy.videoPlayer.R
 
 /**
  * Created by Void on 2020/9/23 15:50

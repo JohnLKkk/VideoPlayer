@@ -1,4 +1,4 @@
-package com.yoy.videoplayer
+package com.yoy.videoPlayer
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test

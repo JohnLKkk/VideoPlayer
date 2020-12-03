@@ -62,7 +62,10 @@ abstract class BaseDefaultActivity : AppCompatActivity() {
 
     open fun isFullScreenWindow(): Boolean = false
 
-    open fun setActionBar(mTitle: String,hasBackBtn:Boolean=false) {
+    /**
+     * 设置 ActionBar的标题和返回键
+     */
+    open fun setActionBar(mTitle: String, hasBackBtn: Boolean = false) {
         supportActionBar?.run {
             setHomeButtonEnabled(hasBackBtn)
             setDisplayHomeAsUpEnabled(hasBackBtn)

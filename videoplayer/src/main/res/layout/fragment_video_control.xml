@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:stretchColumns="*">
+
+    <TableRow>
+        <SeekBar
+            android:id="@+id/videoProgressBar"
+            android:layout_gravity="center_vertical"
+            android:layout_span="3"
+            android:max="100"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:progress="50"
+            android:progressDrawable="@drawable/ic_video_seekbar_bg"
+            android:thumb="@drawable/ic_progress_bg" />
+
+        <TextView
+            android:id="@+id/playTime"
+            android:gravity="center"
+            android:padding="@dimen/x5"
+            android:text="@string/defaultPlayTime"
+            android:textColor="@color/black"
+            android:textSize="@dimen/x20" />
+    </TableRow>
+
+    <TableRow android:layout_marginBottom="@dimen/x5">
+
+        <Button
+            android:id="@+id/selectFileBtn"
+            style="@style/TableLayoutBtn"
+            android:layout_span="2"
+            android:text="选择文件" />
+
+        <Button
+            android:id="@+id/videoHistory"
+            style="@style/TableLayoutBtn"
+            android:layout_span="2"
+            android:text="播放历史" />
+    </TableRow>
+
+    <TableRow android:layout_marginBottom="@dimen/x5">
+
+        <Button
+            android:id="@+id/playBtn"
+            style="@style/TableLayoutBtn"
+            android:text="播放" />
+
+        <Button
+            android:id="@+id/stopBtn"
+            style="@style/TableLayoutBtn"
+            android:text="暂停" />
+
+        <Button
+            android:id="@+id/goBackBtn"
+            style="@style/TableLayoutBtn"
+            android:text="快退" />
+
+        <Button
+            android:id="@+id/forwardBtn"
+            style="@style/TableLayoutBtn"
+            android:text="快进" />
+    </TableRow>
+
+    <TableRow android:layout_marginBottom="@dimen/x5">
+
+        <Spinner
+            android:id="@+id/doubleSpeedList"
+            android:entries="@array/DoubleSpeed" />
+
+        <Spinner
+            android:id="@+id/functionList"
+            android:entries="@array/FunctionList" />
+    </TableRow>
+</TableLayout>

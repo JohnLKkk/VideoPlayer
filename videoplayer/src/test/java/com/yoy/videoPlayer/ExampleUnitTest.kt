@@ -1,4 +1,4 @@
-package com.yoy.videoplayer
+package com.yoy.videoPlayer
 
 import org.junit.Test
 

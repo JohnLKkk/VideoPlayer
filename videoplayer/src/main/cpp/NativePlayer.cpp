@@ -112,7 +112,6 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     vCodecCtx = avcodec_alloc_context3(vCodec);
     avcodec_parameters_to_context(vCodecCtx, pFormatCtx->streams[videoIndex]->codecpar);
 
-
     //7.打开解码器
     if (avcodec_open2(vCodecCtx, vCodec, nullptr) < 0) {
         LOGE("Could not open codec");

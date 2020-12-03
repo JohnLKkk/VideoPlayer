@@ -54,7 +54,7 @@
             android:layout_marginEnd="@dimen/x50"
             android:layout_toEndOf="@id/nextBtn">
 
-            <com.yoy.videoplayer.processing.DecodeOptionTextView
+            <com.yoy.videoPlayer.processing.DecodeOptionTextView
                 android:id="@+id/decodeTypeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -68,7 +68,7 @@
         </FrameLayout>
     </RelativeLayout>
 
-    <com.yoy.videoplayer.processing.VideoPreviewBar
+    <com.yoy.videoPlayer.processing.VideoPreviewBar
         android:id="@+id/videoPreview"
         android:layout_width="match_parent"
         android:translationY="@dimen/x12"

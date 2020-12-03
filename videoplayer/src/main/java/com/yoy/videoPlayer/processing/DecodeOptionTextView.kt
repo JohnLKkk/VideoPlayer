@@ -1,4 +1,4 @@
-package com.yoy.videoplayer.processing
+package com.yoy.videoPlayer.processing
 
 import android.content.Context
 import android.graphics.Color
@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.SPUtils
-import com.yoy.videoplayer.R
+import com.yoy.videoPlayer.R
 import java.util.*
 
 /**

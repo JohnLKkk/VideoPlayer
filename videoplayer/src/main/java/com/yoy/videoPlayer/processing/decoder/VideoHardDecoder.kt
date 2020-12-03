@@ -1,10 +1,10 @@
-package com.yoy.videoplayer.processing.decoder
+package com.yoy.videoPlayer.processing.decoder
 
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.view.SurfaceHolder
-import com.yoy.videoplayer.processing.FileAttributes
+import com.yoy.videoPlayer.processing.FileAttributes
 
 /**
  * Created by Void on 2020/9/9 20:20
@@ -23,9 +23,13 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
     }
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
-        if (fileInfo.isValid) {
-            mediaPlayer.setDisplay(holder)
-            mediaPlayer.prepareAsync()
+        try {
+            if (fileInfo.isValid) {
+                mediaPlayer.setDisplay(holder)
+                mediaPlayer.prepareAsync()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -63,9 +67,9 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
     }
 
     override fun release() {
-        isRelease = true
-        mediaPlayer.stop()
+        if (isPlaying()) mediaPlayer.stop()
         mediaPlayer.release()
+        isRelease = true
     }
 
     override fun isPlaying(): Boolean {

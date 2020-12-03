@@ -1,13 +1,13 @@
-package com.yoy.videoplayer.processing
+package com.yoy.videoPlayer.processing
 
 import android.view.SurfaceHolder
 import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.SPUtils
-import com.yoy.videoplayer.processing.decoder.PlayStateCallback
-import com.yoy.videoplayer.processing.decoder.VideoDecoder
-import com.yoy.videoplayer.processing.decoder.VideoFFMPEGDecoder
-import com.yoy.videoplayer.processing.decoder.VideoHardDecoder
+import com.yoy.videoPlayer.processing.decoder.PlayStateCallback
+import com.yoy.videoPlayer.processing.decoder.VideoDecoder
+import com.yoy.videoPlayer.processing.decoder.VideoFFMPEGDecoder
+import com.yoy.videoPlayer.processing.decoder.VideoHardDecoder
 
 /**
  * Created by Void on 2020/8/17 18:02
@@ -18,8 +18,8 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
         SurfaceHolder.Callback {
     private var surfaceHolder: SurfaceHolder? = null
     private var listenerThread: ListenerPlayTime? = null
-    private var sDecoder = VideoFFMPEGDecoder(this)
-    private var hDecoder = VideoHardDecoder(this)
+    private var sDecoder: VideoFFMPEGDecoder? = null
+    private var hDecoder: VideoHardDecoder? = null
     private var decoderType = DecodeType.HARDDecoder
     private var isReady = false
     val fileInfo = FileAttributes()
@@ -31,7 +31,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
-        getDecoderHandler().setDisPlay(holder, fileInfo)
+        getDecoderHandler()?.setDisPlay(holder, fileInfo)
     }
 
     override fun onPrepared() {
@@ -51,10 +51,20 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     override fun onPlayCancel() {
     }
 
-    private fun getDecoderHandler(): VideoDecoder = when (decoderType) {
-        DecodeType.FFMPEGDecoder -> sDecoder
-        DecodeType.HARDDecoder -> hDecoder
-        else -> hDecoder
+    private fun getDecoderHandler(): VideoDecoder? = when (decoderType) {
+        DecodeType.FFMPEGDecoder -> {
+            if (sDecoder == null) {
+                sDecoder = VideoFFMPEGDecoder(this)
+            }
+            sDecoder
+        }
+        DecodeType.HARDDecoder -> {
+            if (hDecoder == null) {
+                hDecoder = VideoHardDecoder(this)
+            }
+            hDecoder
+        }
+        else -> null
     }
 
     fun setDecoderType(decoder: DecodeType) {
@@ -67,15 +77,15 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
      */
     fun setDataPath(path: String) {
         if (!fileInfo.initData(path)) {
-            KLog.e("文件信息初始化失败！path:$path")
+            KLog.e("文件信息初始化失败,请检查文件是否有效！path:$path")
             return
         }
-        getDecoderHandler().setDataSource(path)
+        getDecoderHandler()?.setDataSource(path)
     }
 
     fun release() {
         isReady = false
-        getDecoderHandler().release()
+        getDecoderHandler()?.release()
         surfaceHolder?.removeCallback(this)
         if (listenerThread?.isInterrupted == true) {
             listenerThread?.interrupt()
@@ -85,28 +95,28 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     //region 播放控制或播放信息获取
     @Synchronized
     fun plStart() {
-        getDecoderHandler().start()
+        getDecoderHandler()?.start()
     }
 
     @Synchronized
     fun plPause() {
         playStateListener?.onPlayPaused()
-        getDecoderHandler().pause()
+        getDecoderHandler()?.pause()
     }
 
     @Synchronized
     fun seekTo(time: Int) {
-        getDecoderHandler().seekTo(time)
+        getDecoderHandler()?.seekTo(time)
     }
 
     @Synchronized
-    fun isPlaying(): Boolean = getDecoderHandler().isPlaying()
+    fun isPlaying(): Boolean = getDecoderHandler()?.isPlaying()?:false
 
     @Synchronized
-    fun getCurrentTime(): Int = getDecoderHandler().getPlayTimeIndex(1)
+    fun getCurrentTime(): Int = getDecoderHandler()?.getPlayTimeIndex(1)?:0
 
     @Synchronized
-    fun getMaxTime(): Int = getDecoderHandler().getPlayTimeIndex(2)
+    fun getMaxTime(): Int = getDecoderHandler()?.getPlayTimeIndex(2)?:0
     //endregion
 
     /**

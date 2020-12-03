@@ -1,4 +1,4 @@
-package com.yoy.videoplayer.processing
+package com.yoy.videoPlayer.ui
 
 import android.Manifest
 import android.app.AlertDialog
@@ -16,8 +16,8 @@ import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.FileTools
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.ToastUtils
-import com.yoy.videoplayer.R
-import com.yoy.videoplayer.VideoApplication
+import com.yoy.videoPlayer.R
+import com.yoy.videoPlayer.VideoApplication
 
 class VideoPlayActivity : BaseDefaultActivity() {
     private val basePermissions = arrayOf(
@@ -39,8 +39,8 @@ class VideoPlayActivity : BaseDefaultActivity() {
         if (!TextUtils.isEmpty(mPresenter.videoPath)&&checkPermission()) mPresenter.onClickPlay()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         mPresenter.onRelease()
     }
 

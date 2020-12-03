@@ -1,9 +1,9 @@
-package com.yoy.videoplayer.processing.decoder
+package com.yoy.videoPlayer.processing.decoder
 
 import android.view.SurfaceHolder
-import com.yoy.videoplayer.R
-import com.yoy.videoplayer.VideoApplication
-import com.yoy.videoplayer.processing.FileAttributes
+import com.yoy.videoPlayer.R
+import com.yoy.videoPlayer.VideoApplication
+import com.yoy.videoPlayer.processing.FileAttributes
 
 /**
  * Created by Void on 2020/9/10 14:34

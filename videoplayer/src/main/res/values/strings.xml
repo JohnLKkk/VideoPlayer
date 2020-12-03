@@ -15,4 +15,20 @@
     <string name="filter_rectangle">矩形</string>
     <string name="filter_flip">翻转</string>
     <string name="filter_sharpening">锐化</string>
+
+    <!--倍速播放-->
+    <string-array name="DoubleSpeed">
+        <item>0.5</item>
+        <item>1</item>
+        <item>1.5</item>
+        <item>2</item>
+    </string-array>
+    <!--功能列表-->
+    <string-array name="FunctionList">
+        <item>无</item>
+        <item>滤镜</item>
+        <item>视频剪辑</item>
+        <item>格式转换</item>
+        <item>推流</item>
+    </string-array>
 </resources>

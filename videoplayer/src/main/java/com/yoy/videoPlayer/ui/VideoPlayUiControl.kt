@@ -1,4 +1,4 @@
-package com.yoy.videoplayer.processing
+package com.yoy.videoPlayer.ui
 
 import android.os.Handler
 import android.os.Looper
@@ -8,7 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.yoy.v_Base.utils.TimeUtils
-import com.yoy.videoplayer.R
+import com.yoy.videoPlayer.R
+import com.yoy.videoPlayer.processing.DecodeOptionTextView
+import com.yoy.videoPlayer.processing.DecodeType
+import com.yoy.videoPlayer.processing.VideoPreviewBar
 
 /**
  * Created by Void on 2020/7/27 17:14

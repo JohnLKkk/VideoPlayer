@@ -13,4 +13,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar" >
+
+    </style>
+    <style name="TableLayoutBtn">
+        <item name="android:layout_marginStart">@dimen/x5</item>
+        <item name="android:layout_marginEnd">@dimen/x5</item>
+    </style>
 </resources>

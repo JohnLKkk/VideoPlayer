@@ -1,4 +1,4 @@
-package com.yoy.videoplayer.processing
+package com.yoy.videoPlayer.processing
 
 import java.io.File
 
@@ -25,6 +25,7 @@ class FileAttributes {
     fun initData(path: String) :Boolean{
         if (this.path==path&&isValid)return true
         playFile = File(path)
+        if (!playFile.exists())return false
         playFile.name.run {
             val index = lastIndexOf(".")
             if (index==-1)return false

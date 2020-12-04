@@ -89,7 +89,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
      * 3设置结束播放的时间进度 endTime
      * @param position 时间，单位 ms
      */
-    fun setPlayTime(type: Int, position: Int) {
+    fun setPlayTime(type: Int, position: Long) {
         val tmp = position / 1000L
         when (type) {
             1 -> {
@@ -107,7 +107,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
                 currentTime = TimeUtils.formatTimeS(tmp)
                 val maxTime = mPresenter.playHandler.getMaxTime().toDouble()
                 when {
-                    position == 0 -> videoPreview.setProgress(0)
+                    position == 0L -> videoPreview.setProgress(0)
                     position > maxTime -> videoPreview.setProgress(100)
                     else -> {
                         videoPreview.setProgress((position / maxTime * 100).toInt())
@@ -141,7 +141,7 @@ class VideoPlayUiControl(private val mActivity: VideoPlayActivity) :
 
     override fun onTouchCallback(type: Int, index: Int) {
         if (type == 0) {
-            setPlayTime(1, index)
+            setPlayTime(1, index.toLong())
         } else {
             mPresenter.goSelectedTime(index)
         }

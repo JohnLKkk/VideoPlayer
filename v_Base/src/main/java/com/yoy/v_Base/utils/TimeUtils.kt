@@ -6,7 +6,8 @@ package com.yoy.v_Base.utils
  */
 object TimeUtils {
     @JvmStatic
-    fun formatTimeS(seconds: Long): String {
+    fun formatTimeS(t: Long): String {
+        val seconds: Long = if (t < 0) 0 else t
         val sb = StringBuffer()
         if (seconds > 3600) {
             val temp = (seconds / 3600).toInt()

@@ -5,6 +5,7 @@
     <string name="defaultPlayTime">00:00 / 00:00</string>
     <string name="playTime">%s / %s</string>
     <string name="decodeType">硬解码</string>
+    <string name="fileInfo">文件名:%s \n 路径:%s</string>
 
     <string name="filter_sketch">素描</string>
     <string name="filter_distinct">鲜明</string>
@@ -15,13 +16,19 @@
     <string name="filter_rectangle">矩形</string>
     <string name="filter_flip">翻转</string>
     <string name="filter_sharpening">锐化</string>
+    <string name="selectFile">选择文件</string>
+    <string name="videoHistory">播放历史</string>
+    <string name="play">播放</string>
+    <string name="stop">暂停</string>
+    <string name="goBack">快退</string>
+    <string name="forwar">快进</string>
 
     <!--倍速播放-->
     <string-array name="DoubleSpeed">
-        <item>0.5</item>
-        <item>1</item>
-        <item>1.5</item>
-        <item>2</item>
+        <item>倍速播放:0.5</item>
+        <item>倍速播放:1</item>
+        <item>倍速播放:1.5</item>
+        <item>倍速播放:2</item>
     </string-array>
     <!--功能列表-->
     <string-array name="FunctionList">
@@ -30,5 +37,10 @@
         <item>视频剪辑</item>
         <item>格式转换</item>
         <item>推流</item>
+    </string-array>
+    <!--解码类型-->
+    <string-array name="DecoderType">
+        <item>硬解码</item>
+        <item>FFMPEG</item>
     </string-array>
 </resources>

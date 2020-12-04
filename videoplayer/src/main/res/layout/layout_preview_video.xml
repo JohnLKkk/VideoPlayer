@@ -7,7 +7,8 @@
     <TextureView
         android:id="@+id/videoPreviewView"
         android:layout_width="@dimen/x150"
-        android:layout_height="@dimen/x120" />
+        android:layout_height="@dimen/x120"
+        android:visibility="gone" />
 
     <SeekBar
         android:id="@+id/videoScheduleView"

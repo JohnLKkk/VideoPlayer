@@ -20,14 +20,8 @@ import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.VideoApplication
 
 class VideoPlayActivity : BaseDefaultActivity() {
-    private val basePermissions = arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-//            Manifest.permission.RECORD_AUDIO
-    )
-    private var permissionDialog: AlertDialog? = null
     private lateinit var uiControl: VideoPlayUiControl
     private lateinit var mPresenter: VideoPlayPresenter
-    private var selectFileCallback: SelectFile? = null
     private val selectFileResultCode = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +41,6 @@ class VideoPlayActivity : BaseDefaultActivity() {
     override fun onDestroy() {
         super.onDestroy()
         try {
-            permissionDialog?.dismiss()
             uiControl.onRelease()
         }catch (e:Exception){
             //Ignore
@@ -62,64 +55,11 @@ class VideoPlayActivity : BaseDefaultActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == selectFileResultCode) {
             val uri = data?.data ?: return
-            selectFileCallback?.selectCallback(FileTools.getFilePathByUri(applicationContext, uri))
+            mPresenter.selectFileResult(FileTools.getFilePathByUri(applicationContext, uri))
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 100) {
-            for (i in permissions.indices) {
-                var resultStr = ""
-                when (permissions[i]) {
-                    Manifest.permission.READ_EXTERNAL_STORAGE ->
-                        resultStr = if (grantResults[i] == PackageManager.PERMISSION_GRANTED) "" else "读写权限获取失败"
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.MODIFY_AUDIO_SETTINGS ->
-                        resultStr = if (grantResults[i] == PackageManager.PERMISSION_GRANTED) "" else "录音权限获取失败，没有基础权限无法继续！"
-                }
-                if (TextUtils.isEmpty(resultStr)) continue
-                ToastUtils.showShort(this, resultStr)
-            }
-            if (checkPermission()) ToastUtils.showShort(applicationContext,"权限获取完成")
-        }
-    }
-
-    private fun checkPermission(): Boolean {
-        for (a in basePermissions) {
-            if (ContextCompat.checkSelfPermission(this, a) == PackageManager.PERMISSION_GRANTED) break
-            KLog.d("AuthActivity#checkPermission", "没有读写或录音权限，请求权限")
-            if (permissionDialog == null) {
-                permissionDialog = AlertDialog.Builder(this)
-                        .setTitle("请求权限")
-                        .setMessage("需要一些基础权限以提供完整体验。")
-                        .setCancelable(false)
-                        .setPositiveButton("设置权限") { _: DialogInterface?, _: Int ->
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(this, a)) {
-                                KLog.e("已设置拒绝授予权限且不在显示，\n请前往设置手动设置权限:$a")
-                                ToastUtils.showShort(
-                                        applicationContext,
-                                        "已设置拒绝授予权限且不在显示，\n请前往设置手动设置权限"
-                                )
-                                finish()
-                            } else {
-                                ActivityCompat.requestPermissions(this, AppCode.basePermissions, 100)
-                            }
-                        }
-                        .create()
-            }
-            if (permissionDialog?.isShowing == true) {
-                permissionDialog?.dismiss()
-            }
-            permissionDialog?.show()
-            return false
-        }
-        Log.i("checkPermission","AuthActivity#checkPermission-拿到所有权限")
-        return true
-    }
-
-    fun openFileSelectTools(callback: SelectFile) {
-        this.selectFileCallback = callback
+    fun openFileSelectTools() {
         try {
             startActivityForResult(Intent.createChooser(
                     Intent(Intent.ACTION_GET_CONTENT).apply {
@@ -129,9 +69,5 @@ class VideoPlayActivity : BaseDefaultActivity() {
         } catch (ex: ActivityNotFoundException) {
             ToastUtils.showShortInMainThread(VideoApplication.context, "没有找到安装文件管理器！")
         }
-    }
-
-    interface SelectFile {
-        fun selectCallback(path: String?)
     }
 }

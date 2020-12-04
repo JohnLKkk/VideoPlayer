@@ -12,23 +12,10 @@ import androidx.annotation.UiThread;
 import com.yoy.v_Base.BuildConfig;
 
 public final class ToastUtils {
+    private static final Handler handler = new Handler(Looper.getMainLooper());
 
-    private static Toast toast;
-    private static Handler handler = new Handler(Looper.getMainLooper());
     private ToastUtils() {
         throw new UnsupportedOperationException();
-    }
-
-    @Nullable
-    private static Toast getToast(Context context) {
-        if (context == null) {
-            return null;
-        }
-        if (toast == null) {
-            Context applicationContext = context.getApplicationContext();
-            toast = Toast.makeText(applicationContext, "", Toast.LENGTH_SHORT);
-        }
-        return toast;
     }
 
     @UiThread
@@ -46,7 +33,6 @@ public final class ToastUtils {
 
     public static void debugToast(Context context, String msg) {
         if (BuildConfig.DEBUG) {
-            Handler handler = new Handler(Looper.getMainLooper());
             handler.post(() -> showShort(context, msg));
         }
     }
@@ -67,20 +53,10 @@ public final class ToastUtils {
     }
 
     private static void show(Context context, String message, int duration) {
-        Toast toast = getToast(context);
-        if (toast != null) {
-            toast.setText(message);
-            toast.setDuration(duration);
-            toast.show();
-        }
+        Toast.makeText(context, message, duration).show();
     }
 
     private static void show(Context context, @StringRes int messageRes, int duration) {
-        Toast toast = getToast(context);
-        if (toast != null) {
-            toast.setText(messageRes);
-            toast.setDuration(duration);
-            toast.show();
-        }
+        Toast.makeText(context, messageRes, duration).show();
     }
 }

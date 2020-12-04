@@ -113,10 +113,10 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     fun isPlaying(): Boolean = getDecoderHandler()?.isPlaying()?:false
 
     @Synchronized
-    fun getCurrentTime(): Int = getDecoderHandler()?.getPlayTimeIndex(1)?:0
+    fun getCurrentTime(): Long = getDecoderHandler()?.getPlayTimeIndex(1)?:0L
 
     @Synchronized
-    fun getMaxTime(): Int = getDecoderHandler()?.getPlayTimeIndex(2)?:0
+    fun getMaxTime(): Long = getDecoderHandler()?.getPlayTimeIndex(2)?:0L
     //endregion
 
     /**

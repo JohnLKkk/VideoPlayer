@@ -1,16 +1,25 @@
 package com.yoy.videoPlayer.ui
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.text.TextUtils
 import com.yoy.v_Base.ui.BaseDefaultActivity
+import com.yoy.v_Base.utils.FileTools
+import com.yoy.v_Base.utils.LogUtils
+import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
+import com.yoy.videoPlayer.VideoApplication
 
 /**
  * Created by Void on 2020/12/3 14:41
  * 视频处理界面
  */
 class VideoProcessActivity : BaseDefaultActivity() {
+    private val TAG = VideoProcessActivity::class.java.simpleName
     private lateinit var uiControl: VideoProcessUiControl
+    private lateinit var mPresenter: VideoProcessPresenter
+    private val selectFileResultCode = 1001
 
     override fun getLayoutID(): Int = R.layout.activity_video_process
 
@@ -19,5 +28,38 @@ class VideoProcessActivity : BaseDefaultActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         uiControl = VideoProcessUiControl(this)
+        mPresenter = VideoProcessPresenter(this, uiControl)
+        uiControl.setPresenter(mPresenter)
+        if (!TextUtils.isEmpty(mPresenter.videoPath)) mPresenter.selectFileResult(mPresenter.videoPath)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mPresenter.onRelease()
+        uiControl.onRelease()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == selectFileResultCode) {
+            val uri = data?.data
+            if (data == null || uri == null) {
+                LogUtils.d(TAG, "选择文件路径结果为空！")
+                return
+            }
+            mPresenter.selectFileResult(FileTools.getFilePathByUri(applicationContext, uri))
+        }
+    }
+
+    fun openSelectFileView() {
+        try {
+            startActivityForResult(Intent.createChooser(
+                    Intent(Intent.ACTION_GET_CONTENT).apply {
+                        type = "*/*"
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                    }, "选择视频文件"), selectFileResultCode)
+        } catch (ex: ActivityNotFoundException) {
+            ToastUtils.showShort(VideoApplication.context, "没有找到文件管理器！")
+        }
     }
 }

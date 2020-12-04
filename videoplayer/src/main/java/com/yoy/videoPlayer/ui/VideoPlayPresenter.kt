@@ -15,7 +15,6 @@ import com.yoy.videoPlayer.processing.PlayVideoHandler
  */
 class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
                          private val uiControl: VideoPlayUiControl) :
-        VideoPlayActivity.SelectFile,
         PlayStateListener,
         DecodeOptionTextView.ClickItemCallback {
     private val mainHandler = Handler(Looper.getMainLooper())
@@ -24,7 +23,7 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
 //        var videoPath = ""
     var videoPath = "/storage/emulated/0/Download/smallfoot.mp4"
 
-    override fun selectCallback(path: String?) {
+    fun selectFileResult(path: String?) {
         if (path == null || path.isEmpty()) {
             KLog.e("视频文件路径为null！")
             return
@@ -60,7 +59,7 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
     override fun onPlayRelease() {
     }
 
-    override fun onPlayTime(time: Int) {
+    override fun onPlayTime(time: Long) {
         mainHandler.post {
             uiControl.setPlayTime(2, time)
         }
@@ -68,7 +67,7 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
 
     fun onClickPlay() {
         if (TextUtils.isEmpty(videoPath)) {//视频地址为空，进入选择路径流程
-            mActivity.openFileSelectTools(this)
+            mActivity.openFileSelectTools()
             return
         }
         playHandler.setDataPath(videoPath)
@@ -94,7 +93,7 @@ class VideoPlayPresenter(private val mActivity: VideoPlayActivity,
             return
         }
         val tmp = playHandler.getMaxTime() * time / 100
-        playHandler.seekTo(tmp)
+        playHandler.seekTo(tmp.toInt())
         uiControl.setPlayTime(2, tmp)
         KLog.d("当前时间索引：$time")
     }

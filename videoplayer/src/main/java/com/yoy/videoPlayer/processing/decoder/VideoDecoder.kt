@@ -54,8 +54,8 @@ abstract class VideoDecoder {
 
     /**
      * 获取播放时间数据
-     * @param type 1当前播放进度 2最大播放长度
+     * @param type 1当前播放进度 2总播放时长
      */
-    abstract fun getPlayTimeIndex(type: Int): Int
+    abstract fun getPlayTimeIndex(type: Int): Long
 
 }

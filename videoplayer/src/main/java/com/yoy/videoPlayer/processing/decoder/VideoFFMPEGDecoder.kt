@@ -51,8 +51,8 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
         return false
     }
 
-    override fun getPlayTimeIndex(type: Int): Int {
-        return 0
+    override fun getPlayTimeIndex(type: Int): Long {
+        return 0L
     }
 
     override fun release() {

@@ -14,7 +14,7 @@
         <clip>
             <shape>
                 <size android:height="@dimen/x2" />
-                <solid android:color="@android:color/holo_blue_bright" />
+                <solid android:color="@android:color/holo_blue_dark" />
             </shape>
         </clip>
     </item>
@@ -24,7 +24,7 @@
         <clip>
             <shape>
                 <size android:height="@dimen/x2" />
-                <solid android:color="@android:color/holo_orange_dark" />
+                <solid android:color="@android:color/holo_blue_bright" />
             </shape>
         </clip>
     </item>

@@ -77,12 +77,12 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
         return mediaPlayer.isPlaying
     }
 
-    override fun getPlayTimeIndex(type: Int): Int {
-        if (isRelease) return 0
+    override fun getPlayTimeIndex(type: Int): Long {
+        if (isRelease) return 0L
         return when (type) {
-            1 -> mediaPlayer.currentPosition
-            2 -> mediaPlayer.duration
-            else -> -1
+            1 -> mediaPlayer.currentPosition.toLong()
+            2 -> mediaPlayer.duration.toLong()
+            else -> -1L
         }
     }
 }

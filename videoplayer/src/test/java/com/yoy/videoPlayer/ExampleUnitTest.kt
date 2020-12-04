@@ -1,5 +1,6 @@
 package com.yoy.videoPlayer
 
+import com.yoy.v_Base.utils.TimeUtils
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -12,6 +13,7 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        println(TimeUtils.formatTimeS(0))
+        println(TimeUtils.formatTimeS(-1))
     }
 }

@@ -4,6 +4,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.view.SurfaceHolder
+import com.yoy.v_Base.utils.KLog
 import com.yoy.videoPlayer.processing.FileAttributes
 
 /**
@@ -24,6 +25,7 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
         try {
+//            KLog.e("----setDisPlay")
             if (fileInfo.isValid) {
                 mediaPlayer.setDisplay(holder)
                 mediaPlayer.prepareAsync()

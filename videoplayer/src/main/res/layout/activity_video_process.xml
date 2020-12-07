@@ -21,11 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.2"
-            android:max="100"
-            android:progress="50"
-            android:progressDrawable="@drawable/ic_video_seekbar_bg"
-            android:thumb="@drawable/ic_progress_bg" />
+            android:layout_weight="0.2" />
 
         <TextView
             android:id="@+id/playTime"
@@ -41,6 +37,7 @@
     <TextView
         android:id="@+id/fileInfo"
         android:layout_width="match_parent"
+        android:textSize="@dimen/x25"
         android:layout_height="wrap_content"
         android:text="@string/fileInfo" />
 

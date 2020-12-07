@@ -3,12 +3,16 @@
 
 extern "C" {
 JNIEXPORT jstring
-Java_com_yoy_videoplayer_processing_decoder_VideoFFMPEGDecoder_stringFromJNI(
+Java_com_yoy_videoPlayer_processing_decoder_VideoFFMPEGDecoder_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
 }
+//VIDEO_PLAYER_FUNC(jstring ,stringFromJNI){
+//    std::string hello = "Hello from C++";
+//    return env->NewStringUTF(hello.c_str());
+//}
 VIDEO_PLAYER_FUNC(int, playVideo, jstring vPath, jobject surface) {
     const char *videoPath = env->GetStringUTFChars(vPath, nullptr);
     ANativeWindow *nativeWindow = ANativeWindow_fromSurface(env, surface);
@@ -26,5 +30,4 @@ VIDEO_PLAYER_FUNC(void, mDestroy) {
     NativePlayer nativePlayer;
     nativePlayer.mDestroy();
 }
-
 }

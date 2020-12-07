@@ -17,7 +17,8 @@
         android:layout_gravity="center"
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
-        android:progress="99"
+        android:progress="1"
+        android:max="100"
         android:progressDrawable="@drawable/ic_video_seekbar_bg"
         android:thumb="@drawable/ic_progress_bg" />
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.KeyEvent
 import com.yoy.v_Base.ui.BaseDefaultActivity
 import com.yoy.v_Base.utils.FileTools
 import com.yoy.v_Base.utils.LogUtils
@@ -19,6 +20,7 @@ class VideoProcessActivity : BaseDefaultActivity() {
     private val TAG = VideoProcessActivity::class.java.simpleName
     private lateinit var uiControl: VideoProcessUiControl
     private lateinit var mPresenter: VideoProcessPresenter
+    private var lastClickBackTime = System.currentTimeMillis()
     private val selectFileResultCode = 1001
 
     override fun getLayoutID(): Int = R.layout.activity_video_process
@@ -33,8 +35,8 @@ class VideoProcessActivity : BaseDefaultActivity() {
         if (!TextUtils.isEmpty(mPresenter.videoPath)) mPresenter.selectFileResult(mPresenter.videoPath)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         mPresenter.onRelease()
         uiControl.onRelease()
     }
@@ -49,6 +51,20 @@ class VideoProcessActivity : BaseDefaultActivity() {
             }
             mPresenter.selectFileResult(FileTools.getFilePathByUri(applicationContext, uri))
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return if (System.currentTimeMillis() - lastClickBackTime < 1500) {
+                finish()
+                true
+            } else {
+                lastClickBackTime = System.currentTimeMillis()
+                ToastUtils.showLong(applicationContext, "请再次点击返回键退出")
+                false
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     fun openSelectFileView() {

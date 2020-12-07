@@ -16,9 +16,10 @@ import com.yoy.videoPlayer.ui.VideoProcessActivity
  * Created by Void on 2020/12/3 14:47
  *
  */
-class VideoControlFragment(private val callback: FragmentCallback) : BaseDefaultFragment(),
-        AdapterView.OnItemSelectedListener{
+class VideoControlFragment : BaseDefaultFragment(),
+        AdapterView.OnItemSelectedListener {
     private val TAG = VideoControlFragment::class.java.simpleName
+    private var callback: FragmentCallback? = null
     private lateinit var selectFileBtn: Button
     private lateinit var videoHistory: Button
     private lateinit var playBtn: Button
@@ -59,9 +60,9 @@ class VideoControlFragment(private val callback: FragmentCallback) : BaseDefault
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         when (parent?.id) {
-            R.id.doubleSpeedList -> callback.onSelectFunction(0, position)
-            R.id.functionList -> callback.onSelectFunction(1, position)
-            R.id.decoderTypeList -> callback.onSelectFunction(2, position)
+            R.id.doubleSpeedList -> callback?.onSelectFunction(0, position)
+            R.id.functionList -> callback?.onSelectFunction(1, position)
+            R.id.decoderTypeList -> callback?.onSelectFunction(2, position)
         }
     }
 
@@ -72,26 +73,20 @@ class VideoControlFragment(private val callback: FragmentCallback) : BaseDefault
     override fun onClick(v: View?) {
         super.onClick(v)
         when (v?.id) {
-            R.id.selectFileBtn -> try {
-                (activity as VideoProcessActivity).openSelectFileView()
-            } catch (e: Exception) {
-            }
-
+            R.id.selectFileBtn ->
+                if (activity is VideoProcessActivity)
+                    (activity as VideoProcessActivity).openSelectFileView()
             R.id.videoHistory -> {
                 LogUtils.d(msg = "播放历史")
             }
-            R.id.playBtn -> {
-                LogUtils.d(msg = "播放")
-            }
-            R.id.stopBtn -> {
-                LogUtils.d(msg = "停止")
-            }
-            R.id.goBackBtn -> {
-                LogUtils.d(msg = "快退")
-            }
-            R.id.forwardBtn -> {
-                LogUtils.d(msg = "快进")
-            }
+            R.id.playBtn -> callback?.onPlayControl(0)
+            R.id.stopBtn -> callback?.onPlayControl(1)
+            R.id.goBackBtn -> callback?.onPlayControl(2)
+            R.id.forwardBtn -> callback?.onPlayControl(3)
         }
+    }
+
+    fun setCallback(callback: FragmentCallback) {
+        this.callback = callback
     }
 }

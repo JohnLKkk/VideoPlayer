@@ -5,9 +5,14 @@ package com.yoy.v_Base.utils
  *
  */
 object TimeUtils {
+    /**
+     * 格式化时间戳
+     * 时间戳->12:10:06
+     * @param t 时间戳(ms)
+     */
     @JvmStatic
     fun formatTimeS(t: Long): String {
-        val seconds: Long = if (t < 0) 0 else t
+        val seconds: Long = if (t < 0) 0 else t / 1000
         val sb = StringBuffer()
         if (seconds > 3600) {
             val temp = (seconds / 3600).toInt()

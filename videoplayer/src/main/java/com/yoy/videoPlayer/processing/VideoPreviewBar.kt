@@ -42,6 +42,7 @@ class VideoPreviewBar(context: Context, attributeSet: AttributeSet) :
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
         if (seekBar == null) return
+        callback?.onChangeProgress(progress, fromUser)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {

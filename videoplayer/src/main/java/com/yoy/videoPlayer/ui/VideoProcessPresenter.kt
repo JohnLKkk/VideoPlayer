@@ -1,9 +1,7 @@
 package com.yoy.videoPlayer.ui
 
-import android.os.Handler
-import android.os.Looper
-import android.text.TextUtils
 import com.yoy.v_Base.utils.KLog
+import com.yoy.v_Base.utils.LogUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.processing.DecodeType
 import com.yoy.videoPlayer.processing.PlayStateListener
@@ -27,8 +25,8 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
 
     val playHandler = PlayVideoHandler(this)
 
-    //    var videoPath = ""
-    var videoPath = "/storage/emulated/0/Download/smallfoot.mp4"
+    var videoPath = ""
+//    var videoPath = "/storage/emulated/0/Download/smallfoot.mp4"
 
     init {
         playHandler.setDecoderType(DecodeType.HARDDecoder)
@@ -70,25 +68,22 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
 
     /**
      * 跳转到选中的时间
-     * @param time 进度百分比  0-100
+     * @param index 进度百分比  0-100
      * */
-    fun goSelectedTime(time: Int) {
-        if (time < 0 || time > 100) {
+    fun goSelectedTime(index: Int) {
+        if (index < 0 || index > 100) {
             KLog.e("目标进度百分比无效")
             return
         }
-        val max = playHandler.getMaxTime()
-        val tmp = max * time / 100
-        playHandler.seekTo(tmp.toInt())
-        uiControl.setPlayProgress(tmp)
-        KLog.d("当前时间索引：$time")
+        playHandler.seekTo(playHandler.progressToTimestamp(index).toInt())
+//        LogUtils.d(msg = "当前播放进度：$index")
     }
 
     //region
     override fun onPlayStart() {
-        KLog.d("即将播放的文件路径：$videoPath")
+        LogUtils.d(msg = "即将播放的文件路径：$videoPath")
         uiControl.setFileInfo(playHandler.fileInfo.name, videoPath)
-        uiControl.setPlayProgress(playHandler.getCurrentTime())
+        uiControl.setPlayProgress(playHandler.timestampToProgress())
     }
 
     override fun onPlayPaused() {
@@ -104,8 +99,7 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
     }
 
     override fun onPlayTime(time: Long) {
-        uiControl.setPlayProgress(time)
+        uiControl.setPlayProgress(playHandler.timestampToProgress(time))
     }
     //endregion
-
 }

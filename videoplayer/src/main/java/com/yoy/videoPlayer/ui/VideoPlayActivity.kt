@@ -1,20 +1,11 @@
 package com.yoy.videoPlayer.ui
 
-import android.Manifest
-import android.app.AlertDialog
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.yoy.v_Base.ui.BaseDefaultActivity
-import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.FileTools
-import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.VideoApplication

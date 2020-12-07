@@ -10,8 +10,8 @@
 //import cn.jzvd.Jzvd
 //import com.wyt.baselibrary.netWork.RetrofitManager
 //import com.wyt.baselibrary.rx.network.IRequestResultListener
-//import com.wyt.baselibrary.utils.LogTool
-//import com.wyt.baselibrary.utils.ToastUtil
+//import com.wyt.baselibrary.com.yoy.videoPlayer.utils.LogTool
+//import com.wyt.baselibrary.com.yoy.videoPlayer.utils.ToastUtil
 //import com.wyt.picturebook.R
 //import com.wyt.picturebook.adapter.VideoListAdapter
 //import com.wyt.picturebook.base.BaseActivity
@@ -139,7 +139,7 @@
 //                try {
 //                    val result = responseBody.string()
 //                    LogTool.e("获取视频url数据\$result")
-//                    val videoInfoBean = com.wyt.baselibrary.utils.CommonUtils.gsonToBean(result, VideoInfoBean::class.java)
+//                    val videoInfoBean = com.wyt.baselibrary.com.yoy.videoPlayer.utils.CommonUtils.gsonToBean(result, VideoInfoBean::class.java)
 //                    if (videoInfoBean.code == 9 && videoInfoBean.result != null) {
 //                        val videoUrlBeans = ArrayList<VideoUrlBean>()
 //                        if (!TextUtils.isEmpty(videoInfoBean.result.biaozhun)) {
@@ -215,7 +215,7 @@
 ////            videoView.setVideoDataList(data, videoListAdapter)
 ////        }
 ////        Jzvd.setVideoImageDisplayType(Jzvd.VIDEO_IMAGE_DISPLAY_TYPE_FILL_PARENT)
-////        com.wyt.baselibrary.utils.CommonUtils.setFullScreen(this)
+////        com.wyt.baselibrary.com.yoy.videoPlayer.utils.CommonUtils.setFullScreen(this)
 ////        videoListAdapter.notifyDataSetChanged()
 ////        videoListAdapter.getSelectPosition()?.let {
 ////            rv_data.smoothScrollToPosition(it)

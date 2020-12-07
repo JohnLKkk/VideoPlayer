@@ -1,9 +1,13 @@
 package com.yoy.videoPlayer.processing
 
+import android.os.Handler
+import android.os.Looper
 import android.view.SurfaceHolder
 import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.KLog
+import com.yoy.v_Base.utils.LogUtils
 import com.yoy.v_Base.utils.SPUtils
+import com.yoy.videoPlayer.BuildConfig
 import com.yoy.videoPlayer.processing.decoder.PlayStateCallback
 import com.yoy.videoPlayer.processing.decoder.VideoDecoder
 import com.yoy.videoPlayer.processing.decoder.VideoFFMPEGDecoder
@@ -16,8 +20,9 @@ import com.yoy.videoPlayer.processing.decoder.VideoHardDecoder
 class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
         PlayStateCallback,
         SurfaceHolder.Callback {
+    private val mHandler = Handler(Looper.getMainLooper())
     private var surfaceHolder: SurfaceHolder? = null
-    private var listenerThread: ListenerPlayTime? = null
+    private var listenerThread: ListenerPlayTimeThread? = null
     private var sDecoder: VideoFFMPEGDecoder? = null
     private var hDecoder: VideoHardDecoder? = null
     private var decoderType = DecodeType.HARDDecoder
@@ -38,7 +43,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
         plStart()
         isReady = true
         if (listenerThread == null) {
-            listenerThread = ListenerPlayTime()
+            listenerThread = ListenerPlayTimeThread()
             listenerThread?.start()
         }
         playStateListener?.onPlayStart()
@@ -64,7 +69,10 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
             }
             hDecoder
         }
-        else -> null
+        else -> {
+            LogUtils.e(msg = "未知的解码类型")
+            null
+        }
     }
 
     fun setDecoderType(decoder: DecodeType) {
@@ -110,24 +118,47 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     }
 
     @Synchronized
-    fun isPlaying(): Boolean = getDecoderHandler()?.isPlaying()?:false
+    fun isPlaying(): Boolean = getDecoderHandler()?.isPlaying() ?: false
 
     @Synchronized
-    fun getCurrentTime(): Long = getDecoderHandler()?.getPlayTimeIndex(1)?:0L
+    fun getCurrentTime(): Long {
+        var currentTime = getDecoderHandler()?.getPlayTimeIndex(1) ?: 0L
+        if (BuildConfig.DEBUG && currentTime == 0L) {
+            currentTime = 50000L
+        }
+        return currentTime
+    }
 
     @Synchronized
-    fun getMaxTime(): Long = getDecoderHandler()?.getPlayTimeIndex(2)?:0L
+    fun getMaxTime(): Long {
+        var maxTime = getDecoderHandler()?.getPlayTimeIndex(2) ?: 0L
+        if (BuildConfig.DEBUG && maxTime == 0L) {
+            maxTime = 100000L
+        }
+        return maxTime
+    }
     //endregion
+
+    /**
+     * 时间戳转换为当前播放进度(百分比)
+     */
+    fun timestampToProgress(): Int = timestampToProgress(getCurrentTime())
+    fun timestampToProgress(time: Long): Int = (time * 100 / getMaxTime()).toInt()
+
+    /**
+     * 播放进度(百分比)转换为具体的时间戳
+     * @param bfb 当前进度，如 50%=播放的一半
+     */
+    fun progressToTimestamp(bfb: Int): Long = (bfb / 100.0 * getMaxTime()).toLong()
 
     /**
      * 播放时间更新线程
      */
-    inner class ListenerPlayTime : Thread() {
+    inner class ListenerPlayTimeThread : Thread() {
         override fun run() {
             super.run()
             while (isReady) {
-                if (playStateListener == null) return
-                playStateListener.onPlayTime(getCurrentTime())
+                mHandler.post { playStateListener?.onPlayTime(getCurrentTime()) }
                 sleep(500)
             }
         }

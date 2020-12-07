@@ -1,12 +1,10 @@
 package com.yoy.videoPlayer
 
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yoy.videoPlayer.utils.db.SQLInfo
 
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -17,8 +15,10 @@ import org.junit.Assert.*
 class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.yoy.videoplayer", appContext.packageName)
+        val items = HashMap<String, String>()
+        items["a"] = "a"
+        items["b"] = "b"
+        items["c"] = "c"
+        println("---------------"+ SQLInfo("hellow", items).createTable)
     }
 }

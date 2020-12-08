@@ -91,46 +91,6 @@ class PermissionActivity : BaseDefaultActivity() {
     }
 
     /**
-     * 检查权限录音，读写等权限,没有将请求请求权限
-     *
-     * @return true 取得全部权限
-     */
-    private fun checkPermission(): Boolean {
-        for (a in AppCode.basePermissions) {
-            if (ContextCompat.checkSelfPermission(this, a) !=
-                    PackageManager.PERMISSION_GRANTED) {
-                KLog.d("AuthActivity#checkPermission", "没有读写或录音权限，请求权限")
-                if (permissionDialog == null) {
-                    permissionDialog = AlertDialog.Builder(this)
-                            .setTitle("请求权限")
-                            .setMessage("需要一些基础权限以提供完整体验。")
-                            .setCancelable(false)
-                            .setPositiveButton("设置权限") { _: DialogInterface?, _: Int ->
-                                if (ActivityCompat.shouldShowRequestPermissionRationale(this, a)) {
-                                    KLog.e("已设置拒绝授予权限且不在显示，\n请前往设置手动设置权限:$a")
-                                    ToastUtils.showShort(
-                                            applicationContext,
-                                            "已设置拒绝授予权限且不在显示，\n请前往设置手动设置权限"
-                                    )
-                                    finish()
-                                } else {
-                                    ActivityCompat.requestPermissions(this, AppCode.basePermissions, 100)
-                                }
-                            }
-                            .create()
-                }
-                if (permissionDialog?.isShowing == true) {
-                    permissionDialog?.dismiss()
-                }
-                permissionDialog?.show()
-                return false
-            }
-        }
-        KLog.d("AuthActivity#checkPermission", "已具备基本运行所需权限")
-        return true
-    }
-
-    /**
      * 检查悬浮窗、写入系统设置权限
      */
     private fun checkFloatWindowPermission(): Boolean {

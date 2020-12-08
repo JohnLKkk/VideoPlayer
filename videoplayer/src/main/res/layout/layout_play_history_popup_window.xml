@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x50"
+        android:gravity="center"
+        android:text="@string/videoHistory"
+        android:textSize="@dimen/x25" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x2"
+        android:layout_marginTop="@dimen/x50"
+        android:background="@drawable/ic_line_bg" />
+
+    <ListView
+        android:id="@+id/playHistoryList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/x55" />
+</FrameLayout>

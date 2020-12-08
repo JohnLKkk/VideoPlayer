@@ -3,15 +3,16 @@ package com.yoy.videoPlayer.processing.decoder
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.util.Log
 import android.view.SurfaceHolder
-import com.yoy.v_Base.utils.KLog
 import com.yoy.videoPlayer.processing.FileAttributes
+import java.util.*
 
 /**
  * Created by Void on 2020/9/9 20:20
  *
  */
-class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
+class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder(), MediaPlayer.OnErrorListener {
     private val mediaPlayer = MediaPlayer()
 
     init {
@@ -21,6 +22,19 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
         }.build())
         mediaPlayer.setOnPreparedListener { callback.onPrepared() }
         mediaPlayer.setOnCompletionListener { callback.onCompletion() }
+        mediaPlayer.setOnErrorListener(this)
+    }
+
+    override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
+        val msg = when (extra) {
+            MediaPlayer.MEDIA_ERROR_IO -> "网络异常/没有文件读写权限"
+            MediaPlayer.MEDIA_ERROR_MALFORMED -> "比特流不符合相关的编码标准或文件规范"
+            MediaPlayer.MEDIA_ERROR_UNSUPPORTED -> "比特流符合相关的编码标准或文件规范，但媒体框架不支持该功能"
+            MediaPlayer.MEDIA_ERROR_TIMED_OUT -> "操作超时"
+            else -> String.format(Locale.CHINA, "未知错误(%d,%d)", what, extra)
+        }
+        Log.e("VideoHardDecoder",msg)
+        return false
     }
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
@@ -28,7 +42,7 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
 //            KLog.e("----setDisPlay")
             if (fileInfo.isValid) {
                 mediaPlayer.setDisplay(holder)
-                mediaPlayer.prepareAsync()
+                mediaPlayer.prepare()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -39,7 +53,7 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder() {
         try {
             mediaPlayer.reset()
             mediaPlayer.setDataSource(path)
-            mediaPlayer.prepareAsync()
+            mediaPlayer.prepare()
         } catch (e: Exception) {
             e.printStackTrace()
         }

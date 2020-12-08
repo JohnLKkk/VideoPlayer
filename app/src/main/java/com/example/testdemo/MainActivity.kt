@@ -45,7 +45,7 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_10.setOnClickListener(this)
         btn_11.setOnClickListener(this)
         setActionBar("测试模块")
-//        startActivity(Intent(this, ClickActivity::class.java))
+        startActivity(Intent(this, PopupWindowActivity::class.java))
     }
 
     override fun getLayoutID(): Int = R.layout.activity_main

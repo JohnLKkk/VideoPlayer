@@ -6,11 +6,10 @@ import android.widget.Button
 import android.widget.Spinner
 import com.yoy.v_Base.ui.BaseDefaultFragment
 import com.yoy.v_Base.utils.KLog
-import com.yoy.v_Base.utils.LogUtils
 import com.yoy.videoPlayer.R
-import com.yoy.videoPlayer.processing.VideoPreviewBar
 import com.yoy.videoPlayer.ui.FragmentCallback
 import com.yoy.videoPlayer.ui.VideoProcessActivity
+import com.yoy.videoPlayer.ui.view.PlayHistoryPopupWindow
 
 /**
  * Created by Void on 2020/12/3 14:47
@@ -19,6 +18,7 @@ import com.yoy.videoPlayer.ui.VideoProcessActivity
 class VideoControlFragment : BaseDefaultFragment(),
         AdapterView.OnItemSelectedListener {
     private val TAG = VideoControlFragment::class.java.simpleName
+    private var historyWindow: PlayHistoryPopupWindow? = null
     private var callback: FragmentCallback? = null
     private lateinit var selectFileBtn: Button
     private lateinit var videoHistory: Button
@@ -43,6 +43,7 @@ class VideoControlFragment : BaseDefaultFragment(),
         doubleSpeedList = view.findViewById(R.id.doubleSpeedList)
         functionList = view.findViewById(R.id.functionList)
         decoderTypeList = view.findViewById(R.id.decoderTypeList)
+        historyWindow = PlayHistoryPopupWindow(view.context)
     }
 
     override fun initListener(view: View) {
@@ -57,6 +58,15 @@ class VideoControlFragment : BaseDefaultFragment(),
         functionList.onItemSelectedListener = this
         decoderTypeList.onItemSelectedListener = this
     }
+
+//    override fun initData(view: View) {
+//        super.initData(view)
+//        PlayHistoryManager.insertData(LinkedList<VideoFileInfo>().apply {
+//            for (i in 0..300) {
+//                add(VideoFileInfo("第${i}个", "第${i}个.mp4"))
+//            }
+//        })
+//    }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         when (parent?.id) {
@@ -76,9 +86,7 @@ class VideoControlFragment : BaseDefaultFragment(),
             R.id.selectFileBtn ->
                 if (activity is VideoProcessActivity)
                     (activity as VideoProcessActivity).openSelectFileView()
-            R.id.videoHistory -> {
-                LogUtils.d(msg = "播放历史")
-            }
+            R.id.videoHistory -> historyWindow?.show(v)
             R.id.playBtn -> callback?.onPlayControl(0)
             R.id.stopBtn -> callback?.onPlayControl(1)
             R.id.goBackBtn -> callback?.onPlayControl(2)

@@ -59,7 +59,7 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
         videoPath = path
         KLog.d("选中的文件路径是：$videoPath")
         playHandler.setDataPath(path)
-        onPlayControl(0)
+//        onPlayControl(0)
     }
 
     fun onRelease() {

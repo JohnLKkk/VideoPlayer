@@ -7,7 +7,6 @@ import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.LogUtils
 import com.yoy.v_Base.utils.SPUtils
-import com.yoy.videoPlayer.BuildConfig
 import com.yoy.videoPlayer.processing.decoder.PlayStateCallback
 import com.yoy.videoPlayer.processing.decoder.VideoDecoder
 import com.yoy.videoPlayer.processing.decoder.VideoFFMPEGDecoder
@@ -26,7 +25,6 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     private var sDecoder: VideoFFMPEGDecoder? = null
     private var hDecoder: VideoHardDecoder? = null
     private var decoderType = DecodeType.HARDDecoder
-    private var isReady = false
     val fileInfo = FileAttributes()
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
@@ -41,11 +39,11 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
 
     override fun onPrepared() {
         plStart()
-        isReady = true
         if (listenerThread == null) {
             listenerThread = ListenerPlayTimeThread()
             listenerThread?.start()
         }
+        listenerThread?.mStart()
         playStateListener?.onPlayStart()
     }
 
@@ -88,16 +86,14 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
             KLog.e("文件信息初始化失败,请检查文件是否有效！path:$path")
             return
         }
+        listenerThread?.mStop()
         getDecoderHandler()?.setDataSource(path)
     }
 
     fun release() {
-        isReady = false
         getDecoderHandler()?.release()
         surfaceHolder?.removeCallback(this)
-        if (listenerThread?.isInterrupted == true) {
-            listenerThread?.interrupt()
-        }
+        stopTimeUpdateThread()
     }
 
     //region 播放控制或播放信息获取
@@ -123,18 +119,18 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     @Synchronized
     fun getCurrentTime(): Long {
         var currentTime = getDecoderHandler()?.getPlayTimeIndex(1) ?: 0L
-        if (BuildConfig.DEBUG && currentTime == 0L) {
-            currentTime = 50000L
-        }
+//        if (BuildConfig.DEBUG && currentTime == 0L) {
+//            currentTime = 50000L
+//        }
         return currentTime
     }
 
     @Synchronized
     fun getMaxTime(): Long {
         var maxTime = getDecoderHandler()?.getPlayTimeIndex(2) ?: 0L
-        if (BuildConfig.DEBUG && maxTime == 0L) {
-            maxTime = 100000L
-        }
+//        if (BuildConfig.DEBUG && maxTime == 0L) {
+//            maxTime = 100000L
+//        }
         return maxTime
     }
     //endregion
@@ -143,24 +139,59 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
      * 时间戳转换为当前播放进度(百分比)
      */
     fun timestampToProgress(): Int = timestampToProgress(getCurrentTime())
-    fun timestampToProgress(time: Long): Int = (time * 100 / getMaxTime()).toInt()
+
+    fun timestampToProgress(time: Long): Int {
+        val max = getMaxTime()
+        if (max <= 0 || time <= 0) return 0
+        return (time * 100 / max).toInt()
+    }
 
     /**
      * 播放进度(百分比)转换为具体的时间戳
      * @param bfb 当前进度，如 50%=播放的一半
      */
-    fun progressToTimestamp(bfb: Int): Long = (bfb / 100.0 * getMaxTime()).toLong()
+    fun progressToTimestamp(bfb: Int): Long {
+        val max = getMaxTime()
+        if (max <= 0 || bfb <= 0) return 0
+        return (bfb / 100.0 * max).toLong()
+    }
+
+    //region -----播放时间更新线程控制-----
+    fun stopTimeUpdateThread() {
+        listenerThread?.release()
+        listenerThread = null
+    }
 
     /**
      * 播放时间更新线程
      */
     inner class ListenerPlayTimeThread : Thread() {
+        private var isReady = true
+        private var isStop = false
         override fun run() {
             super.run()
             while (isReady) {
+                if (isStop) {
+                    sleep(500)
+                    continue
+                }
                 mHandler.post { playStateListener?.onPlayTime(getCurrentTime()) }
                 sleep(500)
             }
         }
+
+        fun mStart() {
+            isStop = false
+        }
+
+        fun mStop() {
+            isStop = true
+        }
+
+        fun release() {
+            isStop = true
+            isReady = false
+        }
     }
+    //endregion
 }

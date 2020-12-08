@@ -11,6 +11,8 @@ import com.yoy.v_Base.utils.LogUtils
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.VideoApplication
+import com.yoy.videoPlayer.beans.VideoFileInfo
+import com.yoy.videoPlayer.utils.PlayHistoryManager
 
 /**
  * Created by Void on 2020/12/3 14:41
@@ -49,7 +51,9 @@ class VideoProcessActivity : BaseDefaultActivity() {
                 LogUtils.d(TAG, "选择文件路径结果为空！")
                 return
             }
-            mPresenter.selectFileResult(FileTools.getFilePathByUri(applicationContext, uri))
+            val path = FileTools.getFilePathByUri(applicationContext, uri) ?: return
+            mPresenter.selectFileResult(path)
+            PlayHistoryManager.insertData(VideoFileInfo(path))
         }
     }
 

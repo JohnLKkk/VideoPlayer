@@ -3,6 +3,7 @@ package com.yoy.videoPlayer
 import android.app.Application
 import android.content.Context
 import com.yoy.v_Base.utils.SPUtils
+import com.yoy.videoPlayer.utils.PlayHistoryManager
 import io.github.prototypez.appjoint.core.AppSpec
 
 /**
@@ -19,6 +20,7 @@ class VideoApplication : Application() {
         super.onCreate()
         context = this
         SPUtils.init(this)
+        PlayHistoryManager.init(context)
     }
     /*
 素描  "lutyuv='u=128:v=128'"

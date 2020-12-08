@@ -16,6 +16,4 @@ class DatabaseHandler(context: Context, val sqlInfo: SQLInfo, version: Int) :
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
     }
-
-
 }

@@ -20,7 +20,7 @@ class SQLInfo(val tableName: String, val items: Map<String, String>) {
                     append(i.value)
                     append(",")
                 }
-                delete(length - 2, length-1)
+                delete(length - 1, length)
                 append(")")
             }.toString()
         }

@@ -76,7 +76,7 @@ class AudioRecorderActivity : BaseDefaultActivity(), InnerAudioRecorder.AudioRec
      *
      * @return true 取得全部权限
      */
-    private fun checkPermission(): Boolean {
+    override fun checkPermission(): Boolean {
         val permissions = arrayOf(
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
                 Manifest.permission.READ_EXTERNAL_STORAGE,

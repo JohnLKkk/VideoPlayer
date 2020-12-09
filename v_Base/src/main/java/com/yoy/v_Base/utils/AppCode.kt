@@ -28,8 +28,6 @@ object AppCode {
     //endregion
 
     //region ------------------ 用于储存SharedPreferences数据所使用的key
-    //当前项目使用的解码方式，这个值必定是最新的，每次变更解码方式都会更新该值，注意：这不是线程安全的
-    const val currentDecodeType = "currentDecodeType"
 
     //endregion
 }

@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.Spinner
+import androidx.core.view.size
 import com.yoy.v_Base.ui.BaseDefaultFragment
 import com.yoy.v_Base.utils.KLog
 import com.yoy.videoPlayer.R
@@ -29,6 +30,8 @@ class VideoControlFragment : BaseDefaultFragment(),
     private lateinit var doubleSpeedList: Spinner
     private lateinit var functionList: Spinner
     private lateinit var decoderTypeList: Spinner
+
+    private var isInitFinish = false
 
     override fun getLayoutID(): Int = R.layout.fragment_video_control
 
@@ -57,16 +60,8 @@ class VideoControlFragment : BaseDefaultFragment(),
         doubleSpeedList.onItemSelectedListener = this
         functionList.onItemSelectedListener = this
         decoderTypeList.onItemSelectedListener = this
+        isInitFinish = true
     }
-
-//    override fun initData(view: View) {
-//        super.initData(view)
-//        PlayHistoryManager.insertData(LinkedList<VideoFileInfo>().apply {
-//            for (i in 0..300) {
-//                add(VideoFileInfo("第${i}个", "第${i}个.mp4"))
-//            }
-//        })
-//    }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         when (parent?.id) {
@@ -86,7 +81,10 @@ class VideoControlFragment : BaseDefaultFragment(),
             R.id.selectFileBtn ->
                 if (activity is VideoProcessActivity)
                     (activity as VideoProcessActivity).openSelectFileView()
-            R.id.videoHistory -> historyWindow?.show(v)
+            R.id.videoHistory -> {
+                historyWindow?.setCallback(callback ?: return)
+                historyWindow?.show(v)
+            }
             R.id.playBtn -> callback?.onPlayControl(0)
             R.id.stopBtn -> callback?.onPlayControl(1)
             R.id.goBackBtn -> callback?.onPlayControl(2)
@@ -94,7 +92,35 @@ class VideoControlFragment : BaseDefaultFragment(),
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        this.callback = null
+    }
+
     fun setCallback(callback: FragmentCallback) {
         this.callback = callback
+    }
+
+    /**
+     * 选择功能回调
+     * @param type 功能类型 0倍速 1功能列表 2解码方式
+     * @param position 功能列表索引
+     */
+    fun setSelectFuctionUI(type: Int, position: Int) {
+        if (!isInitFinish) return
+        when (type) {
+            0 -> {
+                if (position >= doubleSpeedList.size) return
+                doubleSpeedList.setSelection(position)
+            }
+            1 -> {
+                if (position >= functionList.size) return
+                functionList.setSelection(position)
+            }
+            2 -> {
+                if (position >= decoderTypeList.size) return
+                decoderTypeList.setSelection(position)
+            }
+        }
     }
 }

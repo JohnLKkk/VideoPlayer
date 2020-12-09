@@ -10,13 +10,15 @@ import android.widget.*
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.beans.VideoFileInfo
+import com.yoy.videoPlayer.ui.FragmentCallback
 import com.yoy.videoPlayer.utils.PlayHistoryManager
 
 /**
  * Created by Void on 2020/12/8 13:54
  * 播放历史记录弹窗
  */
-class PlayHistoryPopupWindow(private val context: Context) : BaseAdapter(),
+class PlayHistoryPopupWindow(private val context: Context) :
+        BaseAdapter(),
         ViewTreeObserver.OnGlobalLayoutListener {
     private var contentView = LayoutInflater.from(context).inflate(
             R.layout.layout_play_history_popup_window,
@@ -26,6 +28,7 @@ class PlayHistoryPopupWindow(private val context: Context) : BaseAdapter(),
             FrameLayout.LayoutParams.WRAP_CONTENT,
             FrameLayout.LayoutParams.WRAP_CONTENT
     )
+    private var callback: FragmentCallback? = null
     private var mHandler = Handler(Looper.getMainLooper())
     private var items = ArrayList<VideoFileInfo>()
 
@@ -33,7 +36,13 @@ class PlayHistoryPopupWindow(private val context: Context) : BaseAdapter(),
         mPopupWindow.isOutsideTouchable = true
         mPopupWindow.elevation = 10f
         mPopupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        contentView.findViewById<ListView>(R.id.playHistoryList).adapter = this
+        contentView.findViewById<ListView>(R.id.playHistoryList).apply {
+            adapter = this@PlayHistoryPopupWindow
+            setOnItemClickListener { _, _, position, _ ->
+                callback?.onItemClick(getItem(position))
+                mPopupWindow.dismiss()
+            }
+        }
     }
 
     override fun getCount(): Int = items.size
@@ -90,18 +99,27 @@ class PlayHistoryPopupWindow(private val context: Context) : BaseAdapter(),
         return heightCount
     }
 
+    fun setCallback(callback: FragmentCallback) {
+        this.callback = callback
+    }
+
     fun show(view: View) {
         mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         Thread(runable).start()
     }
 
+    fun close() {
+        if (!mPopupWindow.isShowing) return
+        mPopupWindow.dismiss()
+    }
+
     val runable = Runnable {
         val data = PlayHistoryManager.queryData()
         mHandler.post {
-            if (data.isEmpty()){
-                ToastUtils.showShort(context,"记录为空……")
+            if (data.isEmpty()) {
+                ToastUtils.showShort(context, "记录为空……")
                 mPopupWindow.dismiss()
-            }else{
+            } else {
                 contentView.viewTreeObserver.addOnGlobalLayoutListener(this)
                 items.clear()
                 items.addAll(data)

@@ -45,15 +45,19 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     }
 
     override fun seekTo(time: Int) {
+        goSelectedTime(time)
     }
 
     override fun isPlaying(): Boolean {
         return false
     }
 
-    override fun getPlayTimeIndex(type: Int): Long {
-        return 0L
-    }
+    override fun getPlayTimeIndex(type: Int): Long =
+            if (type == 1) {
+                getCurrentPosition()
+            } else {
+                getDuration()
+            }
 
     override fun release() {
         holder = null
@@ -101,6 +105,12 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     private external fun stringFromJNI(): String
 
     private external fun playVideo(vPath: String, surface: Any): Int
+
+    private external fun getCurrentPosition(): Long
+
+    private external fun getDuration(): Long
+
+    private external fun goSelectedTime(t: Int)
 
     private external fun mDestroy()
     //endregion

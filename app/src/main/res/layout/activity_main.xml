@@ -61,5 +61,8 @@
         <Button
             android:id="@+id/btn_11"
             android:text="扫描设备IP" />
+        <Button
+            android:id="@+id/btn_12"
+            android:text="JNI测试" />
     </GridLayout>
 </FrameLayout>

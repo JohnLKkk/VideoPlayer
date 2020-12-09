@@ -13,7 +13,7 @@ int NativePlayer::init_filters(const char *filters_descr) {
     AVFilter *buffersink = avfilter_get_by_name("buffersink");
     AVFilterInOut *outputs = avfilter_inout_alloc();
     AVFilterInOut *inputs = avfilter_inout_alloc();
-    AVRational time_base = pFormatCtx->streams[videoIndex]->time_base;
+    time_base = pFormatCtx->streams[videoIndex]->time_base;
     enum AVPixelFormat pix_fmts[] = {AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE};
 
     filter_graph = avfilter_graph_alloc();
@@ -89,7 +89,10 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     //3.查找文件的流信息
     if (avformat_find_stream_info(pFormatCtx, nullptr) < 0) {
         LOGE("Could not find stream information");
+        findFileInfoOk = 1;
         goto end_line;
+    } else {
+        findFileInfoOk = 0;
     }
     //4.查找视频轨(视频数据类型)
     for (int index = 0; index < pFormatCtx->nb_streams; index++) {
@@ -209,6 +212,26 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     avcodec_free_context(&vCodecCtx);
     ANativeWindow_release(nativeWindow);
     return 0;
+}
+
+long long NativePlayer::getPlayProgress(int type) {
+    if (findFileInfoOk == 1)return 0;
+    if (type == 0) {
+        //该值是从音频文件中提取的，以微妙(us)为单位
+        long tmp = (long) pFormatCtx->duration / 1000;
+        LOGE("获取时间进度：%ld", tmp);
+        return tmp;
+    } else {
+        double tmp = filter_frame->best_effort_timestamp * av_q2d(time_base);
+        LOGE("获取时间进度：%f", tmp);
+        return (long) tmp;
+    }
+}
+
+void NativePlayer::seekTo(int t) {
+    //java传过来的时间单位是ms，这里需要将其转为微秒us
+    long targetTime = t * 1000;
+    av_seek_frame(pFormatCtx, -1, targetTime, AVSEEK_FLAG_BACKWARD);
 }
 
 /**

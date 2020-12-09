@@ -1,5 +1,7 @@
 package com.yoy.videoPlayer.ui
 
+import com.yoy.videoPlayer.beans.VideoFileInfo
+
 /**
  * Created by Void on 2020/12/3 17:23
  *
@@ -18,4 +20,8 @@ interface FragmentCallback {
      */
     fun onPlayControl(action: Int)
 
+    /**
+     * 播放历史item点击回调
+     */
+    fun onItemClick(info: VideoFileInfo)
 }

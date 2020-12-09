@@ -33,15 +33,15 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder(), MediaPlaye
             MediaPlayer.MEDIA_ERROR_TIMED_OUT -> "操作超时"
             else -> String.format(Locale.CHINA, "未知错误(%d,%d)", what, extra)
         }
-        Log.e("VideoHardDecoder",msg)
+        Log.e("VideoHardDecoder", msg)
         return false
     }
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
         try {
 //            KLog.e("----setDisPlay")
+            mediaPlayer.setDisplay(holder)
             if (fileInfo.isValid) {
-                mediaPlayer.setDisplay(holder)
                 mediaPlayer.prepare()
             }
         } catch (e: Exception) {

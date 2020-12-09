@@ -19,7 +19,7 @@ import java.util.*
 class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
         VideoPreviewBar.ProgressCallback {
     private lateinit var mPresenter: VideoProcessPresenter
-    private var videoControlFragment = VideoControlFragment()
+    var videoControlFragment = VideoControlFragment()
     private var videoView: SurfaceView = mActivity.findViewById(R.id.videoView)
     private var videoProgressBar: VideoPreviewBar = mActivity.findViewById(R.id.videoProgressBar)
     private var playTime: TextView = mActivity.findViewById(R.id.playTime)
@@ -55,6 +55,11 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
             return
         }
         isJumpProgress = false
+        //没有播放时不进行进度条改变
+        if (!mPresenter.playHandler.isReadyPlay()) {
+            videoProgressBar.setProgress(0)
+            return
+        }
         mPresenter.goSelectedTime(index)
         videoProgressBar.setProgress(index)
     }
@@ -76,7 +81,7 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
      */
     fun setPlayProgress(index: Int) {
         //当用户正在更改播放进度，忽略设置播放进度请求
-        if (isJumpProgress) return
+        if (isJumpProgress || !mPresenter.playHandler.isReadyPlay()) return
         currentTime = TimeUtils.formatTimeS(mPresenter.playHandler.progressToTimestamp(index))
         endTime = TimeUtils.formatTimeS(mPresenter.playHandler.getMaxTime())
         videoProgressBar.setProgress(index)

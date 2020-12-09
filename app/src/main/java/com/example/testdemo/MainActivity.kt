@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import com.example.testdemo.testModel.audioRecorder.AudioRecorderActivity
 import com.example.testdemo.testModel.barrierFree.BarrierFreeActivity
 import com.example.testdemo.testModel.broadcast.BroadcastActivity
+import com.example.testdemo.testModel.jniTest.JniActivity
 import com.example.testdemo.testModel.notification.NotificationActivity
 import com.example.testdemo.testModel.onClickTest.ClickActivity
 import com.example.testdemo.testModel.permission.PermissionActivity
@@ -44,8 +45,9 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_9.setOnClickListener(this)
         btn_10.setOnClickListener(this)
         btn_11.setOnClickListener(this)
+        btn_12.setOnClickListener(this)
         setActionBar("测试模块")
-        startActivity(Intent(this, PopupWindowActivity::class.java))
+        startActivity(Intent(this, JniActivity::class.java))
     }
 
     override fun getLayoutID(): Int = R.layout.activity_main
@@ -72,6 +74,7 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
             R.id.btn_9 -> startActivity(Intent(this, PermissionActivity::class.java))
             R.id.btn_10 -> startActivity(Intent(this, StartPhoneAppActivity::class.java))
             R.id.btn_11 -> startActivity(Intent(this, ScanIPActivity::class.java))
+            R.id.btn_12 -> startActivity(Intent(this, JniActivity::class.java))
         }
     }
 }

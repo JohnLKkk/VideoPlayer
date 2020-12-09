@@ -2,6 +2,9 @@ buildscript {
     //gradle的引用必须放在这里，不能放在外面，因为这里先运行。
     apply from: 'buildSource/Task.gradle'
     apply from: 'buildSource/Dependencies.gradle'
+    ext {
+        kotlin_version = '1.4.10'
+    }
 
     repositories {
         google()

@@ -43,6 +43,11 @@ abstract class VideoDecoder {
     abstract fun setDataSource(path: String)
     abstract fun start()
     abstract fun pause()
+
+    /**
+     * 跳转到目标时间
+     * @param time 单位：ms
+     */
     abstract fun seekTo(time: Int)
     abstract fun release()
 

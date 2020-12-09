@@ -9,6 +9,16 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions -Wno-deprecated-declarations"
+                cFlags "-DSTDC_HEADERS"
+            }
+        }
+        ndk { // 声明编译的架构类型，指定为armeabi-v7a即可
+//            abiFilters "armeabi-v7a","arm64-v8a"
+            abiFilters "armeabi-v7a"
+        }
     }
     buildTypes {
         release {
@@ -23,13 +33,23 @@ android {
     sourceSets {
         main {
             // 指定jni库的存放目录为libs
-//            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDirs = ['libs']
             // 指定存放native代码的目录，这里指定为jni和cpp皆可
             jni.srcDirs = ['src/main/jni', 'src/main/cpp/']
 //            res.srcDirs+=['faceResource/v2']
             assets.srcDirs += ['faceResource/v5']
         }
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+            version "3.6.0"
+        }
+    }
+    ndkVersion "21.0.6113669"
 }
 
 dependencies {
@@ -37,6 +57,7 @@ dependencies {
     implementation project(':v_Base')
     testImplementation rootProject.ext.junit
     androidTestImplementation rootProject.ext.ext_junit
+    androidTestImplementation rootProject.ext.runner
 //    implementation fileTree(dir: 'libs', include: ['*.jar'])
 //    implementation project(path: ':videolibrary')
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

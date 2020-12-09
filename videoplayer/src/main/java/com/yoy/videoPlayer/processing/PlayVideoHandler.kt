@@ -22,28 +22,36 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     private val mHandler = Handler(Looper.getMainLooper())
     private var surfaceHolder: SurfaceHolder? = null
     private var listenerThread: ListenerPlayTimeThread? = null
-    private var sDecoder: VideoFFMPEGDecoder? = null
-    private var hDecoder: VideoHardDecoder? = null
+    private var sDecoder = VideoFFMPEGDecoder(this)
+    private var hDecoder = VideoHardDecoder(this)
     private var decoderType = DecodeType.HARDDecoder
+    private var isReadyPlay = false
     val fileInfo = FileAttributes()
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
+        LogUtils.e(msg = "PlayVideoHandler--surfaceChanged")
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
+        LogUtils.e(msg = "PlayVideoHandler--surfaceDestroyed")
+        getDecoderHandler()?.setDisPlay(null, fileInfo)
+        stopTimeUpdateThread()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
+        LogUtils.e(msg = "PlayVideoHandler--surfaceCreated")
         getDecoderHandler()?.setDisPlay(holder, fileInfo)
     }
 
     override fun onPrepared() {
+        LogUtils.i(msg = "播放状态：onPrepared")
+        isReadyPlay = true
         plStart()
         if (listenerThread == null) {
             listenerThread = ListenerPlayTimeThread()
             listenerThread?.start()
         }
-        listenerThread?.mStart()
+        listenerThread?.isStop=false
         playStateListener?.onPlayStart()
     }
 
@@ -55,26 +63,20 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     }
 
     private fun getDecoderHandler(): VideoDecoder? = when (decoderType) {
-        DecodeType.FFMPEGDecoder -> {
-            if (sDecoder == null) {
-                sDecoder = VideoFFMPEGDecoder(this)
-            }
-            sDecoder
-        }
-        DecodeType.HARDDecoder -> {
-            if (hDecoder == null) {
-                hDecoder = VideoHardDecoder(this)
-            }
-            hDecoder
-        }
+        DecodeType.FFMPEGDecoder -> sDecoder
+        DecodeType.HARDDecoder -> hDecoder
         else -> {
-            LogUtils.e(msg = "未知的解码类型")
+            LogUtils.e("PlayVideoHandler", "未知的解码类型")
             null
         }
     }
 
+    /**
+     * 是否准备好播放
+     */
+    fun isReadyPlay() = isReadyPlay
+
     fun setDecoderType(decoder: DecodeType) {
-        SPUtils.saveString(AppCode.currentDecodeType, decoder.toString())
         this.decoderType = decoder
     }
 
@@ -86,7 +88,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
             KLog.e("文件信息初始化失败,请检查文件是否有效！path:$path")
             return
         }
-        listenerThread?.mStop()
+        listenerThread?.isStop=true
         getDecoderHandler()?.setDataSource(path)
     }
 
@@ -117,22 +119,10 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     fun isPlaying(): Boolean = getDecoderHandler()?.isPlaying() ?: false
 
     @Synchronized
-    fun getCurrentTime(): Long {
-        var currentTime = getDecoderHandler()?.getPlayTimeIndex(1) ?: 0L
-//        if (BuildConfig.DEBUG && currentTime == 0L) {
-//            currentTime = 50000L
-//        }
-        return currentTime
-    }
+    fun getCurrentTime(): Long = getDecoderHandler()?.getPlayTimeIndex(1) ?: 0L
 
     @Synchronized
-    fun getMaxTime(): Long {
-        var maxTime = getDecoderHandler()?.getPlayTimeIndex(2) ?: 0L
-//        if (BuildConfig.DEBUG && maxTime == 0L) {
-//            maxTime = 100000L
-//        }
-        return maxTime
-    }
+    fun getMaxTime(): Long = getDecoderHandler()?.getPlayTimeIndex(2) ?: 0L
     //endregion
 
     /**
@@ -158,7 +148,8 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
 
     //region -----播放时间更新线程控制-----
     fun stopTimeUpdateThread() {
-        listenerThread?.release()
+        isReadyPlay = false
+        listenerThread?.isStop=true
         listenerThread = null
     }
 
@@ -166,31 +157,17 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
      * 播放时间更新线程
      */
     inner class ListenerPlayTimeThread : Thread() {
-        private var isReady = true
-        private var isStop = false
+        var isStop = false
         override fun run() {
             super.run()
-            while (isReady) {
-                if (isStop) {
+            while (isReadyPlay) {
+                if (isStop || !isPlaying()) {
                     sleep(500)
                     continue
                 }
                 mHandler.post { playStateListener?.onPlayTime(getCurrentTime()) }
                 sleep(500)
             }
-        }
-
-        fun mStart() {
-            isStop = false
-        }
-
-        fun mStop() {
-            isStop = true
-        }
-
-        fun release() {
-            isStop = true
-            isReady = false
         }
     }
     //endregion

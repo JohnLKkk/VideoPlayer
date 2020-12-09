@@ -36,16 +36,30 @@ class NativePlayer {
     AVFormatContext *pFormatCtx = NULL;
     uint8_t *out_buffer = NULL;
     ANativeWindow_Buffer windowBuffer;
-
+    AVRational time_base;
     AVCodec *vCodec = NULL;
 
     AVFilterContext *buffersink_ctx;
     AVFilterContext *buffersrc_ctx;
     AVFilterGraph *filter_graph;
+    int findFileInfoOk = 1;
 public:
     int init_filters(const char *filters_descr);
 
     int playVideo(const char *vPath, ANativeWindow *nativeWindow);
+
+    /**
+     * 获取播放进度
+     * @param type 0当前进度 1总时长
+     * @return 返回对应时间单位毫秒(ms)
+     */
+    long long getPlayProgress(int type);
+
+    /**
+     * 设置播放进度
+     * @param t 目标时间戳单位：ms
+     */
+    void seekTo(int t);
 
     void mDestroy();
 };

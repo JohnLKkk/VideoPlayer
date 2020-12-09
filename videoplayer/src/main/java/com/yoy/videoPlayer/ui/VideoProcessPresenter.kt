@@ -3,6 +3,7 @@ package com.yoy.videoPlayer.ui
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.LogUtils
 import com.yoy.videoPlayer.R
+import com.yoy.videoPlayer.beans.VideoFileInfo
 import com.yoy.videoPlayer.processing.DecodeType
 import com.yoy.videoPlayer.processing.PlayStateListener
 import com.yoy.videoPlayer.processing.PlayVideoHandler
@@ -17,26 +18,23 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
         PlayStateListener {
     private var doubleSpeedArray = mActivity.resources.getStringArray(R.array.DoubleSpeed)
     private var functionArray = mActivity.resources.getStringArray(R.array.FunctionList)
-    private var decoderTypeArray = mActivity.resources.getStringArray(R.array.DecoderType)
 
     private var playSpeed = doubleSpeedArray[0]
     private var selectFunction = functionArray[0]
-    private var decoderType = decoderTypeArray[0]
 
     val playHandler = PlayVideoHandler(this)
 
     var videoPath = ""
-//    var videoPath = "/storage/emulated/0/Download/smallfoot.mp4"
 
     init {
-        playHandler.setDecoderType(DecodeType.HARDDecoder)
+        setDecoderType(1)
     }
 
     override fun onSelectFunction(type: Int, position: Int) {
         when (type) {
             0 -> playSpeed = doubleSpeedArray[position]
             1 -> selectFunction = functionArray[position]
-            2 -> decoderType = decoderTypeArray[position]
+            2 -> setDecoderType(position)
         }
     }
 
@@ -49,6 +47,10 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
             3 -> {
             }
         }
+    }
+
+    override fun onItemClick(info: VideoFileInfo) {
+        selectFileResult(info.vPath)
     }
 
     fun selectFileResult(path: String?) {
@@ -79,7 +81,25 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
 //        LogUtils.d(msg = "当前播放进度：$index")
     }
 
-    //region
+    /**
+     * 设置解码类型
+     * 0=硬解码 1=FFMPEG
+     * @see DecodeType
+     * @see R.array.DecoderType
+     */
+    fun setDecoderType(decodeType: Int) {
+        when (decodeType) {
+            0 -> playHandler.setDecoderType(DecodeType.HARDDecoder)
+            1 -> playHandler.setDecoderType(DecodeType.FFMPEGDecoder)
+            else -> {
+                playHandler.setDecoderType(DecodeType.OTHER)
+                return
+            }
+        }
+        uiControl.videoControlFragment.setSelectFuctionUI(2, decodeType)
+    }
+
+    //region ----- 播放状态回调 -----
     override fun onPlayStart() {
         LogUtils.d(msg = "即将播放的文件路径：$videoPath")
         uiControl.setFileInfo(playHandler.fileInfo.name, videoPath)

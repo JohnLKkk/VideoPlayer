@@ -33,7 +33,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".testModel.jniTest.JniActivity"></activity>
+        <activity android:name=".testModel.jniTest.JniActivity"/>
         <activity android:name=".testModel.testAIDL.AIDLActivity" />
         <activity android:name=".testModel.testAIDL.NetworkActivity" />
         <activity android:name=".testModel.audioRecorder.AudioRecorderActivity" />

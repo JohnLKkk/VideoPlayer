@@ -7,8 +7,16 @@
 extern "C" {
 VIDEO_PLAYER_FUNC(void, setCallback, jobject callback) {
     jclass jniActivity = env->GetObjectClass(callback);
-
-    jmethodID onCallback = env->GetMethodID(jniActivity, "onCallback", "(Ljava/lang/String;)");
-    env->CallVoidMethod(callback, onCallback,"你好");
+    if (!jniActivity) {
+        LOGE("jniActivity not found...");
+        return;
+    }
+    jmethodID onCallback = env->GetMethodID(jniActivity, "onCallback", "(Ljava/lang/String;)V");
+    if (!onCallback) {
+        LOGE("jniActivity not found...");
+        return;
+    }
+    jstring tmp = env->NewStringUTF("你好");
+    env->CallVoidMethod(callback, onCallback, tmp);
 }
 }

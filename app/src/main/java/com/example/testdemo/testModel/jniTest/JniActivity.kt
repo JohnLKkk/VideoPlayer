@@ -11,7 +11,6 @@ class JniActivity : AppCompatActivity(), MCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jni)
-        LogUtils.e("-----","string:"+String::class.java.name)
     }
 
     fun onDj(view: View) {

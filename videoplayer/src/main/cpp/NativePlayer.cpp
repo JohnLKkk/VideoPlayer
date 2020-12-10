@@ -2,9 +2,9 @@
 // Created by Void on 2020/11/30.
 //
 
-#include "NativePlayer.h"
+#include "native_lib_define.h"
 
-int isRelease;
+extern NativeLibDefine *libDefine;
 
 int NativePlayer::init_filters(const char *filters_descr) {
     char args[512];
@@ -32,7 +32,7 @@ int NativePlayer::init_filters(const char *filters_descr) {
     ret = avfilter_graph_create_filter(&buffersrc_ctx, buffersrc, "in",
                                        args, nullptr, filter_graph);
     if (ret < 0) {
-        LOGE("Cannot create buffer source");
+        onErrorCallback(INIT_FAIL, "Cannot create buffer source");
         goto end;
     }
 
@@ -40,14 +40,14 @@ int NativePlayer::init_filters(const char *filters_descr) {
     ret = avfilter_graph_create_filter(&buffersink_ctx, buffersink, "out",
                                        nullptr, nullptr, filter_graph);
     if (ret < 0) {
-        LOGE("Cannot create buffer sink");
+        onErrorCallback(INIT_FAIL, "Cannot create buffer sink");
         goto end;
     }
 
     ret = av_opt_set_int_list(buffersink_ctx, "pix_fmts", pix_fmts,
                               AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN);
     if (ret < 0) {
-        LOGE("Cannot set output pixel format");
+        onErrorCallback(INIT_FAIL, "Cannot set output pixel format");
         goto end;
     }
 
@@ -76,19 +76,18 @@ int NativePlayer::init_filters(const char *filters_descr) {
 }
 
 int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
-    isRelease = 0;
     //初始化所有组件
     av_register_all();
     //分配一个AVFormatContext结构
     pFormatCtx = avformat_alloc_context();
     //打开文件
     if (avformat_open_input(&pFormatCtx, vPath, nullptr, nullptr) != 0) {
-        LOGE("Could not open input stream");
+        onErrorCallback(VIDEO_STREAM_NOT_FOUNT, "Could not open input stream");
         goto end_line;
     }
     //3.查找文件的流信息
     if (avformat_find_stream_info(pFormatCtx, nullptr) < 0) {
-        LOGE("Could not find stream information");
+        onErrorCallback(VIDEO_STREAM_NOT_FOUNT, "Could not find stream information");
         findFileInfoOk = 1;
         goto end_line;
     } else {
@@ -102,13 +101,13 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
         }
     }
     if (videoIndex == -1) {
-        LOGE("Could not find a video stream");
+        onErrorCallback(VIDEO_STREAM_NOT_FOUNT, "Could not find a video stream");
         goto end_line;
     }
     //5.查找解码器
     vCodec = avcodec_find_decoder(pFormatCtx->streams[videoIndex]->codecpar->codec_id);
     if (vCodec == nullptr) {
-        LOGE("could not find codec");
+        onErrorCallback(CODEC_NOT_FOUNT, "could not find codec");
         goto end_line;
     }
     //6.配置解码器
@@ -117,7 +116,7 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
 
     //7.打开解码器
     if (avcodec_open2(vCodecCtx, vCodec, nullptr) < 0) {
-        LOGE("Could not open codec");
+        onErrorCallback(OPEN_CODEC_FAIL, "Could not open codec");
         goto end_line;
     }
     width = vCodecCtx->width;
@@ -126,13 +125,13 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     avfilter_register_all();
     filter_frame = av_frame_alloc();
     if (filter_frame == nullptr) {
-        LOGE("Couldn't allocate filter frame.");
+        onErrorCallback(INIT_FAIL, "初始化帧失败 filter_frame");
         goto end_line;
     }
     //分配一个帧指针，指向解码后的原始帧
     vFrame = av_frame_alloc();
     if (vFrame == nullptr) {
-        LOGE("无法分配过滤器框架");
+        onErrorCallback(INIT_FAIL, "初始化帧失败 vFrame");
         goto end_line;
     }
     vPacket = (AVPacket *) av_malloc(sizeof(AVPacket));
@@ -156,18 +155,19 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     int ret;
     ret = init_filters("drawgrid=w=iw/3:h=ih/3:t=2:c=white@0.5");
     if (ret < 0) {
-        LOGE("init_filter error, ret=%d\n", ret);
+        onErrorCallback(FILTER_NOT_FOUNT, &"init_filter error, ret="[ret]);
         goto end_line;
     }
+    setPlayStatus(0);
     //读取帧
     while (av_read_frame(pFormatCtx, vPacket) >= 0) {
-        if (isRelease)break;
+        if (getPlayStatus() == 5)break;
         if (vPacket->stream_index != videoIndex) continue;
         //视频解码
         if (avcodec_send_packet(vCodecCtx, vPacket) != 0) break;
         //从解码器接收返回的帧数据
         while (avcodec_receive_frame(vCodecCtx, vFrame) == 0) {
-            if (isRelease)break;
+            if (getPlayStatus() == 5)break;
             if (av_buffersrc_add_frame_flags(buffersrc_ctx, vFrame, AV_BUFFERSRC_FLAG_KEEP_REF) <
                 0) {
                 LOGE("Error while feeding the filter_graph");
@@ -234,10 +234,19 @@ void NativePlayer::seekTo(int t) {
     av_seek_frame(pFormatCtx, -1, targetTime, AVSEEK_FLAG_BACKWARD);
 }
 
-/**
- * 释放视频播放
- */
-void NativePlayer::mDestroy() {
-    isRelease = 1;
-    LOGE("释放视频资源，终止播放");
+void NativePlayer::setPlayStatus(int status) {
+    if (status < 0 || status > 5)return;
+    playStatus = status;
+    libDefine->jniPlayStatusCallback(status);
 }
+
+int NativePlayer::getPlayStatus() const {
+    return playStatus;
+}
+
+void NativePlayer::onErrorCallback(int errorCode, char const *msg) {
+    errorStatus = errorCode;
+    libDefine->jniErrorCallback(errorCode, msg);
+}
+
+

@@ -13,5 +13,22 @@
 
 #include "NativePlayer.h"
 
+class NativeLibDefine {
+public:
+    JNIEnv *env= nullptr;
+    jmethodID playStatusCallback= nullptr;
+    jmethodID errorCallback= nullptr;
+    jclass ffmpegDecoder= nullptr;
+
+    NativeLibDefine();
+    void jniPlayStatusCallback(int status){
+
+        env->CallVoidMethod(ffmpegDecoder,playStatusCallback,status);
+    }
+    void jniErrorCallback(int errorCode,char const* msg){
+        env->CallVoidMethod(ffmpegDecoder,errorCallback,errorCode,msg);
+    }
+};
+
 
 #endif //TESTEXAMPLE_NATIVE_LIB_DEFINE_H

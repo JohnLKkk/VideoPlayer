@@ -2,22 +2,21 @@ package com.example.testdemo.testModel.jniTest
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.ProxyFileDescriptorCallback
 import android.view.View
 import com.example.testdemo.R
 import com.yoy.v_Base.utils.LogUtils
 
-class JniActivity : AppCompatActivity(), MCallback {
+class JniActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jni)
     }
 
     fun onDj(view: View) {
-        setCallback(this)
+        setCallback()
     }
 
-    private external fun setCallback(callback: MCallback)
+    private external fun setCallback()
 
     companion object {
         init {
@@ -25,7 +24,7 @@ class JniActivity : AppCompatActivity(), MCallback {
         }
     }
 
-    override fun onCallback(msg: String) {
-        LogUtils.e(msg = "----------$msg")
+    fun onCallback(status:Int,msg: String) {
+        LogUtils.e(msg = "$status----------$msg")
     }
 }

@@ -7,6 +7,7 @@ import android.media.AudioTrack
 import android.os.Build
 import android.text.TextUtils
 import android.view.SurfaceHolder
+import com.yoy.v_Base.utils.LogUtils
 import com.yoy.videoPlayer.processing.FileAttributes
 
 /**
@@ -14,14 +15,18 @@ import com.yoy.videoPlayer.processing.FileAttributes
  *
  */
 class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder() {
-
+    private val TAG = "FFMPEGDecoder"
     private var holder: SurfaceHolder? = null
 
     private var vPath = ""
 
+    init {
+        initJni()
+    }
+
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
-        if (!fileInfo.isValid) return
         this.holder = holder
+        if (!fileInfo.isValid) return
         if (!TextUtils.isEmpty(vPath)) setDataSource(vPath)
     }
 
@@ -29,40 +34,61 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
         vPath = path
         if (holder == null) return
         Thread {
-            try {
-                playVideo(path, holder!!.surface)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            if (playVideo(path, holder!!.surface) < 0)
+                LogUtils.e(TAG, "播放异常，surface无效")
         }.start()
     }
 
     override fun start() {
-
+        setPlayState(0)
     }
 
     override fun pause() {
+        setPlayState(1)
     }
 
     override fun seekTo(time: Int) {
         goSelectedTime(time)
     }
 
-    override fun isPlaying(): Boolean {
-        return false
+    override fun isPlaying(): Boolean = mIsPlaying()
+
+    override fun getPlayTimeIndex(type: Int): Long = if (type == 1) {
+        getCurrentPosition()
+    } else {
+        getDuration()
     }
 
-    override fun getPlayTimeIndex(type: Int): Long =
-            if (type == 1) {
-                getCurrentPosition()
-            } else {
-                getDuration()
-            }
-
     override fun release() {
+        setPlayState(5)
         holder = null
-        mDestroy()
         callback.onCompletion()
+    }
+
+    //region  ------------ffmpeg decoder
+
+    /**
+     * c层播放状态回调
+     * 注，不要更改方法名和参数类型！
+     * @param status 0=Prepared
+     */
+    fun jniPlayStatusCallback(status: Int) {
+        when (status) {
+            0 -> callback.onPrepared()
+        }
+    }
+
+    /**
+     * c层错误回调
+     * 注，不要更改方法名和参数类型！
+     * 详细请查看错误定义文件：src/main/cpp/ErrorCodeDefine.h
+     * @param errorCode
+     */
+    fun jniErrorCallback(errorCode: Int, msg: String) {
+        LogUtils.e(TAG, "jniErrorCallback$msg")
+        when (errorCode) {
+
+        }
     }
 
     /**
@@ -101,8 +127,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
         }
     }
 
-    //region  ------------ffmpeg decoder
-    private external fun stringFromJNI(): String
+    private external fun initJni()
 
     private external fun playVideo(vPath: String, surface: Any): Int
 
@@ -112,7 +137,9 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
 
     private external fun goSelectedTime(t: Int)
 
-    private external fun mDestroy()
+    private external fun mIsPlaying(): Boolean
+
+    private external fun setPlayState(status: Int)
     //endregion
 
     companion object {

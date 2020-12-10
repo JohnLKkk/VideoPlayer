@@ -5,18 +5,18 @@
 #include "Test.h"
 
 extern "C" {
-VIDEO_PLAYER_FUNC(void, setCallback, jobject callback) {
-    jclass jniActivity = env->GetObjectClass(callback);
+VIDEO_PLAYER_FUNC(void, setCallback) {
+    jclass jniActivity = env->GetObjectClass(thiz);
     if (!jniActivity) {
         LOGE("jniActivity not found...");
         return;
     }
-    jmethodID onCallback = env->GetMethodID(jniActivity, "onCallback", "(Ljava/lang/String;)V");
+    jmethodID onCallback = env->GetMethodID(jniActivity, "onCallback", "(ILjava/lang/String;)V");
     if (!onCallback) {
         LOGE("jniActivity not found...");
         return;
     }
     jstring tmp = env->NewStringUTF("你好");
-    env->CallVoidMethod(callback, onCallback, tmp);
+    env->CallVoidMethod(thiz, onCallback,1, tmp);
 }
 }

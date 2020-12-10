@@ -1,5 +1,6 @@
 package com.yoy.videoPlayer.ui
 
+import android.os.Handler
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.LogUtils
 import com.yoy.videoPlayer.R
@@ -27,7 +28,9 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
     var videoPath = ""
 
     init {
-        setDecoderType(1)
+        Handler().postDelayed({
+            setDecoderType(1)
+        }, 1000)
     }
 
     override fun onSelectFunction(type: Int, position: Int) {

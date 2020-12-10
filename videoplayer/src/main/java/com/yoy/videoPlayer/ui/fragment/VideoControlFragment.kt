@@ -110,15 +110,15 @@ class VideoControlFragment : BaseDefaultFragment(),
         if (!isInitFinish) return
         when (type) {
             0 -> {
-                if (position >= doubleSpeedList.size) return
+                if (position >= doubleSpeedList.adapter.count) return
                 doubleSpeedList.setSelection(position)
             }
             1 -> {
-                if (position >= functionList.size) return
+                if (position >= functionList.adapter.count) return
                 functionList.setSelection(position)
             }
             2 -> {
-                if (position >= decoderTypeList.size) return
+                if (position >= decoderTypeList.adapter.count) return
                 decoderTypeList.setSelection(position)
             }
         }

@@ -28,6 +28,9 @@ class NativePlayer {
     int height = 0;
     int bufferSize = 0;
     int videoIndex = -1;
+    int findFileInfoOk = 1;
+    int playStatus = -1;
+    int errorStatus = -1;
 
     AVPacket *vPacket = NULL;
     AVFrame *vFrame = NULL, *pFrameRGBA = NULL, *filter_frame = NULL;
@@ -42,7 +45,7 @@ class NativePlayer {
     AVFilterContext *buffersink_ctx;
     AVFilterContext *buffersrc_ctx;
     AVFilterGraph *filter_graph;
-    int findFileInfoOk = 1;
+
 public:
     int init_filters(const char *filters_descr);
 
@@ -61,7 +64,20 @@ public:
      */
     void seekTo(int t);
 
-    void mDestroy();
+    /**
+     * 设置播放状态
+     * 注：设置状态5后，该引用将失效，需要重新初始化。
+     * @param status -1=未知状态 0=准备 1=播放中 2=暂停中 3=播放完成 4=播放取消 5=释放资源
+     */
+    void setPlayStatus(int status);
+
+    int getPlayStatus() const;
+
+    /**
+     * 回调错误到Java层处理
+     * @param errorCode
+     */
+    void onErrorCallback(int errorCode,char const* msg);
 };
 
 

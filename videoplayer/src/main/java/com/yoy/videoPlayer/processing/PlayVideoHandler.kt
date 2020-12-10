@@ -3,10 +3,8 @@ package com.yoy.videoPlayer.processing
 import android.os.Handler
 import android.os.Looper
 import android.view.SurfaceHolder
-import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.LogUtils
-import com.yoy.v_Base.utils.SPUtils
 import com.yoy.videoPlayer.processing.decoder.PlayStateCallback
 import com.yoy.videoPlayer.processing.decoder.VideoDecoder
 import com.yoy.videoPlayer.processing.decoder.VideoFFMPEGDecoder

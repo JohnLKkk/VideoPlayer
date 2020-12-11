@@ -158,7 +158,7 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
         onErrorCallback(FILTER_NOT_FOUNT, &"init_filter error, ret="[ret]);
         goto end_line;
     }
-    setPlayStatus(0);
+    libDefine->jniPlayStatusCallback(0);
     //读取帧
     while (av_read_frame(pFormatCtx, vPacket) >= 0) {
         if (getPlayStatus() == 5)break;
@@ -237,7 +237,6 @@ void NativePlayer::seekTo(int t) {
 void NativePlayer::setPlayStatus(int status) {
     if (status < 0 || status > 5)return;
     playStatus = status;
-    libDefine->jniPlayStatusCallback(status);
 }
 
 int NativePlayer::getPlayStatus() const {

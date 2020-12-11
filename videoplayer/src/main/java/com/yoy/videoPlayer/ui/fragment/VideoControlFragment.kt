@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.Spinner
-import androidx.core.view.size
 import com.yoy.v_Base.ui.BaseDefaultFragment
 import com.yoy.v_Base.utils.KLog
 import com.yoy.videoPlayer.R
@@ -109,18 +108,12 @@ class VideoControlFragment : BaseDefaultFragment(),
     fun setSelectFuctionUI(type: Int, position: Int) {
         if (!isInitFinish) return
         when (type) {
-            0 -> {
-                if (position >= doubleSpeedList.adapter.count) return
+            0 -> if (position < doubleSpeedList.adapter.count)
                 doubleSpeedList.setSelection(position)
-            }
-            1 -> {
-                if (position >= functionList.adapter.count) return
+            1 -> if (position < functionList.adapter.count)
                 functionList.setSelection(position)
-            }
-            2 -> {
-                if (position >= decoderTypeList.adapter.count) return
+            2 -> if (position < decoderTypeList.adapter.count)
                 decoderTypeList.setSelection(position)
-            }
         }
     }
 }

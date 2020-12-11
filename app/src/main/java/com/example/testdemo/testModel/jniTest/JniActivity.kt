@@ -10,13 +10,19 @@ class JniActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jni)
+        initThreadJni()
     }
 
     fun onDj(view: View) {
-        setCallback()
+//        setCallback()
+        createAndRunThread()
     }
 
     private external fun setCallback()
+
+    private external fun initThreadJni()
+
+    private external fun createAndRunThread()
 
     companion object {
         init {
@@ -24,7 +30,11 @@ class JniActivity : AppCompatActivity() {
         }
     }
 
-    fun onCallback(status:Int,msg: String) {
+    fun onCallback(status: Int, msg: String) {
         LogUtils.e(msg = "$status----------$msg")
+    }
+
+    fun fromJNI(i: Int) {
+        LogUtils.e(msg = "线程：$i")
     }
 }

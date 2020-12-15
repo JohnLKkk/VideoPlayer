@@ -1,10 +1,11 @@
 package com.example.testdemo.testModel.jniTest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.example.testdemo.R
 import com.yoy.v_Base.utils.LogUtils
+import kotlin.concurrent.thread
 
 class JniActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +16,16 @@ class JniActivity : AppCompatActivity() {
 
     fun onDj(view: View) {
 //        setCallback()
-        createAndRunThread()
+//        createAndRunThread()
+        thread {
+            var i = 1001
+            do {
+                postMsg(JniBean(i, "currentTimeMillis:" + System.currentTimeMillis()))
+                i++
+                if (i == 5) break
+                Thread.sleep(1500)
+            } while (true)
+        }
     }
 
     private external fun setCallback()
@@ -23,6 +33,10 @@ class JniActivity : AppCompatActivity() {
     private external fun initThreadJni()
 
     private external fun createAndRunThread()
+
+    private external fun postMsg(bean: JniBean)
+
+    private external fun goFun(code:Int,msg:String): Int
 
     companion object {
         init {

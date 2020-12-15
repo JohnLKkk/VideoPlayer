@@ -2,7 +2,6 @@ package com.example.testdemo.testModel.permission
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -11,12 +10,9 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.testdemo.R
-import com.yoy.v_Base.utils.AppCode
-import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.ui.BaseDefaultActivity
+import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.ToastUtils
 
 class PermissionActivity : BaseDefaultActivity() {

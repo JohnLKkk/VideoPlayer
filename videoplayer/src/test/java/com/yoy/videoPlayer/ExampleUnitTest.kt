@@ -3,8 +3,6 @@ package com.yoy.videoPlayer
 import com.yoy.v_Base.utils.TimeUtils
 import org.junit.Test
 
-import org.junit.Assert.*
-
 /**
  * Example local unit test, which will execute on the development machine (host).
  *

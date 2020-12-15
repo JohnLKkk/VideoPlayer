@@ -13,4 +13,13 @@
 #define VIDEO_STREAM_NOT_FOUNT 0x05
 
 
+/**
+ * 错误消息结构
+ */
+struct ErrorInfoObj {
+    int errorCode;
+    char const *errorMessage;
+};
+
+
 #endif //TESTEXAMPLE_ERRORCODEDEFINE_H

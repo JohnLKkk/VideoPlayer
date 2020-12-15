@@ -5,8 +5,7 @@
 #ifndef TESTEXAMPLE_LOGGER_H
 #define TESTEXAMPLE_LOGGER_H
 
-#define println1(A) printf(join1(A, "\n"))
-#define println2(A, B) printf(join1(A, " \n"), B)
+#define println(A,...) printf(join1(A, "\n"),__VA_ARGS__)
 
 #ifdef ANDROID
 

@@ -15,6 +15,11 @@
 
 class NativeLibDefine {
 public:
+    //全局释放标识
+    bool isRelease = false;
+
+//    ErrorInfoObj[1024] errorArray;
+
     JavaVM *g_jvm = nullptr;
     jobject g_obj = nullptr;
     JNIEnv *env = nullptr;
@@ -23,12 +28,17 @@ public:
 
     NativeLibDefine();
 
+    /**
+     * 回调程序
+     * 专门处理回调内容的的线程
+     */
+    void onCallbackThread();
+
     void jniPlayStatusCallback(int status) {
         if (g_jvm->AttachCurrentThread(&env, nullptr) != JNI_OK) {
             LOGE("%s: AttachCurrentThread() failed", __FUNCTION__);
             return;
         }
-
         env->CallVoidMethod(g_obj, playStatusCallback, status);
         if (g_jvm->DetachCurrentThread() != JNI_OK) {
             LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);

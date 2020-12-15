@@ -1,7 +1,7 @@
 
 #include "native_lib_define.h"
 
-extern "C" {
+
 NativeLibDefine *libDefine;
 NativePlayer nativePlayer;
 
@@ -10,6 +10,13 @@ NativeLibDefine::NativeLibDefine() {
     nativePlayer = NativePlayer();
 }
 
+void NativeLibDefine::onCallbackThread() {
+    while (isRelease){
+
+    }
+}
+
+extern "C" {
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     libDefine = new NativeLibDefine();
 
@@ -41,6 +48,7 @@ VIDEO_PLAYER_FUNC(void, initJni) {
     }
     env->GetJavaVM(&(libDefine->g_jvm));
     libDefine->g_obj = env->NewGlobalRef(thiz);
+    libDefine->onCallbackThread();
 }
 
 VIDEO_PLAYER_FUNC(int, playVideo, jstring vPath, jobject surface) {
@@ -58,6 +66,7 @@ VIDEO_PLAYER_FUNC(int, playVideo, jstring vPath, jobject surface) {
 VIDEO_PLAYER_FUNC(long long, getCurrentPosition) {
     return nativePlayer.getPlayProgress(0);
 }
+
 VIDEO_PLAYER_FUNC(long long, getDuration) {
     return nativePlayer.getPlayProgress(1);
 }
@@ -72,5 +81,6 @@ VIDEO_PLAYER_FUNC(bool, mIsPlaying) {
 
 VIDEO_PLAYER_FUNC(void, setPlayState, jint status) {
     nativePlayer.setPlayStatus(status);
+    libDefine->isRelease = status == 5;
 }
 }

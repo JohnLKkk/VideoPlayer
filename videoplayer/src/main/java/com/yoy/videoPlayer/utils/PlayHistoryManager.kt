@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.text.TextUtils
-import android.util.Log
 import com.yoy.videoPlayer.beans.VideoFileInfo
 import com.yoy.videoPlayer.utils.db.DatabaseHandler
 import com.yoy.videoPlayer.utils.db.SQLInfo

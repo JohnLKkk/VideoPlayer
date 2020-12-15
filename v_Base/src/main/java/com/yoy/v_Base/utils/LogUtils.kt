@@ -1,6 +1,5 @@
 package com.yoy.v_Base.utils
 
-import android.nfc.Tag
 import android.text.TextUtils
 import android.util.Log
 import com.yoy.v_Base.BuildConfig
@@ -13,29 +12,29 @@ import com.yoy.v_Base.BuildConfig
 
 object LogUtils {
     private val is_Debug = BuildConfig.DEBUG//全局是否打印日志
-    private val TAG="Debuger"
+    private val TAG = "Debuger"
 
-    fun v(tag: String=TAG, msg: String) {
+    fun v(tag: String = TAG, msg: String) {
         if (TextUtils.isEmpty(tag) || !is_Debug) return
         Log.v(tag, msg)
     }
 
-    fun i(tag: String=TAG, msg: String) {
+    fun i(tag: String = TAG, msg: String) {
         if (TextUtils.isEmpty(tag) || !is_Debug) return
         Log.i(tag, msg)
     }
 
-    fun d(tag: String=TAG, msg: String) {
+    fun d(tag: String = TAG, msg: String) {
         if (TextUtils.isEmpty(tag) || !is_Debug) return
         Log.d(tag, msg)
     }
 
-    fun w(tag: String=TAG, msg: String) {
+    fun w(tag: String = TAG, msg: String) {
         if (TextUtils.isEmpty(tag) || !is_Debug) return
         Log.w(tag, msg)
     }
 
-    fun e(tag: String=TAG, msg: String) {
+    fun e(tag: String = TAG, msg: String) {
         if (TextUtils.isEmpty(tag) || !is_Debug) return
         Log.e(tag, msg)
     }
@@ -47,7 +46,7 @@ object LogUtils {
      * @param tag
      * @param msg
      */
-    fun showLog(tag: String=TAG, msg: String) {
+    fun showLog(tag: String = TAG, msg: String) {
         if (TextUtils.isEmpty(tag) || !is_Debug) return
         val msgLength = msg.length
         var start = 0

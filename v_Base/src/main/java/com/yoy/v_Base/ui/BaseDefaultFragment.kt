@@ -1,12 +1,10 @@
 package com.yoy.v_Base.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import java.util.logging.Logger
 
 /**
  * Created by Void on 2020/12/4 13:42

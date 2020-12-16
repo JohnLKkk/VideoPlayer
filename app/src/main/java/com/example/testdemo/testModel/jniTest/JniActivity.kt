@@ -17,26 +17,16 @@ class JniActivity : AppCompatActivity() {
     fun onDj(view: View) {
 //        setCallback()
 //        createAndRunThread()
-        thread {
-            var i = 1001
-            do {
-                postMsg(JniBean(i, "currentTimeMillis:" + System.currentTimeMillis()))
-                i++
-                if (i == 5) break
-                Thread.sleep(1500)
-            } while (true)
-        }
+        mRelease()
     }
 
     private external fun setCallback()
 
     private external fun initThreadJni()
 
-    private external fun createAndRunThread()
+    private external fun mRelease()
 
     private external fun postMsg(bean: JniBean)
-
-    private external fun goFun(code:Int,msg:String): Int
 
     companion object {
         init {
@@ -45,10 +35,6 @@ class JniActivity : AppCompatActivity() {
     }
 
     fun onCallback(status: Int, msg: String) {
-        LogUtils.e(msg = "$status----------$msg")
-    }
-
-    fun fromJNI(i: Int) {
-        LogUtils.e(msg = "线程：$i")
+        LogUtils.e(msg = "onCallback:$status----------$msg")
     }
 }

@@ -1,10 +1,5 @@
 package com.yoy.videoPlayer.processing.decoder
 
-import android.media.AudioAttributes
-import android.media.AudioFormat
-import android.media.AudioManager
-import android.media.AudioTrack
-import android.os.Build
 import android.text.TextUtils
 import android.view.SurfaceHolder
 import com.yoy.v_Base.utils.LogUtils
@@ -17,11 +12,11 @@ import com.yoy.videoPlayer.processing.FileAttributes
 class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder() {
     private val TAG = "FFMPEGDecoder"
     private var holder: SurfaceHolder? = null
-
+    private val decoderJni = FFMPEGDecoderJni(this)
     private var vPath = ""
 
     init {
-        initJni()
+        decoderJni.initJni()
     }
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
@@ -34,45 +29,44 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
         vPath = path
         if (holder == null) return
         Thread {
-            if (playVideo(path, holder!!.surface) < 0)
-                LogUtils.e(TAG, "播放异常，surface无效")
+            decoderJni.playVideo(path, holder!!.surface)
         }.start()
     }
 
     override fun start() {
-        setPlayState(0)
+        decoderJni.setPlayState(1)
     }
 
     override fun pause() {
-        setPlayState(1)
+        decoderJni.setPlayState(2)
     }
 
     override fun seekTo(time: Int) {
-        goSelectedTime(time)
+        decoderJni.goSelectedTime(time)
     }
 
-    override fun isPlaying(): Boolean = mIsPlaying()
+    override fun isPlaying(): Boolean = decoderJni.mIsPlaying()
 
     override fun getPlayTimeIndex(type: Int): Long = if (type == 1) {
-        getCurrentPosition()
+        decoderJni.getCurrentPosition()
     } else {
-        getDuration()
+        decoderJni.getDuration()
     }
 
     override fun release() {
-        setPlayState(5)
+        decoderJni.setPlayState(5)
         holder = null
         callback.onCompletion()
     }
 
-    //region  ------------ffmpeg decoder
 
     /**
      * c层播放状态回调
      * 注，不要更改方法名和参数类型！
      * @param status 0=Prepared
      */
-    fun jniPlayStatusCallback(status: Int) {
+    fun onPlayStatusCallback(status: Int) {
+        LogUtils.i(TAG, "jniPlayStatusCallback; status:$status")
         when (status) {
             0 -> callback.onPrepared()
         }
@@ -84,67 +78,10 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
      * 详细请查看错误定义文件：src/main/cpp/ErrorCodeDefine.h
      * @param errorCode
      */
-    fun jniErrorCallback(errorCode: Int, msg: String) {
-        LogUtils.e(TAG, "jniErrorCallback$msg")
+    fun onErrorCallback(errorCode: Int, msg: String) {
+        LogUtils.i(TAG, "jniErrorCallback$msg")
         when (errorCode) {
 
-        }
-    }
-
-    /**
-     * 创建音轨
-     *
-     * @param sampleRate 采样率
-     * @param channels   频道
-     */
-    fun createAudioTrack(sampleRate: Int, channels: Int): AudioTrack? {
-        val audioFormat = AudioFormat.ENCODING_PCM_16BIT
-        val channelConfig: Int = when (channels) {
-            1 -> AudioFormat.CHANNEL_OUT_MONO
-            2 -> AudioFormat.CHANNEL_OUT_STEREO
-            else -> AudioFormat.CHANNEL_OUT_STEREO
-        }
-        val bufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return AudioTrack.Builder()
-                    .setAudioAttributes(AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_MEDIA)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                            .setLegacyStreamType(AudioManager.STREAM_MUSIC)
-                            .build())
-                    .setAudioFormat(AudioFormat.Builder()
-                            .setEncoding(audioFormat)
-                            .setSampleRate(sampleRate)
-                            .setChannelMask(channelConfig)
-                            .build())
-                    .setTransferMode(AudioTrack.MODE_STREAM)
-                    .setBufferSizeInBytes(bufferSizeInBytes)
-                    .build()
-        } else {
-            @Suppress("DEPRECATION")
-            return AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat,
-                    bufferSizeInBytes, AudioTrack.MODE_STREAM)
-        }
-    }
-
-    private external fun initJni()
-
-    private external fun playVideo(vPath: String, surface: Any): Int
-
-    private external fun getCurrentPosition(): Long
-
-    private external fun getDuration(): Long
-
-    private external fun goSelectedTime(t: Int)
-
-    private external fun mIsPlaying(): Boolean
-
-    private external fun setPlayState(status: Int)
-    //endregion
-
-    companion object {
-        init {
-            System.loadLibrary("media-handle")
         }
     }
 }

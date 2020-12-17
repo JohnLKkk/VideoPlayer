@@ -29,6 +29,7 @@ class NativePlayer {
     int bufferSize = 0;
     int videoIndex = -1;
     int findFileInfoOk = 1;
+    //playStatus  -1=未知状态 0=准备 1=播放中 2=暂停中 3=播放完成 4=播放取消 5=释放资源
     int playStatus = -1;
     int errorStatus = -1;
 

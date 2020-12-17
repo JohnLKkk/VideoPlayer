@@ -6,7 +6,7 @@
 #include "pthread.h"
 #include <cstdio>
 #include <unistd.h>
-#include <sys/time.h>
+#include <ctime>
 #include "define/linked_list_define.cpp"
 
 #define NUMTHREADS 2
@@ -24,16 +24,17 @@ typedef struct JniBeanNode {
 extern "C" {
 JavaVM *jvm = nullptr;
 jobject g_obj = nullptr;
-LinkedList *mList = new LinkedList();
+LinkedList *mList;
 bool isRealse = false;
 
 
 void *thread_addMsg(void *arg) {
 //    LOGI("---开始发送消息");
     for (int i = 0; i < 50; ++i) {
-        usleep(500*1000);
+        usleep(500 * 1000);
         auto *bean = new JniBean(i, "error---");
 //        LOGI("---添加消息：%d, %s", bean->code, bean->msg);
+        if (isRealse || mList == nullptr)break;
         mList->add((BaseNode *) bean);
     }
     pthread_exit(nullptr);
@@ -64,7 +65,8 @@ void *thread_callback(void *arg) {
 //    LOGI("-------开始等待信息");
     JniBean *bean;
     while (!isRealse) {
-        usleep(200*1000);
+        usleep(200 * 1000);
+        if (isRealse || mList == nullptr)break;
         if (mList->Size() <= 0)continue;
         bean = (JniBean *) mList->get(0);
 //        LOGI("---收到消息，回调到Java：%d, %s", bean->code, bean->msg);
@@ -92,27 +94,21 @@ VIDEO_PLAYER_FUNC(void, setCallback) {
         LOGE("jniActivity not found...");
         return;
     }
-//    jstring tmp = env->NewStringUTF("你好");
-    while (isRealse) {
-
-//        env->CallVoidMethod(thiz, onCallback, 1, tmp);
-    }
-//    env->CallVoidMethod(thiz, onCallback, 1, tmp);
 }
 
 VIDEO_PLAYER_FUNC(void, initThreadJni) {
     env->GetJavaVM(&jvm);
     g_obj = env->NewGlobalRef(thiz);
-
+    mList = new LinkedList();
     pthread_t pt[NUMTHREADS];
     pthread_create(&pt[0], nullptr, &thread_callback, nullptr);
-    LOGI("跑了吗");
-    usleep(200*1000);
+    usleep(200 * 1000);
     pthread_create(&pt[1], nullptr, &thread_addMsg, nullptr);
 }
 VIDEO_PLAYER_FUNC(void, mRelease) {
     isRealse = true;
     mList->release();
+    mList = nullptr;
 }
 
 VIDEO_PLAYER_FUNC(void, postMsg, jobject bean) {
@@ -137,6 +133,6 @@ VIDEO_PLAYER_FUNC(void, postMsg, jobject bean) {
 //    jobject msg_ = env->GetStringUTFChars(item_bean.msg, nullptr);
 //    jint code_ = item_bean->code;
 //    const char *str_ = env->GetStringUTFChars((jstring) (msg_), nullptr);
-//    LOGI("code__:%d ;msg:%s", code_, item_bean->msg);
+//    LOGI("code__:%d ;msg:%s", code_, item_bean->msg); .
 }
 }

@@ -8,26 +8,81 @@ NativePlayer nativePlayer;
 NativeLibDefine::NativeLibDefine() {
     libDefine = this;
     nativePlayer = NativePlayer();
+    stateCallbackList = new LinkedList();
+    errorCallbackList = new LinkedList();
 }
 
-void NativeLibDefine::onCallbackThread() {
-    while (isRelease){
+void NativeLibDefine::jniPlayStatusCallback(int status) {
+    if (isRelease || stateCallbackList == nullptr)return;
+    LOGD("addCallback-playStatus--status:%d", status);
+    stateCallbackList->add((BaseNode *) new JniBean(status));
+}
 
+void NativeLibDefine::jniErrorCallback(int errorCode, const char *msg) {
+    if (isRelease || errorCallbackList == nullptr)return;
+    LOGD("addCallback-error--status:%d, msg:%s", errorCode, msg);
+    errorCallbackList->add((BaseNode *) new JniBean(errorCode, msg));
+}
+
+/**
+ * 回调程序
+ * 专门处理回调内容的的线程
+ */
+void *onCallbackThread(void *arg) {
+    int attach = -1;
+    JNIEnv *env = libDefine->get_env(&attach);
+//    if (libDefine->g_jvm->AttachCurrentThread(&env, nullptr) != JNI_OK) {
+//        LOGE("%s: AttachCurrentThread() failed", __FUNCTION__);
+//        pthread_exit(nullptr);
+//    }
+    if (env == nullptr) {
+        libDefine->del_env();
+        pthread_exit(nullptr);
     }
+    JniBean *bean;
+    jstring jmsg = nullptr;
+
+    while (!libDefine->isRelease) {
+        usleep(200 * 1000);
+        if (libDefine->isRelease)break;
+        if (libDefine->stateCallbackList != nullptr && libDefine->stateCallbackList->Size() > 0) {
+            bean = (JniBean *) libDefine->stateCallbackList->get(0);
+            LOGD("回调线程运行中--playState--:code:%d", bean->code);
+            env->CallVoidMethod(libDefine->g_obj, libDefine->playStatusCallback,
+                                bean->code);
+            libDefine->stateCallbackList->removeAt(0);
+        }
+        if (libDefine->errorCallbackList != nullptr && libDefine->errorCallbackList->Size() > 0) {
+            bean = (JniBean *) libDefine->errorCallbackList->get(0);
+            LOGD("回调线程运行中--error--:code:%d ;msg:%s", bean->code, bean->msg);
+            jmsg = env->NewStringUTF(bean->msg);
+            env->CallVoidMethod(libDefine->g_obj, libDefine->errorCallback, bean->code,
+                                jmsg);
+            libDefine->errorCallbackList->removeAt(0);
+        }
+    }
+    env->DeleteLocalRef(jmsg);
+    libDefine->del_env();
+//    if (libDefine->g_jvm->DetachCurrentThread() != JNI_OK) {
+//        LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
+//    }
+    pthread_exit(nullptr);
+}
+
+void NativeLibDefine::onRelease() {
+    stateCallbackList->release();
+    stateCallbackList = nullptr;
+    errorCallbackList->release();
+    errorCallbackList = nullptr;
 }
 
 extern "C" {
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     libDefine = new NativeLibDefine();
-
-    //获取JNI版本
-    if (vm->GetEnv((void **) &(libDefine->env), JNI_VERSION_1_6) != JNI_OK) {
-        LOGE("GetEnv failed!");
-        return -1;
-    }
-
+    libDefine->g_jvm = vm;
     return JNI_VERSION_1_6;
 }
+
 VIDEO_PLAYER_FUNC(void, initJni) {
     jclass ffmpegDecoder = env->GetObjectClass(thiz);
     if (!ffmpegDecoder) {
@@ -46,21 +101,21 @@ VIDEO_PLAYER_FUNC(void, initJni) {
         LOGE("找不到方法:jniErrorCallback(int,String)");
         return;
     }
-    env->GetJavaVM(&(libDefine->g_jvm));
     libDefine->g_obj = env->NewGlobalRef(thiz);
-    libDefine->onCallbackThread();
+    //执行消息回调线程
+    pthread_create(&libDefine->pt[0], nullptr, &onCallbackThread, nullptr);
 }
 
-VIDEO_PLAYER_FUNC(int, playVideo, jstring vPath, jobject surface) {
+VIDEO_PLAYER_FUNC(void, playVideo, jstring vPath, jobject surface) {
     const char *videoPath = env->GetStringUTFChars(vPath, nullptr);
     ANativeWindow *nativeWindow = ANativeWindow_fromSurface(env, surface);
     if (nativeWindow == nullptr) {
         LOGE("Could not get native window from surface");
-        return -1;
+        libDefine->jniErrorCallback(INIT_FAIL, "播放异常，surface无效");
+        return;
     }
     nativePlayer.playVideo(videoPath, nativeWindow);
     env->ReleaseStringUTFChars(vPath, videoPath);
-    return 0;
 }
 
 VIDEO_PLAYER_FUNC(long long, getCurrentPosition) {
@@ -82,5 +137,7 @@ VIDEO_PLAYER_FUNC(bool, mIsPlaying) {
 VIDEO_PLAYER_FUNC(void, setPlayState, jint status) {
     nativePlayer.setPlayStatus(status);
     libDefine->isRelease = status == 5;
+    if (status != 5)return;
+    libDefine->onRelease();
 }
 }

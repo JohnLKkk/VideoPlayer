@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.4.1)
 project(video_ffmpeg)
-file(GLOB native_files "src/main/cpp/*.cpp")
+file(GLOB native_files "src/main/cpp/*.cpp","src/main/cpp/define/*.cpp")
 
 include_directories(src/main/cpp)
+include_directories(src/main/cpp/define)
 include_directories(src/main/cpp/ffmpeg)
 include_directories(src/main/cpp/include)
 

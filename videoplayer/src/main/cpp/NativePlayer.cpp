@@ -218,14 +218,16 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
 long long NativePlayer::getPlayProgress(int type) {
     if (findFileInfoOk == 1)return 0;
     if (type == 0) {
-        double tmp = filter_frame->best_effort_timestamp * av_q2d(time_base)/1000;
-        LOGE("获取当前时间进度：%f", tmp);
+        int64_t tmp = filter_frame->pts * av_q2d(time_base);
+//        double tmp = filter_frame->best_effort_timestamp * av_q2d(time_base) / 1000;
+        LOGE("获取当前时间进度(ms):%" PRId64, tmp);
         return (long) tmp;
     } else {
-        //该值是从音频文件中提取的，以微妙(us)为单位
-        long tmp = (long) pFormatCtx->duration / 1000;
-        LOGE("获取总时长：%ld", tmp);
-        return tmp;
+        //得到的总时长(s)
+        long duration = (long) pFormatCtx->duration / AV_TIME_BASE;
+        duration = duration * 1000;
+        LOGE("获取总时长(ms):%ld", duration);
+        return duration;
     }
 }
 

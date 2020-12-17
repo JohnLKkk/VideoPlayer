@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <unistd.h>
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
 
@@ -13,49 +14,63 @@
 
 #include "NativePlayer.h"
 
+typedef struct JniBeanNode {
+    BaseNode node;
+    int code;
+    const char *msg;
+
+    JniBeanNode(int code) {
+        this->code = code;
+    }
+
+    JniBeanNode(int code, const char *msg) {
+        this->code = code;
+        this->msg = msg;
+    }
+} JniBean;
+
 class NativeLibDefine {
 public:
+    LinkedList *stateCallbackList;
+    LinkedList *errorCallbackList;
     //全局释放标识
     bool isRelease = false;
+    //线程指针数组
+    pthread_t pt[2];
 
 //    ErrorInfoObj[1024] errorArray;
 
     JavaVM *g_jvm = nullptr;
     jobject g_obj = nullptr;
-    JNIEnv *env = nullptr;
     jmethodID playStatusCallback = nullptr;
     jmethodID errorCallback = nullptr;
 
     NativeLibDefine();
 
-    /**
-     * 回调程序
-     * 专门处理回调内容的的线程
-     */
-    void onCallbackThread();
+    void jniPlayStatusCallback(int status);
 
-    void jniPlayStatusCallback(int status) {
-        if (g_jvm->AttachCurrentThread(&env, nullptr) != JNI_OK) {
-            LOGE("%s: AttachCurrentThread() failed", __FUNCTION__);
-            return;
+    void jniErrorCallback(int errorCode, char const *msg);
+
+    void onRelease();
+
+    JNIEnv *get_env(int *attach) {
+        if (g_jvm == nullptr)return nullptr;
+        JNIEnv *env = nullptr;
+        *attach = 0;
+        int status = g_jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
+        if (status == JNI_EDETACHED || env == nullptr) {
+            status = g_jvm->AttachCurrentThread(&env, nullptr);
+            if (status < 0) {
+                env = nullptr;
+            } else {
+                *attach = 1;
+            }
         }
-        env->CallVoidMethod(g_obj, playStatusCallback, status);
-        if (g_jvm->DetachCurrentThread() != JNI_OK) {
-            LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
-        }
+        return env;
     }
 
-    void jniErrorCallback(int errorCode, char const *msg) {
-        if (g_jvm->AttachCurrentThread(&env, nullptr) != JNI_OK) {
-            LOGE("%s: AttachCurrentThread() failed", __FUNCTION__);
-            return;
-        }
-        jstring jmsg = env->NewStringUTF(msg);
-        env->CallVoidMethod(g_obj, errorCallback, errorCode, jmsg);
-        env->DeleteLocalRef(jmsg);
-        if (g_jvm->DetachCurrentThread() != JNI_OK) {
-            LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
-        }
+    void del_env() {
+        g_jvm->DetachCurrentThread();
     }
 };
 

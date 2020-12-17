@@ -11,7 +11,8 @@ import org.junit.Test
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        println(TimeUtils.formatTimeS(0))
-        println(TimeUtils.formatTimeS(-1))
+        println(Long.MAX_VALUE)
+        println(Double.MAX_VALUE)
+        println(Float.MAX_VALUE)
     }
 }

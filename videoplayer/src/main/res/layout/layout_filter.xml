@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Spinner
+        android:id="@+id/filterTypeSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/x10"
+        android:entries="@array/filter_Type" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/filterTypeSelect"
+        android:columnCount="4">
+
+        <EditText
+            android:id="@+id/value1"
+            android:autofillHints="-"
+            android:hint="111111111111111"
+            android:text="111111111"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/value2"
+            android:autofillHints="-"
+            android:hint="1"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/value3"
+            android:autofillHints="-"
+            android:hint="1"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/value4"
+            android:autofillHints="-"
+            android:hint="1"
+            android:inputType="number" />
+    </GridLayout>
+</RelativeLayout>

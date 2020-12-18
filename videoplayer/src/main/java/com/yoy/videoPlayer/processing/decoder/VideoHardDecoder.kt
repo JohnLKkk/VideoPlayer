@@ -41,9 +41,8 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder(), MediaPlaye
         try {
 //            KLog.e("----setDisPlay")
             mediaPlayer.setDisplay(holder)
-            if (fileInfo.isValid) {
-                mediaPlayer.prepare()
-            }
+            if (!fileInfo.isValid || holder == null) return
+            mediaPlayer.prepare()
         } catch (e: Exception) {
             e.printStackTrace()
         }

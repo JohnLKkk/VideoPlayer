@@ -13,8 +13,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/x5"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/x5">
 
         <com.yoy.videoPlayer.processing.VideoPreviewBar
             android:id="@+id/videoProgressBar"
@@ -37,22 +37,33 @@
     <TextView
         android:id="@+id/fileInfo"
         android:layout_width="match_parent"
-        android:textSize="@dimen/x25"
         android:layout_height="wrap_content"
-        android:text="@string/fileInfo" />
+        android:text="@string/fileInfo"
+        android:textSize="@dimen/x25" />
 
     <FrameLayout
         android:id="@+id/defaultControlView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <FrameLayout
-        android:id="@+id/functionLayout1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:id="@+id/functionLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/functionLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:id="@+id/functionLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+    </ScrollView>
 </LinearLayout>

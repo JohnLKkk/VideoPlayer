@@ -21,7 +21,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
         this.holder = holder
-        if (!fileInfo.isValid) return
+        if (!fileInfo.isValid || holder == null) return
         if (!TextUtils.isEmpty(vPath)) setDataSource(vPath)
     }
 

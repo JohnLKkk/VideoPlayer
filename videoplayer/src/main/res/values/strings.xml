@@ -43,4 +43,17 @@
         <item>硬解码</item>
         <item>FFMPEG</item>
     </string-array>
+    <!--滤镜类型-->
+    <string-array name="filter_Type">
+        <item>无</item>
+        <item>均衡</item>
+        <item>素描</item>
+        <item>鲜明</item>
+        <item>暖蓝</item>
+        <item>边缘</item>
+        <item>九宫格</item>
+        <item>矩形</item>
+        <item>翻转</item>
+        <item>锐化</item>
+    </string-array>
 </resources>

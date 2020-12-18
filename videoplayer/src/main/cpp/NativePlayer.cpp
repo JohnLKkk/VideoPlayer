@@ -224,11 +224,11 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
 long long NativePlayer::getPlayProgress(int type) const {
     if (findFileInfoOk == 1)return 0;
     if (type == 0) {
-        LOGE("获取当前时间进度(ms),%ld", jniCurrentTime);
+//        LOGE("获取当前时间进度(ms),%ld", jniCurrentTime);
         return jniCurrentTime;
     } else {
         //得到的总时长(s)
-        LOGE("获取总时长(ms):%ld", jniMaxTime);
+//        LOGE("获取总时长(ms):%ld", jniMaxTime);
         return jniMaxTime;
     }
 }

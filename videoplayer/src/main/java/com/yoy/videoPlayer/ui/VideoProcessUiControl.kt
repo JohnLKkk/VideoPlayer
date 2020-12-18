@@ -5,10 +5,11 @@ import android.os.Looper
 import android.view.SurfaceView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.TimeUtils
 import com.yoy.videoPlayer.R
+import com.yoy.videoPlayer.beans.VideoFileInfo
 import com.yoy.videoPlayer.processing.VideoPreviewBar
+import com.yoy.videoPlayer.ui.fragment.FilterFragment
 import com.yoy.videoPlayer.ui.fragment.VideoControlFragment
 import java.util.*
 
@@ -17,21 +18,28 @@ import java.util.*
  *
  */
 class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
+        FragmentCallback,
         VideoPreviewBar.ProgressCallback {
     private lateinit var mPresenter: VideoProcessPresenter
-    var videoControlFragment = VideoControlFragment()
-    private var videoView: SurfaceView = mActivity.findViewById(R.id.videoView)
-    private var videoProgressBar: VideoPreviewBar = mActivity.findViewById(R.id.videoProgressBar)
-    private var playTime: TextView = mActivity.findViewById(R.id.playTime)
-    private var fileInfo: TextView = mActivity.findViewById(R.id.fileInfo)
+    val videoControlFragment = VideoControlFragment()
+    private val videoView: SurfaceView = mActivity.findViewById(R.id.videoView)
+    var videoProgressBar: VideoPreviewBar = mActivity.findViewById(R.id.videoProgressBar)
+    private val playTime: TextView = mActivity.findViewById(R.id.playTime)
+    private val fileInfo: TextView = mActivity.findViewById(R.id.fileInfo)
 
-    private var fragmentManager = mActivity.supportFragmentManager
-    private var function1FragmentItems = LinkedList<Fragment>()
-    private var function2FragmentItems = LinkedList<Fragment>()
+    private val fragmentManager = mActivity.supportFragmentManager
+    private val function1FragmentItems = LinkedList<Fragment>()
+    private val function2FragmentItems = LinkedList<Fragment>()
+
+    private val filterFragment = FilterFragment()
+
+    private var doubleSpeedArray = mActivity.resources.getStringArray(R.array.DoubleSpeed)
+    private var functionArray = mActivity.resources.getStringArray(R.array.FunctionList)
     private val mainHandler = Handler(Looper.getMainLooper())
-    private var currentTime = TimeUtils.formatTimeS(0)
-    private var endTime = TimeUtils.formatTimeS(0)
-    private var isJumpProgress = false //用户正在更改进度
+    var isJumpProgress = false //用户正在更改进度
+
+    private var playSpeed = doubleSpeedArray[0]
+    private var selectFunction = functionArray[0]
 
     init {
         videoProgressBar.callback = this
@@ -41,12 +49,15 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
                 videoControlFragment.javaClass.name
         )
         fragmentTransaction.commit()
+        function1FragmentItems.add(filterFragment)
         setFileInfo("-", "-")
     }
 
     override fun onChangeProgress(index: Int, fromUser: Boolean) {
-        currentTime = TimeUtils.formatTimeS(mPresenter.playHandler.progressToTimestamp(index))
-        playTime.text = mActivity.getString(R.string.playTime, currentTime, endTime)
+        setPlayTime(
+                mPresenter.playHandler.progressToTimestamp(index),
+                mPresenter.playHandler.getMaxTime()
+        )
     }
 
     override fun onTouchCallback(type: Int, index: Int) {
@@ -64,9 +75,32 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
         videoProgressBar.setProgress(index)
     }
 
+    override fun onSelectFunction(type: Int, position: Int) {
+        when (type) {
+            0 -> playSpeed = doubleSpeedArray[position]
+            1 -> selectFunction = functionArray[position]
+            2 -> mPresenter.setDecoderType(position)
+        }
+    }
+
+    override fun onPlayControl(action: Int) {
+        when (action) {
+            0 -> mPresenter.playHandler.plStart()
+            1 -> mPresenter.playHandler.plPause()
+            2 -> {
+            }
+            3 -> {
+            }
+        }
+    }
+
+    override fun onItemClick(info: VideoFileInfo) {
+        mPresenter.selectFileResult(info.vPath)
+    }
+
     fun setPresenter(mPresenter: VideoProcessPresenter) {
         this.mPresenter = mPresenter
-        videoControlFragment.setCallback(mPresenter)
+        videoControlFragment.setCallback(this)
         videoView.holder.addCallback(mPresenter.playHandler)
     }
 
@@ -74,22 +108,15 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
         fileInfo.text = mActivity.getString(R.string.fileInfo, name, path)
     }
 
-    /**
-     * 设置播放进度
-     * @param index 目标播放进度
-     *
-     */
-    fun setPlayProgress(index: Int) {
-        //当用户正在更改播放进度，忽略设置播放进度请求
-        if (isJumpProgress || !mPresenter.playHandler.isReadyPlay()) return
-        currentTime = TimeUtils.formatTimeS(mPresenter.playHandler.getCurrentTime())
-        endTime = TimeUtils.formatTimeS(mPresenter.playHandler.getMaxTime())
-        videoProgressBar.setProgress(index)
-        playTime.text = mActivity.getString(R.string.playTime, currentTime, endTime)
-    }
-
     fun onRelease() {
 //        KLog.e("UI---------onRelease")
         videoView.holder.removeCallback(mPresenter.playHandler)
+    }
+
+    fun setPlayTime(cT: Long, mT: Long) {
+        playTime.text = mActivity.getString(R.string.playTime,
+                TimeUtils.formatTimeS(cT),
+                TimeUtils.formatTimeS(mT)
+        )
     }
 }

@@ -93,6 +93,8 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     } else {
         findFileInfoOk = 0;
     }
+    //得到的总时长,*1000是将s->ms
+    jniMaxTime = (long) pFormatCtx->duration / AV_TIME_BASE * 1000;
     //4.查找视频轨(视频数据类型)
     for (int index = 0; index < pFormatCtx->nb_streams; index++) {
         if (pFormatCtx->streams[index]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
@@ -169,6 +171,10 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
         //从解码器接收返回的帧数据
         while (avcodec_receive_frame(vCodecCtx, vFrame) == 0) {
             if (getPlayStatus() == 5)break;
+            //获取当前帧对应的播放进度时间，并且忽略无效的时间戳
+            int64_t tmp = vFrame->pts * av_q2d(time_base) * 1000;
+            if (tmp >= 0) jniCurrentTime = tmp;
+
             if (av_buffersrc_add_frame_flags(buffersrc_ctx, vFrame, AV_BUFFERSRC_FLAG_KEEP_REF) <
                 0) {
                 LOGE("Error while feeding the filter_graph");
@@ -215,19 +221,15 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     return 0;
 }
 
-long long NativePlayer::getPlayProgress(int type) {
+long long NativePlayer::getPlayProgress(int type) const {
     if (findFileInfoOk == 1)return 0;
     if (type == 0) {
-        int64_t tmp = filter_frame->pts * av_q2d(time_base);
-//        double tmp = filter_frame->best_effort_timestamp * av_q2d(time_base) / 1000;
-        LOGE("获取当前时间进度(ms):%" PRId64, tmp);
-        return (long) tmp;
+        LOGE("获取当前时间进度(ms),%ld", jniCurrentTime);
+        return jniCurrentTime;
     } else {
         //得到的总时长(s)
-        long duration = (long) pFormatCtx->duration / AV_TIME_BASE;
-        duration = duration * 1000;
-        LOGE("获取总时长(ms):%ld", duration);
-        return duration;
+        LOGE("获取总时长(ms):%ld", jniMaxTime);
+        return jniMaxTime;
     }
 }
 

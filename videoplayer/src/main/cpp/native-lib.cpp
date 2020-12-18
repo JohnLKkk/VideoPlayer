@@ -101,12 +101,14 @@ VIDEO_PLAYER_FUNC(void, initJni) {
         LOGE("找不到方法:jniErrorCallback(int,String)");
         return;
     }
+    libDefine->isRelease = false;
     libDefine->g_obj = env->NewGlobalRef(thiz);
     //执行消息回调线程
     pthread_create(&libDefine->pt[0], nullptr, &onCallbackThread, nullptr);
 }
 
 VIDEO_PLAYER_FUNC(void, playVideo, jstring vPath, jobject surface) {
+    if (libDefine->isRelease)return;
     const char *videoPath = env->GetStringUTFChars(vPath, nullptr);
     ANativeWindow *nativeWindow = ANativeWindow_fromSurface(env, surface);
     if (nativeWindow == nullptr) {
@@ -119,22 +121,27 @@ VIDEO_PLAYER_FUNC(void, playVideo, jstring vPath, jobject surface) {
 }
 
 VIDEO_PLAYER_FUNC(long long, getCurrentPosition) {
+    if (libDefine->isRelease)return 0;
     return nativePlayer.getPlayProgress(0);
 }
 
 VIDEO_PLAYER_FUNC(long long, getDuration) {
+    if (libDefine->isRelease)return 0;
     return nativePlayer.getPlayProgress(1);
 }
 
 VIDEO_PLAYER_FUNC(void, goSelectedTime, jint t) {
+    if (libDefine->isRelease)return;
     return nativePlayer.seekTo(t);
 }
 
 VIDEO_PLAYER_FUNC(bool, mIsPlaying) {
+    if (libDefine->isRelease)return false;
     return nativePlayer.getPlayStatus() == 1;
 }
 
 VIDEO_PLAYER_FUNC(void, setPlayState, jint status) {
+    if (libDefine->isRelease)return;
     nativePlayer.setPlayStatus(status);
     libDefine->isRelease = status == 5;
     if (status != 5)return;

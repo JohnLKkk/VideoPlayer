@@ -24,6 +24,7 @@ extern "C" {
 #endif
 
 class NativePlayer {
+private:
     int width = 0;
     int height = 0;
     int bufferSize = 0;
@@ -32,8 +33,12 @@ class NativePlayer {
     //playStatus  -1=未知状态 0=准备 1=播放中 2=暂停中 3=播放完成 4=播放取消 5=释放资源
     int playStatus = -1;
     int errorStatus = -1;
+    //播放进度(ms)
+    long jniCurrentTime = 0L;
+    long jniMaxTime = 0;
 
     AVPacket *vPacket = NULL;
+    //分别为:解码后的原始帧vFrame，参考帧pFrameRGBA,滤镜帧filter_frame(该处理解还彻底，后续补充、修改)
     AVFrame *vFrame = NULL, *pFrameRGBA = NULL, *filter_frame = NULL;
     AVCodecContext *vCodecCtx = NULL;
     SwsContext *sws_ctx = NULL;
@@ -57,7 +62,7 @@ public:
      * @param type 0当前进度 1总时长
      * @return 返回对应时间单位毫秒(ms)
      */
-    long long getPlayProgress(int type);
+    long long getPlayProgress(int type) const;
 
     /**
      * 设置播放进度
@@ -78,7 +83,7 @@ public:
      * 回调错误到Java层处理
      * @param errorCode
      */
-    void onErrorCallback(int errorCode,char const* msg);
+    void onErrorCallback(int errorCode, char const *msg);
 };
 
 

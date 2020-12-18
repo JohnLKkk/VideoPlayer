@@ -40,7 +40,7 @@
 //
 //    private val mHandler = Handler(Looper.getMainLooper())
 //
-//    private var currentTime = ""
+//    private var jniCurrentTime = ""
 //    private var endTime = ""
 //
 //    init {
@@ -85,7 +85,7 @@
 //     * 设置时间的显示
 //     * @param type 类型:
 //     * 1设置跳转的显示时间 jumpTime
-//     * 2设置当前播放的时间进度 currentTime
+//     * 2设置当前播放的时间进度 jniCurrentTime
 //     * 3设置结束播放的时间进度 endTime
 //     * @param position 时间，单位 ms
 //     */
@@ -104,7 +104,7 @@
 //            }
 //            2 -> {
 //                if (jumpTime.visibility != View.GONE) return
-//                currentTime = TimeUtils.formatTimeS(tmp)
+//                jniCurrentTime = TimeUtils.formatTimeS(tmp)
 //                val maxTime = mPresenter.playHandler.getMaxTime().toDouble()
 //                when {
 //                    position == 0L -> videoPreview.setProgress(0)
@@ -118,7 +118,7 @@
 //            3 -> endTime = TimeUtils.formatTimeS(tmp)
 //            else -> return
 //        }
-//        playTime.text = mActivity.getString(R.string.playTime, currentTime, endTime)
+//        playTime.text = mActivity.getString(R.string.playTime, jniCurrentTime, endTime)
 //    }
 //
 //    fun onRelease() {

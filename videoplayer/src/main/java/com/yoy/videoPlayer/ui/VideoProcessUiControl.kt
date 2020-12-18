@@ -82,7 +82,7 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
     fun setPlayProgress(index: Int) {
         //当用户正在更改播放进度，忽略设置播放进度请求
         if (isJumpProgress || !mPresenter.playHandler.isReadyPlay()) return
-        currentTime = TimeUtils.formatTimeS(mPresenter.playHandler.progressToTimestamp(index))
+        currentTime = TimeUtils.formatTimeS(mPresenter.playHandler.getCurrentTime())
         endTime = TimeUtils.formatTimeS(mPresenter.playHandler.getMaxTime())
         videoProgressBar.setProgress(index)
         playTime.text = mActivity.getString(R.string.playTime, currentTime, endTime)

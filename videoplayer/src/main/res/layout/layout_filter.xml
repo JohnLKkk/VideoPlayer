@@ -1,44 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Spinner
         android:id="@+id/filterTypeSelect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/x10"
-        android:entries="@array/filter_Type" />
+        android:entries="@array/FilterType" />
 
-    <GridLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/filterTypeSelect"
-        android:columnCount="4">
+        android:layout_height="wrap_content"
+        android:text="@string/inputValueHint"
+        android:textSize="@dimen/x24" />
 
-        <EditText
-            android:id="@+id/value1"
-            android:autofillHints="-"
-            android:hint="111111111111111"
-            android:text="111111111"
-            android:inputType="number" />
+    <TextView
+        android:id="@+id/filterTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:maxLines="1"
+        android:textSize="@dimen/x21" />
 
-        <EditText
-            android:id="@+id/value2"
-            android:autofillHints="-"
-            android:hint="1"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/value3"
-            android:autofillHints="-"
-            android:hint="1"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/value4"
-            android:autofillHints="-"
-            android:hint="1"
-            android:inputType="number" />
-    </GridLayout>
-</RelativeLayout>
+    <EditText
+        android:id="@+id/inputEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="-"
+        android:inputType="number" />
+</LinearLayout>

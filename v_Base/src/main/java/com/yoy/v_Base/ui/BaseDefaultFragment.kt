@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ArrayRes
 import androidx.fragment.app.Fragment
 
 /**
@@ -28,5 +29,9 @@ abstract class BaseDefaultFragment : Fragment(), View.OnClickListener {
     open fun initListener(view: View) {}
 
     open fun initData(view: View) {}
+
+    open fun getArrayRes(@ArrayRes id: Int): Array<String>? {
+        return activity?.resources?.getStringArray(id)
+    }
 }
 

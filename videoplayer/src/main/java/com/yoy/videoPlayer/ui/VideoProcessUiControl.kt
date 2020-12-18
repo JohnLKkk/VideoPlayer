@@ -3,6 +3,8 @@ package com.yoy.videoPlayer.ui
 import android.os.Handler
 import android.os.Looper
 import android.view.SurfaceView
+import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.yoy.v_Base.utils.TimeUtils
@@ -23,6 +25,7 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
     private lateinit var mPresenter: VideoProcessPresenter
     val videoControlFragment = VideoControlFragment()
     private val videoView: SurfaceView = mActivity.findViewById(R.id.videoView)
+    private val functionLayout1: FrameLayout = mActivity.findViewById(R.id.functionLayout1)
     var videoProgressBar: VideoPreviewBar = mActivity.findViewById(R.id.videoProgressBar)
     private val playTime: TextView = mActivity.findViewById(R.id.playTime)
     private val fileInfo: TextView = mActivity.findViewById(R.id.fileInfo)
@@ -78,7 +81,10 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
     override fun onSelectFunction(type: Int, position: Int) {
         when (type) {
             0 -> playSpeed = doubleSpeedArray[position]
-            1 -> selectFunction = functionArray[position]
+            1 -> {
+                selectFunction = functionArray[position]
+                setFunctionFragment(position - 1)
+            }
             2 -> mPresenter.setDecoderType(position)
         }
     }
@@ -96,6 +102,17 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
 
     override fun onItemClick(info: VideoFileInfo) {
         mPresenter.selectFileResult(info.vPath)
+    }
+
+    private fun setFunctionFragment(index: Int) {
+        if (index < 0 || index >= function1FragmentItems.size) {
+            functionLayout1.visibility = View.GONE
+            return
+        }
+        functionLayout1.visibility = View.VISIBLE
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.functionLayout1, function1FragmentItems[index])
+        fragmentTransaction.commit()
     }
 
     fun setPresenter(mPresenter: VideoProcessPresenter) {

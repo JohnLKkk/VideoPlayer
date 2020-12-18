@@ -7,21 +7,14 @@
     <string name="decodeType">硬解码</string>
     <string name="fileInfo">文件名:%s \n 路径:%s</string>
 
-    <string name="filter_sketch">素描</string>
-    <string name="filter_distinct">鲜明</string>
-    <string name="filter_warming">暖蓝</string>
-    <string name="filter_edge">边缘</string>
-    <string name="filter_division">九宫格</string>
-    <string name="filter_equalize">均衡</string>
-    <string name="filter_rectangle">矩形</string>
-    <string name="filter_flip">翻转</string>
-    <string name="filter_sharpening">锐化</string>
     <string name="selectFile">选择文件</string>
     <string name="videoHistory">播放历史</string>
     <string name="play">播放</string>
     <string name="stop">暂停</string>
     <string name="goBack">快退</string>
     <string name="forwar">快进</string>
+    <string name="inputValueHint">注：输入各个参数数值，以英文 , 分隔</string>
+    <string name="filterHint">%s: %s</string>
 
     <!--倍速播放-->
     <string-array name="DoubleSpeed">
@@ -44,7 +37,7 @@
         <item>FFMPEG</item>
     </string-array>
     <!--滤镜类型-->
-    <string-array name="filter_Type">
+    <string-array name="FilterType">
         <item>无</item>
         <item>均衡</item>
         <item>素描</item>

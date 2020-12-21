@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.yoy.v_Base.utils.TimeUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.beans.VideoFileInfo
+import com.yoy.videoPlayer.processing.PlayVideoHandler
 import com.yoy.videoPlayer.processing.VideoPreviewBar
 import com.yoy.videoPlayer.ui.fragment.FilterFragment
 import com.yoy.videoPlayer.ui.fragment.VideoControlFragment
@@ -34,7 +35,7 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
     private val function1FragmentItems = LinkedList<Fragment>()
     private val function2FragmentItems = LinkedList<Fragment>()
 
-    private val filterFragment = FilterFragment()
+    private val filterFragment = FilterFragment(mActivity)
 
     private var doubleSpeedArray = mActivity.resources.getStringArray(R.array.DoubleSpeed)
     private var functionArray = mActivity.resources.getStringArray(R.array.FunctionList)
@@ -58,8 +59,8 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
 
     override fun onChangeProgress(index: Int, fromUser: Boolean) {
         setPlayTime(
-                mPresenter.playHandler.progressToTimestamp(index),
-                mPresenter.playHandler.getMaxTime()
+                getPlayHandler().progressToTimestamp(index),
+                getPlayHandler().getMaxTime()
         )
     }
 
@@ -70,7 +71,7 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
         }
         isJumpProgress = false
         //没有播放时不进行进度条改变
-        if (!mPresenter.playHandler.isReadyPlay()) {
+        if (!getPlayHandler().isReadyPlay()) {
             videoProgressBar.setProgress(0)
             return
         }
@@ -91,8 +92,8 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
 
     override fun onPlayControl(action: Int) {
         when (action) {
-            0 -> mPresenter.playHandler.plStart()
-            1 -> mPresenter.playHandler.plPause()
+            0 -> getPlayHandler().plStart()
+            1 -> getPlayHandler().plPause()
             2 -> {
             }
             3 -> {
@@ -115,10 +116,12 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
         fragmentTransaction.commit()
     }
 
+    fun getPlayHandler(): PlayVideoHandler = mActivity.playHandler
+
     fun setPresenter(mPresenter: VideoProcessPresenter) {
         this.mPresenter = mPresenter
         videoControlFragment.setCallback(this)
-        videoView.holder.addCallback(mPresenter.playHandler)
+        videoView.holder.addCallback(getPlayHandler())
     }
 
     fun setFileInfo(name: String, path: String) {
@@ -127,7 +130,7 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
 
     fun onRelease() {
 //        KLog.e("UI---------onRelease")
-        videoView.holder.removeCallback(mPresenter.playHandler)
+        videoView.holder.removeCallback(getPlayHandler())
     }
 
     fun setPlayTime(cT: Long, mT: Long) {

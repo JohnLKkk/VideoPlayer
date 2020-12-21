@@ -1,28 +1,35 @@
 package com.yoy.videoPlayer.ui.fragment
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import com.yoy.v_Base.ui.BaseDefaultFragment
+import com.yoy.v_Base.utils.LogUtils
 import com.yoy.videoPlayer.R
+import com.yoy.videoPlayer.processing.PlayVideoHandler
+import com.yoy.videoPlayer.ui.VideoProcessActivity
+import java.util.*
 
 /**
  * Created by Void on 2020/12/18 14:52
  *
  */
-class FilterFragment : BaseDefaultFragment(), AdapterView.OnItemSelectedListener {
+class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultFragment(),
+        AdapterView.OnItemSelectedListener {
 
     private lateinit var filterTypeSelect: Spinner
     private lateinit var filterTv: TextView
     private lateinit var inputEt: EditText
 
-
     //vflip is up and down, hflip is left and right
     private lateinit var txtArray: Array<String>
 
     private val filters = arrayOf(
+            "——",
             "lutyuv='u=%s:v=%s'",
             "hue='h=%s:s=%s'",
             "lutrgb='r=%s:g=%s'",
@@ -33,12 +40,20 @@ class FilterFragment : BaseDefaultFragment(), AdapterView.OnItemSelectedListener
             "vflip",
             "unsharp"
     )
+    private var selectFilters: String? = ""
+        set(value) {
+            if (value == null) return
+            filterTv.text = value
+            getPlayHandler().setFilterValue(value)
+            field = value
+        }
+    private var filtersIndex = 0
 
     override fun getLayoutID(): Int = R.layout.layout_filter
 
     override fun initView(view: View) {
         super.initView(view)
-        getArrayRes(R.array.FilterType)
+        txtArray = getArrayRes(R.array.FilterType) ?: arrayOf(String())
         filterTypeSelect = view.findViewById(R.id.filterTypeSelect)
         filterTv = view.findViewById(R.id.filterTv)
         inputEt = view.findViewById(R.id.inputEt)
@@ -47,26 +62,49 @@ class FilterFragment : BaseDefaultFragment(), AdapterView.OnItemSelectedListener
     override fun initListener(view: View) {
         super.initListener(view)
         filterTypeSelect.onItemSelectedListener = this
+        inputEt.addTextChangedListener(textChangeListener)
     }
 
-    fun getFilterFormat(index: Int, itemStr: String) {
-        val itemArray = itemStr.split(",")
-        val value = String.format(filters[index],
-                itemArray[0],
-                itemArray[1],
-                itemArray[2],
-                itemArray[3],
-                itemArray[4]
-        )
-        filterTv.text = activity?.getString(R.string.filterHint, txtArray[index], value)
+    fun getPlayHandler(): PlayVideoHandler = mActivity.playHandler
+
+    /**
+     * 格式化参数
+     * @param itemStr 输入的参数
+     */
+    fun getFilterFormat(itemStr: String) {
+        arrayListOf("0", "0", "0", "0", "0").run {
+            this.addAll(0, itemStr.split(","))
+            this.removeAll(Collections.singleton(""))
+            val stringBuilder = StringBuilder()
+            for (a in this)
+                stringBuilder.append(a).append(";")
+            LogUtils.i(msg = stringBuilder.toString())
+            val value = String.format(filters[filtersIndex], *this.toTypedArray())
+            selectFilters = activity?.getString(R.string.filterHint, txtArray[filtersIndex], value)
+        }
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        getFilterFormat(position, "0,0,0,0,0")
+        this.filtersIndex = position
+        getFilterFormat("0,0,0,0,0")
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
+    private val textChangeListener = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
 
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            getFilterFormat(s.toString())
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+//            val text = s.toString()
+//            if (s == null || TextUtils.isEmpty(text)) return
+//            if (text.endsWith(",")) return
+//            s.append(",")
+        }
+    }
 }

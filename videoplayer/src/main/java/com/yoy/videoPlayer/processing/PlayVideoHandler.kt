@@ -14,14 +14,13 @@ import com.yoy.videoPlayer.processing.decoder.VideoHardDecoder
  * Created by Void on 2020/8/17 18:02
  * 播放助手
  */
-class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
-        PlayStateCallback,
-        SurfaceHolder.Callback {
+class PlayVideoHandler : PlayStateCallback, SurfaceHolder.Callback {
     private val mHandler = Handler(Looper.getMainLooper())
     private var surfaceHolder: SurfaceHolder? = null
     private var listenerThread: ListenerPlayTimeThread? = null
     private var sDecoder = VideoFFMPEGDecoder(this)
     private var hDecoder = VideoHardDecoder(this)
+    private var playStateListener: PlayStateListener? = null
     private var decoderType = DecodeType.HARDDecoder
     private var isReadyPlay = false
     val fileInfo = FileAttributes()
@@ -49,7 +48,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
             listenerThread = ListenerPlayTimeThread()
             listenerThread?.start()
         }
-        listenerThread?.isStop=false
+        listenerThread?.isStop = false
         playStateListener?.onPlayStart()
     }
 
@@ -69,6 +68,10 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
         }
     }
 
+    fun setPlayStateListener(listener: PlayStateListener) {
+        this.playStateListener = listener
+    }
+
     /**
      * 是否准备好播放
      */
@@ -86,7 +89,7 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
             KLog.e("文件信息初始化失败,请检查文件是否有效！path:$path")
             return
         }
-        listenerThread?.isStop=true
+        listenerThread?.isStop = true
         getDecoderHandler()?.setDataSource(path)
     }
 
@@ -147,8 +150,11 @@ class PlayVideoHandler(private val playStateListener: PlayStateListener?) :
     //region -----播放时间更新线程控制-----
     fun stopTimeUpdateThread() {
         isReadyPlay = false
-        listenerThread?.isStop=true
+        listenerThread?.isStop = true
         listenerThread = null
+    }
+    fun setFilterValue(str:String){
+
     }
 
     /**

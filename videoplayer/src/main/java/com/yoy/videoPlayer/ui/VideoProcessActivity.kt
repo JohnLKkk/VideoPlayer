@@ -12,6 +12,7 @@ import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.VideoApplication
 import com.yoy.videoPlayer.beans.VideoFileInfo
+import com.yoy.videoPlayer.processing.PlayVideoHandler
 import com.yoy.videoPlayer.utils.PlayHistoryManager
 
 /**
@@ -24,6 +25,7 @@ class VideoProcessActivity : BaseDefaultActivity() {
     private lateinit var mPresenter: VideoProcessPresenter
     private var lastClickBackTime = System.currentTimeMillis()
     private val selectFileResultCode = 1001
+    val playHandler = PlayVideoHandler()
 
     override fun getLayoutID(): Int = R.layout.activity_video_process
 

@@ -16,11 +16,11 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
                             private val uiControl: VideoProcessUiControl) :
         PlayStateListener {
 
-    val playHandler = PlayVideoHandler(this)
 
     var videoPath = ""
 
     init {
+        getPlayHandler().setPlayStateListener(this)
         Handler().postDelayed({
             setDecoderType(1)
         }, 1000)
@@ -29,8 +29,8 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
     //region ----- 播放状态回调 -----
     override fun onPlayStart() {
         LogUtils.d(msg = "即将播放的文件路径：$videoPath")
-        uiControl.setFileInfo(playHandler.fileInfo.name, videoPath)
-        setPlayProgress(playHandler.timestampToProgress())
+        uiControl.setFileInfo(getPlayHandler().fileInfo.name, videoPath)
+        setPlayProgress(getPlayHandler().timestampToProgress())
     }
 
     override fun onPlayPaused() {
@@ -46,9 +46,11 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
     }
 
     override fun onPlayTime(time: Long) {
-        setPlayProgress(playHandler.timestampToProgress(time))
+        setPlayProgress(getPlayHandler().timestampToProgress(time))
     }
     //endregion
+
+    fun getPlayHandler(): PlayVideoHandler = mActivity.playHandler
 
     fun selectFileResult(path: String?) {
         if (path == null || path.isEmpty()) {
@@ -57,12 +59,12 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
         }
         videoPath = path
         KLog.d("选中的文件路径是：$videoPath")
-        playHandler.setDataPath(path)
+        getPlayHandler().setDataPath(path)
 //        onPlayControl(0)
     }
 
     fun onRelease() {
-        playHandler.release()
+        getPlayHandler().release()
     }
 
     /**
@@ -74,7 +76,7 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
             KLog.e("目标进度百分比无效")
             return
         }
-        playHandler.seekTo(playHandler.progressToTimestamp(index).toInt())
+        getPlayHandler().seekTo(getPlayHandler().progressToTimestamp(index).toInt())
 //        LogUtils.d(msg = "当前播放进度：$index")
     }
 
@@ -86,10 +88,10 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
      */
     fun setDecoderType(decodeType: Int) {
         when (decodeType) {
-            0 -> playHandler.setDecoderType(DecodeType.HARDDecoder)
-            1 -> playHandler.setDecoderType(DecodeType.FFMPEGDecoder)
+            0 -> getPlayHandler().setDecoderType(DecodeType.HARDDecoder)
+            1 -> getPlayHandler().setDecoderType(DecodeType.FFMPEGDecoder)
             else -> {
-                playHandler.setDecoderType(DecodeType.OTHER)
+                getPlayHandler().setDecoderType(DecodeType.OTHER)
                 return
             }
         }
@@ -104,8 +106,8 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
      */
     fun setPlayProgress(index: Int) {
         //当用户正在更改播放进度，忽略设置播放进度请求
-        if (uiControl.isJumpProgress || !playHandler.isReadyPlay()) return
+        if (uiControl.isJumpProgress || !getPlayHandler().isReadyPlay()) return
         uiControl.videoProgressBar.setProgress(index)
-        uiControl.setPlayTime(playHandler.getCurrentTime(), playHandler.getMaxTime())
+        uiControl.setPlayTime(getPlayHandler().getCurrentTime(), getPlayHandler().getMaxTime())
     }
 }

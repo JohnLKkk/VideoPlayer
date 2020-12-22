@@ -1,5 +1,6 @@
 package com.yoy.videoPlayer.ui.fragment
 
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -24,6 +25,7 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
     private lateinit var filterTypeSelect: Spinner
     private lateinit var filterTv: TextView
     private lateinit var inputEt: EditText
+    private val mHandler = Handler()
 
     //vflip is up and down, hflip is left and right
     private lateinit var txtArray: Array<String>
@@ -44,7 +46,11 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
         set(value) {
             if (value == null) return
             filterTv.text = value
-            getPlayHandler().setFilterValue(value)
+            mHandler.removeCallbacksAndMessages(null)
+            mHandler.postDelayed({
+                getPlayHandler().setFilterValue(value)
+            }, 1000)
+
             field = value
         }
     private var filtersIndex = 0

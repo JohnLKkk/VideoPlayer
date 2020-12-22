@@ -1,12 +1,12 @@
 applyPlugin(project, false)
 
 android {
-    compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildTools
+    compileSdkVersion Versions.compileSdk
+    buildToolsVersion Versions.buildTools
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion rootProject.ext.targetSdk
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -35,20 +35,20 @@ android {
 }
 
 dependencies {
-    testImplementation rootProject.ext.junit
-    androidTestImplementation rootProject.ext.ext_junit
-    androidTestImplementation rootProject.ext.espresso_core
-    api rootProject.ext.kotlin_stdlib
-    api rootProject.ext.core_ktx
-    api rootProject.ext.constraint_layout
-    api rootProject.ext.constraintlayout
-    api rootProject.ext.appcompat
-    api rootProject.ext.gson
-    api rootProject.ext.material
-    api rootProject.ext.glide
-    api rootProject.ext.okhttp
-    api rootProject.ext.okhttp_urlconnection
-    api rootProject.ext.okio
-    api rootProject.ext.recyclerview
-    api rootProject.ext.app_joint_core
+    testImplementation Deps.junit
+    androidTestImplementation Deps.ext_junit
+    androidTestImplementation Deps.espresso_core
+    api Deps.kotlin_stdlib
+    api Deps.core_ktx
+    api Deps.constraint_layout
+    api Deps.constraintlayout
+    api Deps.appcompat
+    api Deps.gson
+    api Deps.material
+    api Deps.glide
+    api Deps.okhttp
+    api Deps.okhttp_urlconnection
+    api Deps.okio
+    api Deps.recyclerview
+    api Deps.app_joint_core
 }

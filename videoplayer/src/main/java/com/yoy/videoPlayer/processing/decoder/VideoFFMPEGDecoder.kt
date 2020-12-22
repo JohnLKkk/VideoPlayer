@@ -59,6 +59,10 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
         callback.onCompletion()
     }
 
+    fun setFilter(value: String) {
+        if (TextUtils.isEmpty(value)) return
+        decoderJni.setFilter(value)
+    }
 
     /**
      * c层播放状态回调

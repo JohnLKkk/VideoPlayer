@@ -1,10 +1,10 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdk
+    compileSdkVersion Versions.compileSdk
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion rootProject.ext.targetSdk
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -31,14 +31,14 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation rootProject.ext.appcompat
-    implementation rootProject.ext.core_ktx
-    testImplementation rootProject.ext.junit
-    androidTestImplementation rootProject.ext.runner
-    androidTestImplementation rootProject.ext.espresso_core
+    implementation Deps.appcompat
+    implementation Deps.core_ktx
+    testImplementation Deps.junit
+    androidTestImplementation Deps.runner
+    androidTestImplementation Deps.espresso_core
 
-    api rootProject.ext.jiaozivideoplayer
-    api rootProject.ext.exoplayer
-    api rootProject.ext.constraintlayout
-    api rootProject.ext.recyclerview
+    api Deps.jiaozivideoplayer
+    api Deps.exoplayer
+    api Deps.constraintlayout
+    api Deps.recyclerview
 }

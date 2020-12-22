@@ -147,4 +147,8 @@ VIDEO_PLAYER_FUNC(void, setPlayState, jint status) {
     if (status != 5)return;
     libDefine->onRelease();
 }
+
+VIDEO_PLAYER_FUNC(void, setFilter, jstring value) {
+
+}
 }

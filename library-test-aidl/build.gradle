@@ -4,12 +4,12 @@ plugins{
     id 'kotlin-android-extensions'
 }
 android {
-    compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildTools
+    compileSdkVersion Versions.compileSdk
+    buildToolsVersion Versions.buildTools
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion rootProject.ext.targetSdk
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -28,10 +28,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation rootProject.ext.kotlin_stdlib
-    implementation rootProject.ext.appcompat
-    implementation rootProject.ext.core_ktx
-    testImplementation rootProject.ext.junit
-    androidTestImplementation rootProject.ext.ext_junit
-    androidTestImplementation rootProject.ext.espresso_core
+    implementation Deps.kotlin_stdlib
+    implementation Deps.appcompat
+    implementation Deps.core_ktx
+    testImplementation Deps.junit
+    androidTestImplementation Deps.ext_junit
+    androidTestImplementation Deps.espresso_core
 }

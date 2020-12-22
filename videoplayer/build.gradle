@@ -1,13 +1,13 @@
 applyPlugin(project, true)
 
 android {
-    compileSdkVersion rootProject.ext.compileSdk
-    buildToolsVersion rootProject.ext.buildTools
+    compileSdkVersion Versions.compileSdk
+    buildToolsVersion Versions.buildTools
 
     defaultConfig {
         applicationId "com.yoy.videoplayer"
-        minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion rootProject.ext.targetSdk
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -55,9 +55,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation rootProject.ext.junit
-    androidTestImplementation rootProject.ext.ext_junit
-//    androidTestImplementation rootProject.ext.app_joint_core
-    androidTestImplementation rootProject.ext.runner
+    testImplementation Deps.junit
+    androidTestImplementation Deps.ext_junit
+//    androidTestImplementation Deps.app_joint_core
+    androidTestImplementation Deps.runner
     implementation project(':v_Base')
 }

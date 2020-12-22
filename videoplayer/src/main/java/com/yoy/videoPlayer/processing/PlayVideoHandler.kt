@@ -153,8 +153,9 @@ class PlayVideoHandler : PlayStateCallback, SurfaceHolder.Callback {
         listenerThread?.isStop = true
         listenerThread = null
     }
-    fun setFilterValue(str:String){
 
+    fun setFilterValue(str: String) {
+        sDecoder.setFilter(str)
     }
 
     /**

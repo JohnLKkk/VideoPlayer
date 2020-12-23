@@ -106,9 +106,13 @@ VIDEO_PLAYER_FUNC(void, initThreadJni) {
     pthread_create(&pt[1], nullptr, &thread_addMsg, nullptr);
 }
 VIDEO_PLAYER_FUNC(void, mRelease) {
-    isRealse = true;
-    mList->release();
-    mList = nullptr;
+    char args[512];
+    int a = snprintf(args, sizeof(args), "我说了啥？%d", 37);
+    LOGI("a:%d", a);
+    LOGI("args:%s", args);
+//    isRealse = true;
+//    mList->release();
+//    mList = nullptr;
 }
 
 VIDEO_PLAYER_FUNC(void, postMsg, jobject bean) {

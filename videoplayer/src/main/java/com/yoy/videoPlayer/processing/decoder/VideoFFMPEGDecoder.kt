@@ -61,6 +61,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
 
     fun setFilter(value: String) {
         if (TextUtils.isEmpty(value)) return
+        LogUtils.w(msg = "设置滤镜：$value")
         decoderJni.setFilter(value)
     }
 

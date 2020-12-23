@@ -32,15 +32,15 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
 
     private val filters = arrayOf(
             "——",
-            "lutyuv='u=%s:v=%s'",
-            "hue='h=%s:s=%s'",
-            "lutrgb='r=%s:g=%s'",
-            "edgedetect=low=%s:high=%s",
-            "drawgrid=w=%s/3:h=%s/3:t=2:c=white@0.5",
-            "colorbalance=bs=%s",
-            "drawbox=x=%s:y=%s:w=%s:h=%s:color=red@0.5'",
-            "vflip",
-            "unsharp"
+            "lutyuv='u=%s:v=%s'",//素描
+            "hue='h=%s:s=%s'",//鲜明
+            "lutrgb='r=%s:g=%s'",//暖蓝
+            "edgedetect=low=%s:high=%s",//边缘
+            "drawgrid=w=%s/3:h=%s/3:t=2:c=white@0.5",//九宫格
+            "colorbalance=bs=%s",//均衡
+            "drawbox=x=%s:y=%s:w=%s:h=%s:color=red@0.5'",//矩形
+            "vflip",//翻转
+            "unsharp"//锐化
     )
     private var selectFilters: String? = ""
         set(value) {
@@ -78,6 +78,7 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
      * @param itemStr 输入的参数
      */
     fun getFilterFormat(itemStr: String) {
+        if (filtersIndex == 0) return
         arrayListOf("0", "0", "0", "0", "0").run {
             this.addAll(0, itemStr.split(","))
             this.removeAll(Collections.singleton(""))

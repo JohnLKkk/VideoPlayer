@@ -46,6 +46,7 @@ int NativePlayer::init_filters(const char *filters_descr) {
 
     ret = av_opt_set_int_list(buffersink_ctx, "pix_fmts", pix_fmts,
                               AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN);
+    onErrorCallback(INIT_FAIL, "Cannot set output pixel format");
     if (ret < 0) {
         onErrorCallback(INIT_FAIL, "Cannot set output pixel format");
         goto end;
@@ -71,6 +72,12 @@ int NativePlayer::init_filters(const char *filters_descr) {
     end:
     avfilter_inout_free(&inputs);
     avfilter_inout_free(&outputs);
+
+    if (ret < 0){
+        char tmp[8];
+        snprintf(args,sizeof(args),"init_filter error, ret=%d")
+        onErrorCallback(FILTER_NOT_FOUNT, join1(,ret));
+    }
 
     return ret;
 }
@@ -155,9 +162,8 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
         goto end_line;
     }
     int ret;
-    ret = init_filters("drawgrid=w=iw/3:h=ih/3:t=2:c=white@0.5");
+    ret = init_filters("colorbalance=bs=0.3");
     if (ret < 0) {
-        onErrorCallback(FILTER_NOT_FOUNT, &"init_filter error, ret="[ret]);
         goto end_line;
     }
     libDefine->jniPlayStatusCallback(0);
@@ -165,7 +171,10 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     //读取帧
     while (av_read_frame(pFormatCtx, vPacket) >= 0) {
         if (getPlayStatus() == 5)break;
-        if (vPacket->stream_index != videoIndex) continue;
+        //如果是停止播放，将停止读取帧
+//        if (isStop)goto stopPlay;
+
+        if (vPacket->stream_index != videoIndex || isStop) continue;
         //视频解码
         if (avcodec_send_packet(vCodecCtx, vPacket) != 0) break;
         //从解码器接收返回的帧数据
@@ -218,6 +227,9 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     avformat_free_context(pFormatCtx);
     avcodec_free_context(&vCodecCtx);
     ANativeWindow_release(nativeWindow);
+    stopPlay:
+    isStop = false;
+    LOGW("stop play ......");
     return 0;
 }
 
@@ -241,6 +253,7 @@ void NativePlayer::seekTo(int t) {
 
 void NativePlayer::setPlayStatus(int status) {
     if (status < 0 || status > 5)return;
+    isStop = status == 2;
     playStatus = status;
 }
 
@@ -252,5 +265,3 @@ void NativePlayer::onErrorCallback(int errorCode, char const *msg) {
     errorStatus = errorCode;
     libDefine->jniErrorCallback(errorCode, msg);
 }
-
-

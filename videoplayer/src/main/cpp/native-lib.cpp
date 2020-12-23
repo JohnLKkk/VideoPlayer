@@ -20,7 +20,7 @@ void NativeLibDefine::jniPlayStatusCallback(int status) {
 
 void NativeLibDefine::jniErrorCallback(int errorCode, const char *msg) {
     if (isRelease || errorCallbackList == nullptr)return;
-    LOGD("addCallback-error--status:%d, msg:%s", errorCode, msg);
+    LOGE("addCallback-error--status:%d, msg:%s", errorCode, msg);
     errorCallbackList->add((BaseNode *) new JniBean(errorCode, msg));
 }
 
@@ -47,14 +47,14 @@ void *onCallbackThread(void *arg) {
         if (libDefine->isRelease)break;
         if (libDefine->stateCallbackList != nullptr && libDefine->stateCallbackList->Size() > 0) {
             bean = (JniBean *) libDefine->stateCallbackList->get(0);
-            LOGD("回调线程运行中--playState--:code:%d", bean->code);
+//            LOGD("回调线程运行中--playState--:code:%d", bean->code);
             env->CallVoidMethod(libDefine->g_obj, libDefine->playStatusCallback,
                                 bean->code);
             libDefine->stateCallbackList->removeAt(0);
         }
         if (libDefine->errorCallbackList != nullptr && libDefine->errorCallbackList->Size() > 0) {
             bean = (JniBean *) libDefine->errorCallbackList->get(0);
-            LOGD("回调线程运行中--error--:code:%d ;msg:%s", bean->code, bean->msg);
+//            LOGE("回调线程运行中--error--:code:%d ;msg:%s", bean->code, bean->msg);
             jmsg = env->NewStringUTF(bean->msg);
             env->CallVoidMethod(libDefine->g_obj, libDefine->errorCallback, bean->code,
                                 jmsg);
@@ -149,6 +149,10 @@ VIDEO_PLAYER_FUNC(void, setPlayState, jint status) {
 }
 
 VIDEO_PLAYER_FUNC(void, setFilter, jstring value) {
-
+    const char *filterValue = env->GetStringUTFChars(value, nullptr);
+    nativePlayer.setPlayStatus(2);
+    nativePlayer.init_filters(filterValue);
+    nativePlayer.setPlayStatus(1);
+    env->ReleaseStringUTFChars(value, filterValue);
 }
 }

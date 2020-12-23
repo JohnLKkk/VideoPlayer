@@ -11,7 +11,7 @@ class JniActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jni)
-        initThreadJni()
+//        initThreadJni()
     }
 
     fun onDj(view: View) {

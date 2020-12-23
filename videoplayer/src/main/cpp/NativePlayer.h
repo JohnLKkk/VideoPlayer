@@ -32,6 +32,7 @@ private:
     int findFileInfoOk = 1;
     //playStatus  -1=未知状态 0=准备 1=播放中 2=暂停中 3=播放完成 4=播放取消 5=释放资源
     int playStatus = -1;
+    bool isStop = false;
     int errorStatus = -1;
     //播放进度(ms)
     long jniCurrentTime = 0L;

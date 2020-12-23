@@ -22,17 +22,4 @@ class VideoApplication : Application() {
         SPUtils.init(this)
         PlayHistoryManager.init(context)
     }
-    /*
-素描  "lutyuv='u=128:v=128'"
-鲜明  "hue='h=60:s=-3'"
-暖蓝  "lutrgb='r=0:g=0'"
-边缘  "edgedetect=low=0.1:high=0.4"
-九宫格 "drawgrid=w=iw/3:h=ih/3:t=2:c=white@0.5"
-均衡  "colorbalance=bs=0.3"
-矩形  "drawbox=x=100:y=100:w=100:h=100:color=red@0.5'"
-翻转  "vflip"
-锐化  "unsharp"
-    *
-    *
-    * */
 }

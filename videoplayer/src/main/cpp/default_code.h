@@ -20,4 +20,21 @@
     JNIEXPORT RETURN_TYPE JNICALL Java_com_yoy_videoPlayer_processing_decoder_FFMPEGDecoderJni_ ## FUNC_NAME \
     (JNIEnv *env, jobject thiz, ##__VA_ARGS__)\
 
+
+/**
+* @brief 拼接字符串
+*
+* @return char* 组合后的字符串指针
+*/
+char *join1(const char *, const char *);
+
+char *join1(const char *s1, const char *s2) {
+    char *result = (char *) malloc(strlen(s1) + strlen(s2) + 1);
+    if (result == NULL)
+        exit(1);
+    strcpy(result, s1);
+    strcat(result, s2);
+    return result;
+}
+
 #endif //TESTEXAMPLE_DEFAULT_CODE_H

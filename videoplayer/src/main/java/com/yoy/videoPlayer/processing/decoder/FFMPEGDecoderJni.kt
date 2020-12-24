@@ -20,7 +20,7 @@ class FFMPEGDecoderJni(private val decoder: VideoFFMPEGDecoder) {
      * @param status 0=Prepared
      */
     fun jniPlayStatusCallback(status: Int) {
-        LogUtils.i(TAG, "jniPlayStatusCallback; status:$status")
+//        LogUtils.i(TAG, "jniPlayStatusCallback; status:$status")
         decoder.onPlayStatusCallback(status)
     }
 
@@ -31,7 +31,6 @@ class FFMPEGDecoderJni(private val decoder: VideoFFMPEGDecoder) {
      * @param errorCode
      */
     fun jniErrorCallback(errorCode: Int, msg: String) {
-        LogUtils.i(TAG, "jniErrorCallback$msg")
         decoder.onErrorCallback(errorCode, msg)
     }
 

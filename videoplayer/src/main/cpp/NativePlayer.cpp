@@ -8,6 +8,7 @@ extern NativeLibDefine *libDefine;
 
 int NativePlayer::init_filters(const char *filters_descr) {
     char args[512];
+    char errorStr[512];
     int ret;
     AVFilter *buffersrc = avfilter_get_by_name("buffer");
     AVFilter *buffersink = avfilter_get_by_name("buffersink");
@@ -32,7 +33,8 @@ int NativePlayer::init_filters(const char *filters_descr) {
     ret = avfilter_graph_create_filter(&buffersrc_ctx, buffersrc, "in",
                                        args, nullptr, filter_graph);
     if (ret < 0) {
-        onErrorCallback(INIT_FAIL, "Cannot create buffer source");
+        snprintf(errorStr, sizeof(errorStr), "init_filter-Cannot create buffer source, ret=%d",
+                 ret);
         goto end;
     }
 
@@ -40,15 +42,15 @@ int NativePlayer::init_filters(const char *filters_descr) {
     ret = avfilter_graph_create_filter(&buffersink_ctx, buffersink, "out",
                                        nullptr, nullptr, filter_graph);
     if (ret < 0) {
-        onErrorCallback(INIT_FAIL, "Cannot create buffer sink");
+        snprintf(errorStr, sizeof(errorStr), "init_filter-Cannot create buffer sink, ret=%d", ret);
         goto end;
     }
 
     ret = av_opt_set_int_list(buffersink_ctx, "pix_fmts", pix_fmts,
                               AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN);
-    onErrorCallback(INIT_FAIL, "Cannot set output pixel format");
     if (ret < 0) {
-        onErrorCallback(INIT_FAIL, "Cannot set output pixel format");
+        snprintf(errorStr, sizeof(errorStr), "init_filter-Cannot set output pixel format, ret=%d",
+                 ret);
         goto end;
     }
 
@@ -63,20 +65,23 @@ int NativePlayer::init_filters(const char *filters_descr) {
     inputs->next = nullptr;
 
     if ((ret = avfilter_graph_parse_ptr(filter_graph, filters_descr,
-                                        &inputs, &outputs, nullptr)) < 0)
+                                        &inputs, &outputs, nullptr)) < 0) {
+        snprintf(errorStr, sizeof(errorStr), "init_filter-avfilter_graph_parse_ptr error, ret=%d",
+                 ret);
         goto end;
+    }
 
-    if ((ret = avfilter_graph_config(filter_graph, nullptr)) < 0)
+    if ((ret = avfilter_graph_config(filter_graph, nullptr)) < 0) {
+        snprintf(errorStr, sizeof(errorStr), "init_filter-avfilter_graph_config error, ret=%d",
+                 ret);
         goto end;
+    }
 
     end:
     avfilter_inout_free(&inputs);
     avfilter_inout_free(&outputs);
-
-    if (ret < 0){
-        char tmp[8];
-        snprintf(args,sizeof(args),"init_filter error, ret=%d")
-        onErrorCallback(FILTER_NOT_FOUNT, join1(,ret));
+    if (ret < 0) {
+        onErrorCallback(INIT_FAIL, errorStr);
     }
 
     return ret;
@@ -172,7 +177,7 @@ int NativePlayer::playVideo(const char *vPath, ANativeWindow *nativeWindow) {
     while (av_read_frame(pFormatCtx, vPacket) >= 0) {
         if (getPlayStatus() == 5)break;
         //如果是停止播放，将停止读取帧
-//        if (isStop)goto stopPlay;
+        if (isStop)goto stopPlay;
 
         if (vPacket->stream_index != videoIndex || isStop) continue;
         //视频解码

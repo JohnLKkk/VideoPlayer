@@ -5,9 +5,6 @@
 #ifndef TESTEXAMPLE_LOGGER_H
 #define TESTEXAMPLE_LOGGER_H
 
-
-#define println(A,...) printf(join1(A, "\n"),##__VA_ARGS__)
-
 #ifdef ANDROID
 
 #include <android/log.h>

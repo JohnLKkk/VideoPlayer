@@ -106,7 +106,7 @@ VIDEO_PLAYER_FUNC(void, initThreadJni) {
     pthread_create(&pt[1], nullptr, &thread_addMsg, nullptr);
 }
 VIDEO_PLAYER_FUNC(void, mRelease) {
-    char args[512];
+    char args[20];
     int a = snprintf(args, sizeof(args), "我说了啥？%d", 37);
     LOGI("a:%d", a);
     LOGI("args:%s", args);

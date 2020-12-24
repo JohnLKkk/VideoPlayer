@@ -151,8 +151,8 @@ VIDEO_PLAYER_FUNC(void, setPlayState, jint status) {
 VIDEO_PLAYER_FUNC(void, setFilter, jstring value) {
     const char *filterValue = env->GetStringUTFChars(value, nullptr);
     nativePlayer.setPlayStatus(2);
-    nativePlayer.init_filters(filterValue);
-    nativePlayer.setPlayStatus(1);
+    int ret = nativePlayer.init_filters(filterValue);
+    if (ret > 0) nativePlayer.setPlayStatus(1);
     env->ReleaseStringUTFChars(value, filterValue);
 }
 }

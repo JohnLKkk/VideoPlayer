@@ -30,18 +30,44 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
     //vflip is up and down, hflip is left and right
     private lateinit var txtArray: Array<String>
 
+    /*
+素描  "lutyuv='u=128:v=128'"
+鲜明  "hue='h=60:s=-3'"
+暖蓝  "lutrgb='r=0:g=0'"
+边缘  "edgedetect=low=0.1:high=0.4"
+九宫格 "drawgrid=w=iw/3:h=ih/3:t=2:c=white@0.5"
+均衡  "colorbalance=bs=0.3"
+矩形  "drawbox=x=100:y=100:w=100:h=100:color=red@0.5'"
+翻转  "vflip"
+锐化  "unsharp"
+    *
+    *
+    * */
     private val filters = arrayOf(
             "——",
-            "lutyuv='u=%s:v=%s'",//素描
-            "hue='h=%s:s=%s'",//鲜明
-            "lutrgb='r=%s:g=%s'",//暖蓝
-            "edgedetect=low=%s:high=%s",//边缘
-            "drawgrid=w=%s/3:h=%s/3:t=2:c=white@0.5",//九宫格
-            "colorbalance=bs=%s",//均衡
-            "drawbox=x=%s:y=%s:w=%s:h=%s:color=red@0.5'",//矩形
+            "lutyuv='u=128:v=128'",//素描
+            "hue='h=60:s=-3'",//鲜明
+            "lutrgb='r=0:g=0'",//暖蓝
+            "edgedetect=low=0.1:high=0.4",//边缘
+            "drawgrid=w=iw/3:h=ih/3:t=2:c=white@0.5",//九宫格
+            "colorbalance=bs=0.3",//均衡
+            "drawbox=x=100:y=100:w=100:h=100:color=red@0.5'",//矩形
             "vflip",//翻转
             "unsharp"//锐化
     )
+
+    //    private val filters = arrayOf(
+//            "——",
+//            "lutyuv='u=%s:v=%s'",//素描
+//            "hue='h=%s:s=%s'",//鲜明
+//            "lutrgb='r=%s:g=%s'",//暖蓝
+//            "edgedetect=low=%s:high=%s",//边缘
+//            "drawgrid=w=%s/3:h=%s/3:t=2:c=white@0.5",//九宫格
+//            "colorbalance=bs=%s",//均衡
+//            "drawbox=x=%s:y=%s:w=%s:h=%s:color=red@0.5'",//矩形
+//            "vflip",//翻转
+//            "unsharp"//锐化
+//    )
     private var selectFilters: String? = ""
         set(value) {
             if (value == null) return
@@ -85,8 +111,9 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
             val stringBuilder = StringBuilder()
             for (a in this)
                 stringBuilder.append(a).append(";")
-            LogUtils.i(msg = stringBuilder.toString())
-            val value = String.format(filters[filtersIndex], *this.toTypedArray())
+//            LogUtils.i(msg = stringBuilder.toString())
+//            val value = String.format(filters[filtersIndex], *this.toTypedArray())
+            val value = filters[filtersIndex]
             selectFilters = activity?.getString(R.string.filterHint, txtArray[filtersIndex], value)
         }
     }

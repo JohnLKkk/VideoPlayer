@@ -71,7 +71,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
      * @param status 0=Prepared
      */
     fun onPlayStatusCallback(status: Int) {
-        LogUtils.i(TAG, "jniPlayStatusCallback; status:$status")
+//        LogUtils.i(TAG, "jniPlayStatusCallback; status:$status")
         when (status) {
             0 -> callback.onPrepared()
         }
@@ -84,7 +84,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
      * @param errorCode
      */
     fun onErrorCallback(errorCode: Int, msg: String) {
-        LogUtils.i(TAG, "jniErrorCallback$msg")
+        LogUtils.i(TAG, "jniErrorCallback:$msg")
         when (errorCode) {
 
         }

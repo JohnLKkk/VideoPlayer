@@ -7,7 +7,14 @@ import android.util.Log
  *
  */
 class OutputLog : IAppAIDLTest.Stub() {
-    override fun outPutLog(msg: String?) {
-        Log.e("-------", this.javaClass.simpleName + "outPutLog:$msg")
+    var mListener: AidlAiListener? = null
+
+    override fun setListener(obj: AidlAiListener?) {
+        mListener = obj
     }
+
+    override fun outPutLog(msg: String?) {
+        Log.e("--library_test_aidl--", this.javaClass.simpleName + "$msg")
+    }
+
 }

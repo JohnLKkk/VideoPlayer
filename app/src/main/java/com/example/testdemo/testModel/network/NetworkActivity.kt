@@ -1,4 +1,4 @@
-package com.example.testdemo.testModel.testAIDL
+package com.example.testdemo.testModel.network
 
 import android.os.Bundle
 import android.util.Log

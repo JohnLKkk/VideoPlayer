@@ -13,7 +13,7 @@ public class GenerateValueFiles {
     private int baseW;
     private int baseH;
 
-//    private String dirStr = "./res";
+    //    private String dirStr = "./res";
     private String dirStr = "D:/res";
 
     private final static String WTemplate = "<dimen name=\"laX{0}\">{1}px</dimen>\n";
@@ -26,6 +26,7 @@ public class GenerateValueFiles {
 
     private static final String SUPPORT_DIMESION = "272,480;" +
             "272,448;" +
+            "320,170;" +
             "320,480;" +
             "480,800;" +
             "432,800;" +
@@ -103,8 +104,7 @@ public class GenerateValueFiles {
     }
 
     /**
-     * @param supportStr
-     *            w,h_...w,h;
+     * @param supportStr w,h_...w,h;
      * @return
      */
     private String validateInput(String supportStr) {
@@ -150,7 +150,7 @@ public class GenerateValueFiles {
         System.out.println("width : " + w + "," + baseW + "," + cellw);
         for (int i = -baseW; i < baseW; i++) {
             String name = i + "";
-            if(name.contains("-")){
+            if (name.contains("-")) {
                 name = name.replace("-", "_");
             }
             sbForWidth.append(WTemplate.replace("{0}", name).replace("{1}",
@@ -163,11 +163,11 @@ public class GenerateValueFiles {
         StringBuffer sbForHeight = new StringBuffer();
         sbForHeight.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
         sbForHeight.append("<resources>");
-        float cellh = h *1.0f/ baseH;
-        System.out.println("height : "+ h + "," + baseH + "," + cellh);
+        float cellh = h * 1.0f / baseH;
+        System.out.println("height : " + h + "," + baseH + "," + cellh);
         for (int i = -baseH; i < baseH; i++) {
             String name = i + "";
-            if(name.contains("-")){
+            if (name.contains("-")) {
                 name = name.replace("-", "_");
             }
             sbForHeight.append(HTemplate.replace("{0}", name).replace("{1}",

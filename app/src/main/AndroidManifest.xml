@@ -35,7 +35,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".testModel.jniTest.JniActivity"/>
         <activity android:name=".testModel.testAIDL.AIDLActivity" />
-        <activity android:name=".testModel.testAIDL.NetworkActivity" />
+        <activity android:name=".testModel.network.NetworkActivity" />
         <activity android:name=".testModel.audioRecorder.AudioRecorderActivity" />
         <activity android:name=".testModel.notification.NotificationActivity" />
         <activity android:name=".testModel.viewpager.ViewPagerActivity" />

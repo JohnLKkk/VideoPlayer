@@ -15,6 +15,7 @@ import com.example.testdemo.testModel.permission.PermissionActivity
 import com.example.testdemo.testModel.popupWindow.PopupWindowActivity
 import com.example.testdemo.testModel.scanDevicesIP.ScanIPActivity
 import com.example.testdemo.testModel.startPhoneApp.StartPhoneAppActivity
+import com.example.testdemo.testModel.testAIDL.AIDLActivity
 import com.example.testdemo.testModel.testView.TestViewActivity
 import com.example.testdemo.testModel.viewpager.ViewPagerActivity
 import com.yoy.v_Base.ui.BaseDefaultActivity
@@ -47,7 +48,7 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_11.setOnClickListener(this)
         btn_12.setOnClickListener(this)
         setActionBar("测试模块")
-        startActivity(Intent(this, JniActivity::class.java))
+        startActivity(Intent(this, AIDLActivity::class.java))
     }
 
     override fun getLayoutID(): Int = R.layout.activity_main

@@ -8,25 +8,25 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
-import com.example.testdemo.IAppAIDLTest
+import com.example.library_test_aidl.IAppAIDLTest
 import com.example.testdemo.R
 import com.yoy.v_Base.ui.BaseDefaultActivity
+import com.yoy.v_Base.utils.LogUtils
 
 class AIDLActivity : BaseDefaultActivity() {
-    private val str = "com.example.library_test_aidl.hello"
     private var iAppAIDLTest: IAppAIDLTest? = null
     private var aidlIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        aidlIntent = Intent()
-        aidlIntent!!.setPackage("com.example.library_test_aidl")
-        aidlIntent!!.action = str
+        aidlIntent = Intent("com.example.library_test_aidl.hello").apply {
+            setPackage("com.example.library_test_aidl")
+        }
         bindService(aidlIntent, aidlConnection, Context.BIND_AUTO_CREATE)
-        setActionBar("AIDL测试",true)
+        setActionBar("AIDL测试", true)
     }
 
-    override fun getLayoutID(): Int =R.layout.activity_aidl
+    override fun getLayoutID(): Int = R.layout.activity_aidl
 
     override fun isFullScreenWindow(): Boolean = true
 
@@ -35,15 +35,18 @@ class AIDLActivity : BaseDefaultActivity() {
             bindService(aidlIntent, aidlConnection, Context.BIND_AUTO_CREATE)
         }
         Log.e("Boot_Void", "onClick跑起来")
-        iAppAIDLTest?.outPutLog("你好啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊")
+        iAppAIDLTest?.outPutLog("你好:" + System.currentTimeMillis())
     }
 
     private val aidlConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            LogUtils.w("AppAIDLTest", "onServiceConnected")
             iAppAIDLTest = IAppAIDLTest.Stub.asInterface(service)
+            iAppAIDLTest?.setListener(AIDLListener())
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
+            LogUtils.w("AppAIDLTest", "onServiceDisconnected")
             iAppAIDLTest = null
         }
     }

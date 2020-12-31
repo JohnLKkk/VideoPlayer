@@ -109,15 +109,14 @@ VIDEO_PLAYER_FUNC(void, initJni) {
 
 VIDEO_PLAYER_FUNC(void, playVideo, jstring vPath, jobject surface) {
     if (libDefine->isRelease)return;
-    const char *videoPath = env->GetStringUTFChars(vPath, nullptr);
+    nativePlayer.file_name = env->GetStringUTFChars(vPath, nullptr);
     ANativeWindow *nativeWindow = ANativeWindow_fromSurface(env, surface);
     if (nativeWindow == nullptr) {
         LOGE("Could not get native window from surface");
         libDefine->jniErrorCallback(INIT_FAIL, "播放异常，surface无效");
         return;
     }
-    nativePlayer.playVideo(videoPath, nativeWindow);
-    env->ReleaseStringUTFChars(vPath, videoPath);
+    nativePlayer.setPlayInfo(nativeWindow);
 }
 
 VIDEO_PLAYER_FUNC(long long, getCurrentPosition) {
@@ -149,10 +148,10 @@ VIDEO_PLAYER_FUNC(void, setPlayState, jint status) {
 }
 
 VIDEO_PLAYER_FUNC(void, setFilter, jstring value) {
-    const char *filterValue = env->GetStringUTFChars(value, nullptr);
+    nativePlayer.filter_descr = env->GetStringUTFChars(value, nullptr);
     nativePlayer.setPlayStatus(2);
-    int ret = nativePlayer.init_filters(filterValue);
+    usleep(50 * 1000);
+    int ret = nativePlayer.init_filters(nativePlayer.filter_descr, false);
     if (ret > 0) nativePlayer.setPlayStatus(1);
-    env->ReleaseStringUTFChars(value, filterValue);
 }
 }

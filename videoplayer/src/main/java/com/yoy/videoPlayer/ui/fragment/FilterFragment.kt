@@ -25,8 +25,6 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
     private lateinit var filterTypeSelect: Spinner
     private lateinit var filterTv: TextView
     private lateinit var inputEt: EditText
-    private val mHandler = Handler()
-
     //vflip is up and down, hflip is left and right
     private lateinit var txtArray: Array<String>
 
@@ -72,10 +70,7 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
         set(value) {
             if (value == null) return
             filterTv.text = value
-            mHandler.removeCallbacksAndMessages(null)
-            mHandler.postDelayed({
-                getPlayHandler().setFilterValue(value)
-            }, 1000)
+            getPlayHandler().setFilterValue(value)
 
             field = value
         }

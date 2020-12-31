@@ -25,38 +25,42 @@ extern "C" {
 
 class NativePlayer {
 private:
-    int width = 0;
-    int height = 0;
+public:
     int bufferSize = 0;
-    int videoIndex = -1;
-    int findFileInfoOk = 1;
     //playStatus  -1=未知状态 0=准备 1=播放中 2=暂停中 3=播放完成 4=播放取消 5=释放资源
     int playStatus = -1;
     bool isStop = false;
     int errorStatus = -1;
     //播放进度(ms)
     long jniCurrentTime = 0L;
-    long jniMaxTime = 0;
 
+    ANativeWindow *nativeWindow;
     AVPacket *vPacket = NULL;
     //分别为:解码后的原始帧vFrame，参考帧pFrameRGBA,滤镜帧filter_frame(该处理解还彻底，后续补充、修改)
     AVFrame *vFrame = NULL, *pFrameRGBA = NULL, *filter_frame = NULL;
-    AVCodecContext *vCodecCtx = NULL;
     SwsContext *sws_ctx = NULL;
-    AVFormatContext *pFormatCtx = NULL;
     uint8_t *out_buffer = NULL;
     ANativeWindow_Buffer windowBuffer;
     AVRational time_base;
-    AVCodec *vCodec = NULL;
 
     AVFilterContext *buffersink_ctx;
     AVFilterContext *buffersrc_ctx;
     AVFilterGraph *filter_graph;
+    int width = 0;
+    int height = 0;
+    const char *file_name;
+    const char *filter_descr;
+    int findFileInfoOk = 1;
+    int videoIndex = -1;
+    long jniMaxTime = 0;
 
-public:
-    int init_filters(const char *filters_descr);
+    AVFormatContext *pFormatCtx = NULL;
+    AVCodecContext *vCodecCtx = NULL;
+    AVCodec *vCodec = NULL;
 
-    int playVideo(const char *vPath, ANativeWindow *nativeWindow);
+    int init_filters(const char *filters_descr, bool isInit);
+
+    void setPlayInfo(ANativeWindow *aNWindow);
 
     /**
      * 获取播放进度

@@ -1,5 +1,7 @@
 package com.yoy.videoPlayer.processing.decoder
 
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.view.SurfaceHolder
 import com.yoy.v_Base.utils.LogUtils
@@ -13,6 +15,8 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     private val TAG = "FFMPEGDecoder"
     private var holder: SurfaceHolder? = null
     private val decoderJni = FFMPEGDecoderJni(this)
+    private val mHandler = Handler(Looper.getMainLooper())
+    private val filterHandler = Handler()
     private var vPath = ""
 
     init {
@@ -31,6 +35,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
         Thread {
             decoderJni.playVideo(path, holder!!.surface)
         }.start()
+        start()
     }
 
     override fun start() {
@@ -62,7 +67,10 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     fun setFilter(value: String) {
         if (TextUtils.isEmpty(value)) return
         LogUtils.w(msg = "设置滤镜：$value")
-        decoderJni.setFilter(value)
+        filterHandler.removeCallbacksAndMessages(null)
+        filterHandler.postDelayed({
+            decoderJni.setFilter(value)
+        }, 500)
     }
 
     /**
@@ -72,8 +80,10 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
      */
     fun onPlayStatusCallback(status: Int) {
 //        LogUtils.i(TAG, "jniPlayStatusCallback; status:$status")
-        when (status) {
-            0 -> callback.onPrepared()
+        mHandler.post {
+            when (status) {
+                0 -> callback.onPrepared()
+            }
         }
     }
 

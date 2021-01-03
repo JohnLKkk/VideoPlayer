@@ -12,13 +12,13 @@ NativeLibDefine::NativeLibDefine() {
     errorCallbackList = new LinkedList();
 }
 
-void NativeLibDefine::jniPlayStatusCallback(int status) {
+void NativeLibDefine::jniPlayStatusCallback(int status) const {
     if (isRelease || stateCallbackList == nullptr)return;
     LOGD("addCallback-playStatus--status:%d", status);
     stateCallbackList->add((BaseNode *) new JniBean(status));
 }
 
-void NativeLibDefine::jniErrorCallback(int errorCode, const char *msg) {
+void NativeLibDefine::jniErrorCallback(int errorCode, const char *msg) const {
     if (isRelease || errorCallbackList == nullptr)return;
     LOGE("addCallback-error--status:%d, msg:%s", errorCode, msg);
     errorCallbackList->add((BaseNode *) new JniBean(errorCode, msg));
@@ -31,16 +31,10 @@ void NativeLibDefine::jniErrorCallback(int errorCode, const char *msg) {
 void *onCallbackThread(void *arg) {
     int attach = -1;
     JNIEnv *env = libDefine->get_env(&attach);
-//    if (libDefine->g_jvm->AttachCurrentThread(&env, nullptr) != JNI_OK) {
-//        LOGE("%s: AttachCurrentThread() failed", __FUNCTION__);
-//        pthread_exit(nullptr);
-//    }
-    if (env == nullptr) {
-        libDefine->del_env();
-        pthread_exit(nullptr);
-    }
     JniBean *bean;
     jstring jmsg = nullptr;
+
+    if (env == nullptr) goto delEnv;
 
     while (!libDefine->isRelease) {
         usleep(200 * 1000);
@@ -55,6 +49,7 @@ void *onCallbackThread(void *arg) {
         if (libDefine->errorCallbackList != nullptr && libDefine->errorCallbackList->Size() > 0) {
             bean = (JniBean *) libDefine->errorCallbackList->get(0);
 //            LOGE("回调线程运行中--error--:code:%d ;msg:%s", bean->code, bean->msg);
+
             jmsg = env->NewStringUTF(bean->msg);
             env->CallVoidMethod(libDefine->g_obj, libDefine->errorCallback, bean->code,
                                 jmsg);
@@ -62,10 +57,8 @@ void *onCallbackThread(void *arg) {
         }
     }
     env->DeleteLocalRef(jmsg);
+    delEnv:
     libDefine->del_env();
-//    if (libDefine->g_jvm->DetachCurrentThread() != JNI_OK) {
-//        LOGE("%s: DetachCurrentThread() failed", __FUNCTION__);
-//    }
     pthread_exit(nullptr);
 }
 
@@ -107,7 +100,7 @@ VIDEO_PLAYER_FUNC(void, initJni) {
     pthread_create(&libDefine->pt[0], nullptr, &onCallbackThread, nullptr);
 }
 
-VIDEO_PLAYER_FUNC(void, playVideo, jstring vPath, jobject surface) {
+VIDEO_PLAYER_FUNC(void, setDataSource, jstring vPath, jobject surface) {
     if (libDefine->isRelease)return;
     nativePlayer.file_name = env->GetStringUTFChars(vPath, nullptr);
     ANativeWindow *nativeWindow = ANativeWindow_fromSurface(env, surface);
@@ -151,7 +144,7 @@ VIDEO_PLAYER_FUNC(void, setFilter, jstring value) {
     nativePlayer.filter_descr = env->GetStringUTFChars(value, nullptr);
     nativePlayer.setPlayStatus(2);
     usleep(50 * 1000);
-    int ret = nativePlayer.init_filters(nativePlayer.filter_descr, false);
-    if (ret > 0) nativePlayer.setPlayStatus(1);
+//    int ret = nativePlayer.init_filters(nativePlayer.filter_descr, false);
+//    if (ret > 0) nativePlayer.setPlayStatus(1);
 }
 }

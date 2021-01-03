@@ -32,10 +32,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     override fun setDataSource(path: String) {
         vPath = path
         if (holder == null) return
-        Thread {
-            decoderJni.playVideo(path, holder!!.surface)
-        }.start()
-        start()
+        decoderJni.setDataSource(path, holder!!.surface)
     }
 
     override fun start() {
@@ -94,7 +91,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
      * @param errorCode
      */
     fun onErrorCallback(errorCode: Int, msg: String) {
-        LogUtils.i(TAG, "jniErrorCallback:$msg")
+//        LogUtils.i(TAG, "jniErrorCallback:$msg")
         when (errorCode) {
 
         }

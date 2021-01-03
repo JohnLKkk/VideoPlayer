@@ -40,8 +40,6 @@ public:
     //线程指针数组
     pthread_t pt[2];
 
-//    ErrorInfoObj[1024] errorArray;
-
     JavaVM *g_jvm = nullptr;
     jobject g_obj = nullptr;
     jmethodID playStatusCallback = nullptr;
@@ -49,9 +47,9 @@ public:
 
     NativeLibDefine();
 
-    void jniPlayStatusCallback(int status);
+    void jniPlayStatusCallback(int status) const;
 
-    void jniErrorCallback(int errorCode, char const *msg);
+    void jniErrorCallback(int errorCode, char const *msg) const;
 
     void onRelease();
 

@@ -25,6 +25,7 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
     private lateinit var filterTypeSelect: Spinner
     private lateinit var filterTv: TextView
     private lateinit var inputEt: EditText
+
     //vflip is up and down, hflip is left and right
     private lateinit var txtArray: Array<String>
 
@@ -69,7 +70,7 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
     private var selectFilters: String? = ""
         set(value) {
             if (value == null) return
-            filterTv.text = value
+            filterTv.text = activity?.getString(R.string.filterHint, txtArray[filtersIndex], value)
             getPlayHandler().setFilterValue(value)
 
             field = value
@@ -108,8 +109,7 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
                 stringBuilder.append(a).append(";")
 //            LogUtils.i(msg = stringBuilder.toString())
 //            val value = String.format(filters[filtersIndex], *this.toTypedArray())
-            val value = filters[filtersIndex]
-            selectFilters = activity?.getString(R.string.filterHint, txtArray[filtersIndex], value)
+            selectFilters = filters[filtersIndex]
         }
     }
 

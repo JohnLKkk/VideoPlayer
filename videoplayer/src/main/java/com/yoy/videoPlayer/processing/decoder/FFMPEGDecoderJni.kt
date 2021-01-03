@@ -72,7 +72,7 @@ class FFMPEGDecoderJni(private val decoder: VideoFFMPEGDecoder) {
 
     external fun initJni()
 
-    external fun playVideo(vPath: String, surface: Any): Int
+    external fun setDataSource(vPath: String, surface: Any): Int
 
     external fun getCurrentPosition(): Long
 

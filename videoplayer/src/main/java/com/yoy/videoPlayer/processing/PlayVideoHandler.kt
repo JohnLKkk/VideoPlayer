@@ -26,17 +26,17 @@ class PlayVideoHandler : PlayStateCallback, SurfaceHolder.Callback {
     val fileInfo = FileAttributes()
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-        LogUtils.e(msg = "PlayVideoHandler--surfaceChanged")
+//        LogUtils.e(msg = "PlayVideoHandler--surfaceChanged")
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
-        LogUtils.e(msg = "PlayVideoHandler--surfaceDestroyed")
+//        LogUtils.e(msg = "PlayVideoHandler--surfaceDestroyed")
         getDecoderHandler()?.setDisPlay(null, fileInfo)
         stopTimeUpdateThread()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
-        LogUtils.e(msg = "PlayVideoHandler--surfaceCreated")
+//        LogUtils.e(msg = "PlayVideoHandler--surfaceCreated")
         getDecoderHandler()?.setDisPlay(holder, fileInfo)
     }
 

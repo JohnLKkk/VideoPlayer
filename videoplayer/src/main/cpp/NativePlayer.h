@@ -29,36 +29,20 @@ public:
     int bufferSize = 0;
     //playStatus  -1=未知状态 0=准备 1=播放中 2=暂停中 3=播放完成 4=播放取消 5=释放资源
     int playStatus = -1;
-    bool isStop = false;
     int errorStatus = -1;
     //播放进度(ms)
     long jniCurrentTime = 0L;
 
-    ANativeWindow *nativeWindow;
-    AVPacket *vPacket = NULL;
-    //分别为:解码后的原始帧vFrame，参考帧pFrameRGBA,滤镜帧filter_frame(该处理解还彻底，后续补充、修改)
-    AVFrame *vFrame = NULL, *pFrameRGBA = NULL, *filter_frame = NULL;
-    SwsContext *sws_ctx = NULL;
-    uint8_t *out_buffer = NULL;
-    ANativeWindow_Buffer windowBuffer;
-    AVRational time_base;
-
-    AVFilterContext *buffersink_ctx;
-    AVFilterContext *buffersrc_ctx;
-    AVFilterGraph *filter_graph;
-    int width = 0;
-    int height = 0;
     const char *file_name;
-    const char *filter_descr;
-    int findFileInfoOk = 1;
+    const char *filter_descr = "colorbalance=bs=0.3";
+//    const char *filter_descr="lutrgb='r=0:g=0'";
+    int findFileInfo_Ok = 1;
     int videoIndex = -1;
     long jniMaxTime = 0;
 
-    AVFormatContext *pFormatCtx = NULL;
-    AVCodecContext *vCodecCtx = NULL;
     AVCodec *vCodec = NULL;
 
-    int init_filters(const char *filters_descr, bool isInit);
+    int init_filters(bool isInit);
 
     void setPlayInfo(ANativeWindow *aNWindow);
 

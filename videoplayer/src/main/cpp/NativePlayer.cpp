@@ -83,7 +83,7 @@ int NativePlayer::init_filters(bool isInit) {
     inputs->pad_idx = 0;
     inputs->next = nullptr;
 //    }
-    LOGE("output--filter:%s", filter_descr);
+//    LOGE("output--filter:%s", filter_descr);
     if ((ret = avfilter_graph_parse_ptr(filter_graph, filter_descr,
                                         &inputs, &outputs, nullptr)) < 0) {
         LOGE("init_filter-avfilter_graph_parse_ptr error, ret=%d", ret);
@@ -101,7 +101,9 @@ int NativePlayer::init_filters(bool isInit) {
     if (ret < 0) {
         char errorStr[512];
         snprintf(errorStr, sizeof(errorStr), "切换滤镜失败:%d", ret);
-        onErrorCallback(INIT_FAIL, errorStr);
+        libDefine->jniErrorCallback(INIT_FAIL, errorStr);
+    } else{
+        libDefine->jniPlayStatusCallback(5);
     }
     return ret;
 }
@@ -121,12 +123,12 @@ void *playVideo(void *arg) {
     if (avformat_open_input(&pFormatCtx, nativePlayer.file_name, nullptr, nullptr) !=
         0) {
         LOGE("Could not open input stream:%s", nativePlayer.file_name);
-        nativePlayer.onErrorCallback(VIDEO_STREAM_NOT_FOUNT, "Could not open input stream");
+        libDefine->jniErrorCallback(VIDEO_STREAM_NOT_FOUNT, "Could not open input stream");
         goto end_line;
     }
     //3.查找文件的流信息
     if (avformat_find_stream_info(pFormatCtx, nullptr) < 0) {
-        nativePlayer.onErrorCallback(VIDEO_STREAM_NOT_FOUNT, "Could not find stream information");
+        libDefine->jniErrorCallback(VIDEO_STREAM_NOT_FOUNT, "Could not find stream information");
         nativePlayer.findFileInfo_Ok = 1;
         goto end_line;
     } else {
@@ -142,14 +144,14 @@ void *playVideo(void *arg) {
         }
     }
     if (nativePlayer.videoIndex == -1) {
-        nativePlayer.onErrorCallback(VIDEO_STREAM_NOT_FOUNT, "Could not find a video stream");
+        libDefine->jniErrorCallback(VIDEO_STREAM_NOT_FOUNT, "Could not find a video stream");
         goto end_line;
     }
     //5.查找解码器
     nativePlayer.vCodec = avcodec_find_decoder(
             pFormatCtx->streams[nativePlayer.videoIndex]->codecpar->codec_id);
     if (nativePlayer.vCodec == nullptr) {
-        nativePlayer.onErrorCallback(CODEC_NOT_FOUNT, "could not find codec");
+        libDefine->jniErrorCallback(CODEC_NOT_FOUNT, "could not find codec");
         goto end_line;
     }
     //6.配置解码器
@@ -159,7 +161,7 @@ void *playVideo(void *arg) {
 
     //7.打开解码器
     if (avcodec_open2(vCodecCtx, nativePlayer.vCodec, nullptr) < 0) {
-        nativePlayer.onErrorCallback(OPEN_CODEC_FAIL, "Could not open codec");
+        libDefine->jniErrorCallback(OPEN_CODEC_FAIL, "Could not open codec");
         goto end_line;
     }
     width = vCodecCtx->width;
@@ -168,13 +170,13 @@ void *playVideo(void *arg) {
     avfilter_register_all();
     filter_frame = av_frame_alloc();
     if (filter_frame == nullptr) {
-        nativePlayer.onErrorCallback(INIT_FAIL, "init filter_frame fail");
+        libDefine->jniErrorCallback(INIT_FAIL, "init filter_frame fail");
         goto end_line;
     }
     //分配一个帧指针，指向解码后的原始帧
     vFrame = av_frame_alloc();
     if (vFrame == nullptr) {
-        nativePlayer.onErrorCallback(INIT_FAIL, "init vFrame fail");
+        libDefine->jniErrorCallback(INIT_FAIL, "init vFrame fail");
         goto end_line;
     }
     vPacket = (AVPacket *) av_malloc(sizeof(AVPacket));
@@ -303,9 +305,4 @@ void NativePlayer::setPlayStatus(int status) {
 
 int NativePlayer::getPlayStatus() const {
     return playStatus;
-}
-
-void NativePlayer::onErrorCallback(int errorCode, char const *msg) {
-    errorStatus = errorCode;
-    libDefine->jniErrorCallback(errorCode, msg);
 }

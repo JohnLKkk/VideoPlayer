@@ -13,8 +13,8 @@
     <string name="stop">暂停</string>
     <string name="goBack">快退</string>
     <string name="forwar">快进</string>
-    <string name="inputValueHint">注：输入各个参数数值，以英文 , 分隔</string>
-    <string name="filterHint">%s: %s</string>
+    <string name="inputValueHint">自定义滤镜参数说明：输入各个参数数值，以英文 , 分隔;(错误的参数可能导致闪退)</string>
+    <string name="currentFilter">当前滤镜—— %s: %s</string>
 
     <!--倍速播放-->
     <string-array name="DoubleSpeed">
@@ -38,7 +38,6 @@
     </string-array>
     <!--滤镜类型-->
     <string-array name="FilterType">
-        <item>无</item>
         <item>均衡</item>
         <item>素描</item>
         <item>鲜明</item>

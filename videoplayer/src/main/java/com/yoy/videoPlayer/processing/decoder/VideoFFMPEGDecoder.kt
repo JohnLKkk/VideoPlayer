@@ -67,13 +67,13 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
         filterHandler.removeCallbacksAndMessages(null)
         filterHandler.postDelayed({
             decoderJni.setFilter(value)
-        }, 500)
+        }, 1000)
     }
 
     /**
      * c层播放状态回调
      * 注，不要更改方法名和参数类型！
-     * @param status 0=Prepared
+     * @param status 0=Prepared 5=改变滤镜成功
      */
     fun onPlayStatusCallback(status: Int) {
 //        LogUtils.i(TAG, "jniPlayStatusCallback; status:$status")

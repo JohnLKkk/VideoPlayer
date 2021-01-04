@@ -67,12 +67,6 @@ public:
     void setPlayStatus(int status);
 
     int getPlayStatus() const;
-
-    /**
-     * 回调错误到Java层处理
-     * @param errorCode
-     */
-    void onErrorCallback(int errorCode, char const *msg);
 };
 
 

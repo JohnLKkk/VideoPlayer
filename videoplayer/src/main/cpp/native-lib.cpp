@@ -145,6 +145,6 @@ VIDEO_PLAYER_FUNC(void, setFilter, jstring value) {
     nativePlayer.setPlayStatus(2);
     usleep(50 * 1000);
 //    int ret = nativePlayer.init_filters(nativePlayer.filter_descr, false);
-//    if (ret > 0) nativePlayer.setPlayStatus(1);
+    nativePlayer.setPlayStatus(1);
 }
 }

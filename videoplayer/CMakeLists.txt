@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.4.1)
 project(video_ffmpeg)
-file(GLOB native_files "src/main/cpp/*.cpp","src/main/cpp/define/*.cpp")
+file(GLOB native_files1 "src/main/cpp/*.cpp")
+file(GLOB native_files2 "src/main/cpp/define/*.cpp")
 
 include_directories(src/main/cpp)
 include_directories(src/main/cpp/define)
@@ -10,7 +11,8 @@ include_directories(src/main/cpp/include)
 add_library(
         media-handle
         SHARED
-        ${native_files})
+        ${native_files1}
+        ${native_files2})
 
 add_library(ffmpeg
         SHARED

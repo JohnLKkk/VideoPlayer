@@ -25,24 +25,29 @@ extern "C" {
 
 class NativePlayer {
 private:
-public:
-    int bufferSize = 0;
     //playStatus  -1=未知状态 0=准备 1=播放中 2=暂停中 3=播放完成 4=播放取消 5=释放资源
     int playStatus = -1;
-    int errorStatus = -1;
+public:
     //播放进度(ms)
     long jniCurrentTime = 0L;
 
     const char *file_name;
     const char *filter_descr = "colorbalance=bs=0.3";
-//    const char *filter_descr="lutrgb='r=0:g=0'";
     int findFileInfo_Ok = 1;
     int videoIndex = -1;
     long jniMaxTime = 0;
 
     AVCodec *vCodec = NULL;
 
-    int init_filters(bool isInit);
+    int init_player();
+
+    int open_file(const char *file_name);
+
+    int init_filters() const;
+
+    int init_audio();
+
+    int set_filter();
 
     void setPlayInfo(ANativeWindow *aNWindow);
 

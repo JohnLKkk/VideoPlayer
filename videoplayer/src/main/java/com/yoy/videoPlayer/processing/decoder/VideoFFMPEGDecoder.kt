@@ -5,6 +5,8 @@ import android.os.Looper
 import android.text.TextUtils
 import android.view.SurfaceHolder
 import com.yoy.v_Base.utils.LogUtils
+import com.yoy.v_Base.utils.ToastUtils
+import com.yoy.videoPlayer.VideoApplication
 import com.yoy.videoPlayer.processing.FileAttributes
 
 /**
@@ -76,10 +78,10 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
      * @param status 0=Prepared 5=改变滤镜成功
      */
     fun onPlayStatusCallback(status: Int) {
-//        LogUtils.i(TAG, "jniPlayStatusCallback; status:$status")
         mHandler.post {
             when (status) {
                 0 -> callback.onPrepared()
+                5 -> ToastUtils.showShort(VideoApplication.context, "滤镜切换成功")
             }
         }
     }
@@ -91,7 +93,6 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
      * @param errorCode
      */
     fun onErrorCallback(errorCode: Int, msg: String) {
-//        LogUtils.i(TAG, "jniErrorCallback:$msg")
         when (errorCode) {
 
         }

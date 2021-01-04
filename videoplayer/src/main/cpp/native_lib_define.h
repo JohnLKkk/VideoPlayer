@@ -26,7 +26,6 @@ typedef struct JniBeanNode {
     JniBeanNode(int code, const char *msg) {
         this->code = code;
         checkUtf8Bytes((char *) msg);
-        LOGE("---------%s", msg);
         this->msg = msg;
     }
 } JniBean;

@@ -18,6 +18,7 @@ extern "C" {
 #include "libavutil/opt.h"
 #include <libavfilter/buffersrc.h>
 #include <libavfilter/buffersink.h>
+#include "libswresample/swresample.h"
 
 #ifdef __cplusplus
 }
@@ -35,9 +36,11 @@ public:
     const char *filter_descr = "colorbalance=bs=0.3";
     int findFileInfo_Ok = 1;
     int videoIndex = -1;
+    int audioIndex = -1;
     long jniMaxTime = 0;
 
     AVCodec *vCodec = NULL;
+    AVCodec *aCodec = NULL;
 
     int init_player();
 

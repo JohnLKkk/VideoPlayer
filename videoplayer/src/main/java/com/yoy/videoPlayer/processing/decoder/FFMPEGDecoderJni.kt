@@ -40,7 +40,7 @@ class FFMPEGDecoderJni(private val decoder: VideoFFMPEGDecoder) {
      * @param sampleRate 采样率
      * @param channels   频道
      */
-    fun createAudioTrack(sampleRate: Int, channels: Int): AudioTrack? {
+    private fun createAudioTrack(sampleRate: Int, channels: Int): AudioTrack? {
         val audioFormat = AudioFormat.ENCODING_PCM_16BIT
         val channelConfig: Int = when (channels) {
             1 -> AudioFormat.CHANNEL_OUT_MONO

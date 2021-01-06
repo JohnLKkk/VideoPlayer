@@ -43,6 +43,7 @@ public:
     jobject g_obj = nullptr;
     jmethodID playStatusCallback = nullptr;
     jmethodID errorCallback = nullptr;
+    jmethodID createAudioTrack = nullptr;
 
     NativeLibDefine();
 

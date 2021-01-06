@@ -94,6 +94,14 @@ VIDEO_PLAYER_FUNC(void, initJni) {
         LOGE("找不到方法:jniErrorCallback(int,String)");
         return;
     }
+    libDefine->createAudioTrack = env->GetMethodID(ffmpegDecoder, "createAudioTrack",
+                                                   "(II)Landroid/media/AudioTrack;");
+    if (!libDefine->createAudioTrack) {
+        LOGE("找不到方法:createAudioTrack(int,int)");
+        return;
+    }
+
+
     libDefine->isRelease = false;
     libDefine->g_obj = env->NewGlobalRef(thiz);
     //执行消息回调线程

@@ -13,6 +13,60 @@ import com.yoy.v_Base.utils.LogUtils
  */
 class FFMPEGDecoderJni(private val decoder: VideoFFMPEGDecoder) {
     private val TAG = "FFMPEG_decoder_jni"
+    private var audioTrack: AudioTrack? = null
+
+
+    /**
+     * 创建音轨
+     *
+     * @param sampleRate 采样率
+     * @param channels   频道
+     */
+    private fun createAudioTrack(sampleRate: Int, channels: Int) {
+        val audioFormat = AudioFormat.ENCODING_PCM_16BIT
+        val channelConfig: Int = when (channels) {
+            1 -> AudioFormat.CHANNEL_OUT_MONO
+            2 -> AudioFormat.CHANNEL_OUT_STEREO
+            else -> AudioFormat.CHANNEL_OUT_STEREO
+        }
+        val bufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            audioTrack = AudioTrack.Builder()
+                    .setAudioAttributes(AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setLegacyStreamType(AudioManager.STREAM_MUSIC)
+                            .build())
+                    .setAudioFormat(AudioFormat.Builder()
+                            .setEncoding(audioFormat)
+                            .setSampleRate(sampleRate)
+                            .setChannelMask(channelConfig)
+                            .build())
+                    .setTransferMode(AudioTrack.MODE_STREAM)
+                    .setBufferSizeInBytes(bufferSizeInBytes)
+                    .build()
+        } else {
+            @Suppress("DEPRECATION")
+            audioTrack = AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat,
+                    bufferSizeInBytes, AudioTrack.MODE_STREAM)
+        }
+    }
+
+    private fun playAudio() {
+        audioTrack?.play()
+    }
+
+    private fun stopAudio() {
+        audioTrack?.stop()
+    }
+
+    fun releaseJni() {
+        audioTrack?.release()
+    }
+
+    private fun writeAudioData(audioData: ByteArray, offsetInBytes: Int, sizeInBytes: Int): Int =
+            audioTrack?.write(audioData, offsetInBytes, sizeInBytes)
+                    ?: AudioTrack.ERROR_INVALID_OPERATION
 
     /**
      * c层播放状态回调
@@ -32,42 +86,6 @@ class FFMPEGDecoderJni(private val decoder: VideoFFMPEGDecoder) {
      */
     fun jniErrorCallback(errorCode: Int, msg: String) {
         decoder.onErrorCallback(errorCode, msg)
-    }
-
-    /**
-     * 创建音轨
-     *
-     * @param sampleRate 采样率
-     * @param channels   频道
-     */
-    private fun createAudioTrack(sampleRate: Int, channels: Int): AudioTrack? {
-        val audioFormat = AudioFormat.ENCODING_PCM_16BIT
-        val channelConfig: Int = when (channels) {
-            1 -> AudioFormat.CHANNEL_OUT_MONO
-            2 -> AudioFormat.CHANNEL_OUT_STEREO
-            else -> AudioFormat.CHANNEL_OUT_STEREO
-        }
-        val bufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormat)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return AudioTrack.Builder()
-                    .setAudioAttributes(AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_MEDIA)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                            .setLegacyStreamType(AudioManager.STREAM_MUSIC)
-                            .build())
-                    .setAudioFormat(AudioFormat.Builder()
-                            .setEncoding(audioFormat)
-                            .setSampleRate(sampleRate)
-                            .setChannelMask(channelConfig)
-                            .build())
-                    .setTransferMode(AudioTrack.MODE_STREAM)
-                    .setBufferSizeInBytes(bufferSizeInBytes)
-                    .build()
-        } else {
-            @Suppress("DEPRECATION")
-            return AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, channelConfig, audioFormat,
-                    bufferSizeInBytes, AudioTrack.MODE_STREAM)
-        }
     }
 
     external fun initJni()

@@ -21,12 +21,102 @@ AVCodecContext *audioCodecCtx = nullptr;
 AVFrame *vFrame = nullptr, *pFrameRGBA = nullptr, *filter_frame = nullptr;
 SwsContext *sws_ctx = nullptr;
 SwrContext *audio_swr_ctx = nullptr;
-uint8_t *out_buffer = nullptr;
+uint8_t *video_out_Buffer = nullptr;
+uint8_t *audio_out_Buffer = nullptr;
+
 AVRational time_base;
 enum AVSampleFormat out_sample_fmt;
 int mWidth = 0;
 int mHeight = 0;
 int out_channel_nb;
+int got_frame;
+
+void *playVideo(void *arg) {
+    nativePlayer.init_player();
+
+    //注册过滤器
+    avfilter_register_all();
+    filter_frame = av_frame_alloc();
+    if (filter_frame == nullptr) {
+        libDefine->jniErrorCallback(INIT_FAIL, "init filter_frame fail");
+        goto end_line;
+    }
+    int ret;
+    ret = nativePlayer.init_filters();
+    if (ret < 0) {
+        goto end_line;
+    }
+
+    ANativeWindow_Buffer windowBuffer;
+    AVPacket avPacket;
+    //读取帧
+    while (av_read_frame(pFormatCtx, &avPacket) >= 0) {
+        if (nativePlayer.getPlayStatus() == 4 || nativePlayer.getPlayStatus() == 5)break;
+        //如果是停止播放，将停止读取帧
+        if (nativePlayer.getPlayStatus() == 2)goto stopPlay;
+
+        if (avPacket.stream_index != nativePlayer.videoIndex) {
+            av_packet_unref(&avPacket);
+            continue;
+        }
+        //视频解码
+        if (avcodec_send_packet(vCodecCtx, &avPacket) != 0) break;
+        //从解码器接收返回的帧数据
+        while (avcodec_receive_frame(vCodecCtx, vFrame) == 0) {
+            if (nativePlayer.getPlayStatus() == 5)break;
+            //获取当前帧对应的播放进度时间，并且忽略无效的时间戳
+            int64_t tmp = vFrame->pts * av_q2d(time_base) * 1000;
+            if (tmp >= 0) nativePlayer.jniCurrentTime = tmp;
+
+            if (av_buffersrc_add_frame_flags(buffersrc_ctx, vFrame,
+                                             AV_BUFFERSRC_FLAG_KEEP_REF) <
+                0) {
+                LOGE("Error while feeding the filter_graph");
+                break;
+            }
+            av_buffersink_get_frame(buffersink_ctx, filter_frame);
+            //转化格式
+            sws_scale(sws_ctx,
+                      (const uint8_t *const *) filter_frame->data,
+                      filter_frame->linesize,
+                      0,
+                      mHeight,
+                      pFrameRGBA->data, pFrameRGBA->linesize);
+            if (ANativeWindow_lock(nativeWindow, &windowBuffer,
+                                   nullptr) >= 0) {
+                //逐行复制
+                auto *bufferBits = (uint8_t *) windowBuffer.bits;
+                for (int h = 0; h < mHeight; h++) {
+                    memcpy(bufferBits + h * windowBuffer.stride * 4,
+                           video_out_Buffer + h * pFrameRGBA->linesize[0],
+                           pFrameRGBA->linesize[0]);
+                }
+                ANativeWindow_unlockAndPost(nativeWindow);
+            } else {
+                LOGE("cannot lock window");
+            }
+        }
+        av_frame_unref(filter_frame);
+    }
+    //释放内存
+    sws_freeContext(sws_ctx);
+
+    end_line:
+//    av_free(&vPacket);
+    av_frame_free(&vFrame);
+    av_frame_free(&pFrameRGBA);
+    av_frame_free(&filter_frame);
+    avfilter_free(buffersrc_ctx);
+    avfilter_free(buffersink_ctx);
+    avfilter_graph_free(&filter_graph);
+    avcodec_close(vCodecCtx);
+    avformat_close_input(&pFormatCtx);
+    avcodec_free_context(&vCodecCtx);
+    ANativeWindow_release(nativeWindow);
+    stopPlay:
+    LOGW("stop play ......");
+    pthread_exit(nullptr);
+}
 
 int NativePlayer::init_player() {
     int ret;
@@ -118,9 +208,9 @@ int NativePlayer::open_file(const char *file_path) {
     }
     //绑定输出buffer
     int bufferSize = av_image_get_buffer_size(AV_PIX_FMT_RGBA, mWidth, mHeight, 1);
-    out_buffer = (uint8_t *) av_malloc(bufferSize * sizeof(uint8_t));
+    video_out_Buffer = (uint8_t *) av_malloc(bufferSize * sizeof(uint8_t));
     av_image_fill_arrays(pFrameRGBA->data, pFrameRGBA->linesize,
-                         out_buffer, AV_PIX_FMT_RGBA,
+                         video_out_Buffer, AV_PIX_FMT_RGBA,
                          mWidth, mHeight, 1);
     //创建SwsContext用于缩放、转换操作
     sws_ctx = sws_getContext(mWidth, mHeight,
@@ -242,16 +332,12 @@ int NativePlayer::init_audio() {
                        0, NULL);
     swr_init(audio_swr_ctx);
     out_channel_nb = av_get_channel_layout_nb_channels(out_ch_layout);
-    int attach = -1;
-    JNIEnv *env = libDefine->get_env(&attach);
-    jobject audio_track=env->CallObjectMethod(libDefine->g_obj, libDefine->createAudioTrack, out_sample_rate,
-                          out_channel_nb);
-    jclass audio_track_class=env->GetObjectClass()
-    jmethodID audio_track_play_mid = (*env)->GetMethodID(env, audio_track_class, "play", "()V");
-    (*env)->CallVoidMethod(env, audio_track, audio_track_play_mid);
 
-    audio_track_write_mid = (*env)->GetMethodID(env, audio_track_class, "write", "([BII)I");
-    out_buffer = (uint8_t *) av_malloc(MAX_AUDIO_FRAME_SIZE);
+    JNIEnv *env = libDefine->get_env();
+    env->CallVoidMethod(libDefine->g_obj, libDefine->createAudioTrack, out_sample_rate,
+                        out_channel_nb);
+    env->CallVoidMethod(libDefine->g_obj, libDefine->playAudioMethod);
+    audio_out_Buffer = (uint8_t *) av_malloc(MAX_AUDIO_FRAME_SIZE);
     return 0;
 }
 
@@ -263,93 +349,6 @@ void NativePlayer::setPlayInfo(ANativeWindow *aNWindow) {
     nativeWindow = aNWindow;
     setPlayStatus(0);
     libDefine->jniPlayStatusCallback(0);
-}
-
-void *playVideo(void *arg) {
-    nativePlayer.init_player();
-
-    //注册过滤器
-    avfilter_register_all();
-    filter_frame = av_frame_alloc();
-    if (filter_frame == nullptr) {
-        libDefine->jniErrorCallback(INIT_FAIL, "init filter_frame fail");
-        goto end_line;
-    }
-    int ret;
-    ret = nativePlayer.init_filters();
-    if (ret < 0) {
-        goto end_line;
-    }
-
-    ANativeWindow_Buffer windowBuffer;
-    AVPacket avPacket;
-    //读取帧
-    while (av_read_frame(pFormatCtx, &avPacket) >= 0) {
-        if (nativePlayer.getPlayStatus() == 4 || nativePlayer.getPlayStatus() == 5)break;
-        //如果是停止播放，将停止读取帧
-        if (nativePlayer.getPlayStatus() == 2)goto stopPlay;
-
-        if (avPacket.stream_index != nativePlayer.videoIndex) {
-            av_packet_unref(&avPacket);
-            continue;
-        }
-        //视频解码
-        if (avcodec_send_packet(vCodecCtx, &avPacket) != 0) break;
-        //从解码器接收返回的帧数据
-        while (avcodec_receive_frame(vCodecCtx, vFrame) == 0) {
-            if (nativePlayer.getPlayStatus() == 5)break;
-            //获取当前帧对应的播放进度时间，并且忽略无效的时间戳
-            int64_t tmp = vFrame->pts * av_q2d(time_base) * 1000;
-            if (tmp >= 0) nativePlayer.jniCurrentTime = tmp;
-
-            if (av_buffersrc_add_frame_flags(buffersrc_ctx, vFrame,
-                                             AV_BUFFERSRC_FLAG_KEEP_REF) <
-                0) {
-                LOGE("Error while feeding the filter_graph");
-                break;
-            }
-            av_buffersink_get_frame(buffersink_ctx, filter_frame);
-            //转化格式
-            sws_scale(sws_ctx,
-                      (const uint8_t *const *) filter_frame->data,
-                      filter_frame->linesize,
-                      0,
-                      mHeight,
-                      pFrameRGBA->data, pFrameRGBA->linesize);
-            if (ANativeWindow_lock(nativeWindow, &windowBuffer,
-                                   nullptr) >= 0) {
-                //逐行复制
-                auto *bufferBits = (uint8_t *) windowBuffer.bits;
-                for (int h = 0; h < mHeight; h++) {
-                    memcpy(bufferBits + h * windowBuffer.stride * 4,
-                           out_buffer + h * pFrameRGBA->linesize[0],
-                           pFrameRGBA->linesize[0]);
-                }
-                ANativeWindow_unlockAndPost(nativeWindow);
-            } else {
-                LOGE("cannot lock window");
-            }
-        }
-        av_frame_unref(filter_frame);
-    }
-    //释放内存
-    sws_freeContext(sws_ctx);
-
-    end_line:
-//    av_free(&vPacket);
-    av_frame_free(&vFrame);
-    av_frame_free(&pFrameRGBA);
-    av_frame_free(&filter_frame);
-    avfilter_free(buffersrc_ctx);
-    avfilter_free(buffersink_ctx);
-    avfilter_graph_free(&filter_graph);
-    avcodec_close(vCodecCtx);
-    avformat_close_input(&pFormatCtx);
-    avcodec_free_context(&vCodecCtx);
-    ANativeWindow_release(nativeWindow);
-    stopPlay:
-    LOGW("stop play ......");
-    pthread_exit(nullptr);
 }
 
 long long NativePlayer::getPlayProgress(int type) const {
@@ -380,4 +379,24 @@ void NativePlayer::setPlayStatus(int status) {
 
 int NativePlayer::getPlayStatus() const {
     return playStatus;
+}
+
+void NativePlayer::writeAudioData(AVPacket *packet, AVFrame *frame) {
+    int ret;
+    if ((ret = avcodec_decode_audio4(audioCodecCtx, frame, &got_frame, packet)) < 0) {
+        LOGE("avcodec_decode_audio4 fail:%d", ret);
+        return;
+    }
+    //无法解码
+    if (got_frame <= 0)return;
+    swr_convert(audio_swr_ctx, &audio_out_Buffer, MAX_AUDIO_FRAME_SIZE,
+                (const uint8_t **) frame->data, frame->nb_samples);
+    int out_buffer_size = av_samples_get_buffer_size(NULL, out_channel_nb,
+                                                     frame->nb_samples, out_sample_fmt, 1);
+    JNIEnv *env = libDefine->get_env();
+    jbyteArray audio_sample_array = env->NewByteArray(out_buffer_size);
+    jbyte *sample_byte_array = env->GetByteArrayElements(audio_sample_array, NULL);
+    memcpy(sample_byte_array, audio_out_Buffer, (size_t) out_buffer_size);
+    env->ReleaseByteArrayElements(audio_sample_array, sample_byte_array, 0);
+    libDefine
 }

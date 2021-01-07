@@ -29,8 +29,7 @@ void NativeLibDefine::jniErrorCallback(int errorCode, const char *msg) const {
  * 专门处理回调内容的的线程
  */
 void *onCallbackThread(void *arg) {
-    int attach = -1;
-    JNIEnv *env = libDefine->get_env(&attach);
+    JNIEnv *env = libDefine->get_env();
     JniBean *bean;
     jstring jmsg = nullptr;
 
@@ -94,13 +93,31 @@ VIDEO_PLAYER_FUNC(void, initJni) {
         LOGE("找不到方法:jniErrorCallback(int,String)");
         return;
     }
-    libDefine->createAudioTrack = env->GetMethodID(ffmpegDecoder, "createAudioTrack",
-                                                   "(II)Landroid/media/AudioTrack;");
+    libDefine->createAudioTrack = env->GetMethodID(ffmpegDecoder, "createAudioTrack", "(II)V");
     if (!libDefine->createAudioTrack) {
         LOGE("找不到方法:createAudioTrack(int,int)");
         return;
     }
-
+    libDefine->playAudioMethod = env->GetMethodID(ffmpegDecoder, "playAudio", "()V");
+    if (!libDefine->playAudioMethod) {
+        LOGE("找不到方法:playAudio()");
+        return;
+    }
+    libDefine->stopAudioMethod = env->GetMethodID(ffmpegDecoder, "stopAudio", "()V");
+    if (!libDefine->stopAudioMethod) {
+        LOGE("找不到方法:stopAudio()");
+        return;
+    }
+    libDefine->releaseJniMethod = env->GetMethodID(ffmpegDecoder, "releaseJni", "()V");
+    if (!libDefine->releaseJniMethod) {
+        LOGE("找不到方法:releaseJni()");
+        return;
+    }
+    libDefine->writeAudioDataMethod = env->GetMethodID(ffmpegDecoder, "writeAudioData", "([BII)I");
+    if (!libDefine->writeAudioDataMethod) {
+        LOGE("找不到方法:releaseJni()");
+        return;
+    }
 
     libDefine->isRelease = false;
     libDefine->g_obj = env->NewGlobalRef(thiz);

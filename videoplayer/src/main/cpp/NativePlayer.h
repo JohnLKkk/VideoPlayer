@@ -20,6 +20,7 @@ extern "C" {
 #include <libavfilter/buffersink.h>
 #include "libswresample/swresample.h"
 
+#define MAX_AUDIO_FRAME_SIZE 48000 * 4
 #ifdef __cplusplus
 }
 #endif
@@ -75,6 +76,8 @@ public:
     void setPlayStatus(int status);
 
     int getPlayStatus() const;
+
+    void writeAudioData(AVPacket *packet, AVFrame *frame);
 };
 
 

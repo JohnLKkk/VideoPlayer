@@ -44,6 +44,10 @@ public:
     jmethodID playStatusCallback = nullptr;
     jmethodID errorCallback = nullptr;
     jmethodID createAudioTrack = nullptr;
+    jmethodID playAudioMethod = nullptr;
+    jmethodID stopAudioMethod = nullptr;
+    jmethodID releaseJniMethod = nullptr;
+    jmethodID writeAudioDataMethod = nullptr;
 
     NativeLibDefine();
 
@@ -53,18 +57,13 @@ public:
 
     void onRelease();
 
-    JNIEnv *get_env(int *attach) {
+    JNIEnv *get_env() {
         if (g_jvm == nullptr)return nullptr;
         JNIEnv *env = nullptr;
-        *attach = 0;
         int status = g_jvm->GetEnv((void **) &env, JNI_VERSION_1_6);
         if (status == JNI_EDETACHED || env == nullptr) {
             status = g_jvm->AttachCurrentThread(&env, nullptr);
-            if (status < 0) {
-                env = nullptr;
-            } else {
-                *attach = 1;
-            }
+            if (status < 0) env = nullptr;
         }
         return env;
     }

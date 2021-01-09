@@ -55,47 +55,48 @@ void *playVideo(void *arg) {
         //如果是停止播放，将停止读取帧
         if (nativePlayer.getPlayStatus() == 2)goto stopPlay;
 
-        if (avPacket.stream_index != nativePlayer.videoIndex) {
-            av_packet_unref(&avPacket);
-            continue;
-        }
-        //视频解码
-        if (avcodec_send_packet(vCodecCtx, &avPacket) != 0) break;
-        //从解码器接收返回的帧数据
-        while (avcodec_receive_frame(vCodecCtx, vFrame) == 0) {
-            if (nativePlayer.getPlayStatus() == 5)break;
-            //获取当前帧对应的播放进度时间，并且忽略无效的时间戳
-            int64_t tmp = vFrame->pts * av_q2d(time_base) * 1000;
-            if (tmp >= 0) nativePlayer.jniCurrentTime = tmp;
+        if (avPacket.stream_index == nativePlayer.videoIndex) {
+            //视频解码
+            if (avcodec_send_packet(vCodecCtx, &avPacket) != 0) break;
+            //从解码器接收返回的帧数据
+            while (avcodec_receive_frame(vCodecCtx, vFrame) == 0) {
+                if (nativePlayer.getPlayStatus() == 5)break;
+                //获取当前帧对应的播放进度时间，并且忽略无效的时间戳
+                int64_t tmp = vFrame->pts * av_q2d(time_base) * 1000;
+                if (tmp >= 0) nativePlayer.jniCurrentTime = tmp;
 
-            if (av_buffersrc_add_frame_flags(buffersrc_ctx, vFrame,
-                                             AV_BUFFERSRC_FLAG_KEEP_REF) <
-                0) {
-                LOGE("Error while feeding the filter_graph");
-                break;
-            }
-            av_buffersink_get_frame(buffersink_ctx, filter_frame);
-            //转化格式
-            sws_scale(sws_ctx,
-                      (const uint8_t *const *) filter_frame->data,
-                      filter_frame->linesize,
-                      0,
-                      mHeight,
-                      pFrameRGBA->data, pFrameRGBA->linesize);
-            if (ANativeWindow_lock(nativeWindow, &windowBuffer,
-                                   nullptr) >= 0) {
-                //逐行复制
-                auto *bufferBits = (uint8_t *) windowBuffer.bits;
-                for (int h = 0; h < mHeight; h++) {
-                    memcpy(bufferBits + h * windowBuffer.stride * 4,
-                           video_out_Buffer + h * pFrameRGBA->linesize[0],
-                           pFrameRGBA->linesize[0]);
+                if (av_buffersrc_add_frame_flags(buffersrc_ctx, vFrame,
+                                                 AV_BUFFERSRC_FLAG_KEEP_REF) <
+                    0) {
+                    LOGE("Error while feeding the filter_graph");
+                    break;
                 }
-                ANativeWindow_unlockAndPost(nativeWindow);
-            } else {
-                LOGE("cannot lock window");
+                av_buffersink_get_frame(buffersink_ctx, filter_frame);
+                //转化格式
+                sws_scale(sws_ctx,
+                          (const uint8_t *const *) filter_frame->data,
+                          filter_frame->linesize,
+                          0,
+                          mHeight,
+                          pFrameRGBA->data, pFrameRGBA->linesize);
+                if (ANativeWindow_lock(nativeWindow, &windowBuffer,
+                                       nullptr) >= 0) {
+                    //逐行复制
+                    auto *bufferBits = (uint8_t *) windowBuffer.bits;
+                    for (int h = 0; h < mHeight; h++) {
+                        memcpy(bufferBits + h * windowBuffer.stride * 4,
+                               video_out_Buffer + h * pFrameRGBA->linesize[0],
+                               pFrameRGBA->linesize[0]);
+                    }
+                    ANativeWindow_unlockAndPost(nativeWindow);
+                } else {
+                    LOGE("cannot lock window");
+                }
             }
+        } else if (avPacket.stream_index == nativePlayer.audioIndex && nativePlayer.isPlayAudio) {
+            nativePlayer.writeAudioData(&avPacket, vFrame);
         }
+        av_packet_unref(&avPacket);
         av_frame_unref(filter_frame);
     }
     //释放内存
@@ -372,7 +373,7 @@ void NativePlayer::setPlayStatus(int status) {
     if (status < -1 || status > 5)return;
     if (playStatus == status)return;
     if (status == 1) {
-        pthread_create(&libDefine->pt[1], nullptr, &playVideo, nullptr);
+        pthread_create(&libDefine->pt[2], nullptr, &playVideo, nullptr);
     }
     playStatus = status;
 }
@@ -398,5 +399,8 @@ void NativePlayer::writeAudioData(AVPacket *packet, AVFrame *frame) {
     jbyte *sample_byte_array = env->GetByteArrayElements(audio_sample_array, NULL);
     memcpy(sample_byte_array, audio_out_Buffer, (size_t) out_buffer_size);
     env->ReleaseByteArrayElements(audio_sample_array, sample_byte_array, 0);
-    libDefine
+    env->CallIntMethod(libDefine->g_obj, libDefine->writeAudioDataMethod, audio_sample_array,
+                       0, out_buffer_size);
+    env->DeleteLocalRef(audio_sample_array);
+    usleep(1000);
 }

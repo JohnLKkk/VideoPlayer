@@ -21,11 +21,15 @@ typedef struct JniBeanNode {
 
     JniBeanNode(int code) {
         this->code = code;
+        this->msg = "-";
     }
 
     JniBeanNode(int code, const char *msg) {
         this->code = code;
         checkUtf8Bytes((char *) msg);
+        if (strlen(msg) == 0) {
+            msg = "-";
+        }
         this->msg = msg;
     }
 } JniBean;
@@ -37,7 +41,7 @@ public:
     //全局释放标识
     bool isRelease = false;
     //线程指针数组
-    pthread_t pt[2];
+    pthread_t pt[10];
 
     JavaVM *g_jvm = nullptr;
     jobject g_obj = nullptr;

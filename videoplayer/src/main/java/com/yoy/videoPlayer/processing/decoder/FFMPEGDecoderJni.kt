@@ -104,6 +104,8 @@ class FFMPEGDecoderJni(private val decoder: VideoFFMPEGDecoder) {
 
     external fun setFilter(value: String)
 
+    external fun isPlayAudio(boolean: Boolean)
+
     companion object {
         init {
             System.loadLibrary("media-handle")

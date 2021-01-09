@@ -39,6 +39,7 @@ public:
     int videoIndex = -1;
     int audioIndex = -1;
     long jniMaxTime = 0;
+    bool isPlayAudio = true;
 
     AVCodec *vCodec = NULL;
     AVCodec *aCodec = NULL;

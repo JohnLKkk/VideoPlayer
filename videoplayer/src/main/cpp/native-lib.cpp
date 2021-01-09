@@ -4,6 +4,9 @@
 
 NativeLibDefine *libDefine;
 NativePlayer nativePlayer;
+//初始化读写锁
+pthread_rwlock_t stateCallbackRWLock = PTHREAD_RWLOCK_INITIALIZER;
+pthread_rwlock_t errorCallbackRWLock = PTHREAD_RWLOCK_INITIALIZER;
 
 NativeLibDefine::NativeLibDefine() {
     libDefine = this;
@@ -15,20 +18,29 @@ NativeLibDefine::NativeLibDefine() {
 void NativeLibDefine::jniPlayStatusCallback(int status) const {
     if (isRelease || stateCallbackList == nullptr)return;
     LOGD("addCallback-playStatus--status:%d", status);
+    //写加锁
+    pthread_rwlock_wrlock(&stateCallbackRWLock);
     stateCallbackList->add((BaseNode *) new JniBean(status));
+    //写解锁
+    pthread_rwlock_unlock(&stateCallbackRWLock);
 }
 
 void NativeLibDefine::jniErrorCallback(int errorCode, const char *msg) const {
     if (isRelease || errorCallbackList == nullptr)return;
     LOGE("addCallback-error--status:%d, msg:%s", errorCode, msg);
+    //写加锁
+    pthread_rwlock_wrlock(&errorCallbackRWLock);
+
     errorCallbackList->add((BaseNode *) new JniBean(errorCode, msg));
+    //写解锁
+    pthread_rwlock_unlock(&errorCallbackRWLock);
 }
 
 /**
  * 回调程序
  * 专门处理回调内容的的线程
  */
-void *onCallbackThread(void *arg) {
+void *onStateCallbackThread(void *arg) {
     JNIEnv *env = libDefine->get_env();
     JniBean *bean;
     jstring jmsg = nullptr;
@@ -36,8 +48,8 @@ void *onCallbackThread(void *arg) {
     if (env == nullptr) goto delEnv;
 
     while (!libDefine->isRelease) {
-        usleep(200 * 1000);
         if (libDefine->isRelease)break;
+        pthread_rwlock_rdlock(&stateCallbackRWLock);
         if (libDefine->stateCallbackList != nullptr && libDefine->stateCallbackList->Size() > 0) {
             bean = (JniBean *) libDefine->stateCallbackList->get(0);
 //            LOGD("回调线程运行中--playState--:code:%d", bean->code);
@@ -45,15 +57,34 @@ void *onCallbackThread(void *arg) {
                                 bean->code);
             libDefine->stateCallbackList->removeAt(0);
         }
+        pthread_rwlock_unlock(&stateCallbackRWLock);
+        usleep(200 * 1000);
+    }
+    env->DeleteLocalRef(jmsg);
+    delEnv:
+    libDefine->del_env();
+    pthread_exit(nullptr);
+}
+
+void *onErrorCallbackThread(void *arg) {
+    JNIEnv *env = libDefine->get_env();
+    JniBean *bean;
+    jstring jmsg = nullptr;
+
+    if (env == nullptr) goto delEnv;
+    while (!libDefine->isRelease) {
+        pthread_rwlock_rdlock(&errorCallbackRWLock);
         if (libDefine->errorCallbackList != nullptr && libDefine->errorCallbackList->Size() > 0) {
             bean = (JniBean *) libDefine->errorCallbackList->get(0);
-//            LOGE("回调线程运行中--error--:code:%d ;msg:%s", bean->code, bean->msg);
+            LOGE("回调线程运行中--error--:code:%d ;msg:%s", bean->code, bean->msg);
 
             jmsg = env->NewStringUTF(bean->msg);
             env->CallVoidMethod(libDefine->g_obj, libDefine->errorCallback, bean->code,
                                 jmsg);
             libDefine->errorCallbackList->removeAt(0);
         }
+        pthread_rwlock_unlock(&errorCallbackRWLock);
+        usleep(200 * 1000);
     }
     env->DeleteLocalRef(jmsg);
     delEnv:
@@ -122,7 +153,8 @@ VIDEO_PLAYER_FUNC(void, initJni) {
     libDefine->isRelease = false;
     libDefine->g_obj = env->NewGlobalRef(thiz);
     //执行消息回调线程
-    pthread_create(&libDefine->pt[0], nullptr, &onCallbackThread, nullptr);
+    pthread_create(&libDefine->pt[0], nullptr, &onStateCallbackThread, nullptr);
+    pthread_create(&libDefine->pt[1], nullptr, &onErrorCallbackThread, nullptr);
 }
 
 VIDEO_PLAYER_FUNC(void, setDataSource, jstring vPath, jobject surface) {
@@ -170,5 +202,8 @@ VIDEO_PLAYER_FUNC(void, setFilter, jstring value) {
     nativePlayer.setPlayStatus(2);
     usleep(50 * 1000);
     nativePlayer.setPlayStatus(1);
+}
+VIDEO_PLAYER_FUNC(void, isPlayAudio, jboolean flag) {
+    nativePlayer.isPlayAudio = flag;
 }
 }

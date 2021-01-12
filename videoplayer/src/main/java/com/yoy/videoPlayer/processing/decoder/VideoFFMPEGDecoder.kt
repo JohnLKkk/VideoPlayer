@@ -23,6 +23,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
 
     init {
         decoderJni.initJni()
+        decoderJni.isPlayAudio(false)
     }
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {

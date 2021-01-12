@@ -34,7 +34,8 @@ public:
     long jniCurrentTime = 0L;
 
     const char *file_name;
-    const char *filter_descr = "colorbalance=bs=0.3";
+//    const char *filter_descr = "colorbalance=bs=0.3";
+    const char *filter_descr = "lutyuv='u=128:v=128'";
     int findFileInfo_Ok = 1;
     int videoIndex = -1;
     int audioIndex = -1;
@@ -48,11 +49,9 @@ public:
 
     int open_file(const char *file_name);
 
-    int init_filters() const;
+    int change_filter() const;
 
     int init_audio();
-
-    int set_filter();
 
     void setPlayInfo(ANativeWindow *aNWindow);
 

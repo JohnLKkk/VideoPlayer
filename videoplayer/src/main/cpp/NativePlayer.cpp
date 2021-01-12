@@ -32,17 +32,8 @@ int out_channel_nb;
 int got_frame;
 
 void *playVideo(void *arg) {
-    nativePlayer.init_player();
-
-    //注册过滤器
-    avfilter_register_all();
-    filter_frame = av_frame_alloc();
-    if (filter_frame == nullptr) {
-        libDefine->jniErrorCallback(INIT_FAIL, "init filter_frame fail");
-        goto end_line;
-    }
     int ret;
-    ret = nativePlayer.init_filters();
+    ret = nativePlayer.change_filter();
     if (ret < 0) {
         goto end_line;
     }
@@ -116,7 +107,7 @@ void *playVideo(void *arg) {
     ANativeWindow_release(nativeWindow);
     stopPlay:
     LOGW("stop play ......");
-    pthread_exit(nullptr);
+    return 0;
 }
 
 int NativePlayer::init_player() {
@@ -125,7 +116,13 @@ int NativePlayer::init_player() {
         LOGE("");
         goto error;
     }
-    init_filters();
+    //注册过滤器
+    avfilter_register_all();
+    filter_frame = av_frame_alloc();
+    if (filter_frame == nullptr) {
+        libDefine->jniErrorCallback(INIT_FAIL, "init filter_frame fail");
+        goto error;
+    }
     init_audio();
     return 0;
 
@@ -222,7 +219,7 @@ int NativePlayer::open_file(const char *file_path) {
     return 0;
 }
 
-int NativePlayer::init_filters() const {
+int NativePlayer::change_filter() const {
     LOGD("设置的滤镜参数：%s", filter_descr);
     int ret;
     AVFilter *buffersrc = avfilter_get_by_name("buffer");
@@ -342,13 +339,10 @@ int NativePlayer::init_audio() {
     return 0;
 }
 
-int NativePlayer::set_filter() {
-    return 0;
-}
-
 void NativePlayer::setPlayInfo(ANativeWindow *aNWindow) {
     nativeWindow = aNWindow;
     setPlayStatus(0);
+    nativePlayer.init_player();
     libDefine->jniPlayStatusCallback(0);
 }
 

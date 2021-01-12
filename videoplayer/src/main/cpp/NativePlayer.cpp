@@ -110,7 +110,29 @@ void *playVideo(void *arg) {
     return 0;
 }
 
+void log_callback(void *ptr, int level, const char *format, va_list args) {
+    switch (level) {
+        case AV_LOG_DEBUG:
+            LOGD(format, args);
+            break;
+        case AV_LOG_WARNING:
+            LOGW(format, args);
+            break;
+        case AV_LOG_ERROR:
+            LOGE(format, args);
+            break;
+        default:
+            LOGI(format, args);
+            break;
+    }
+}
+
 int NativePlayer::init_player() {
+    // set the level of log
+//    av_log_set_level(AV_LOG_INFO);
+    // set the callback of log, and redirect to print android log
+//    av_log_set_callback(log_callback);
+
     int ret;
     if ((ret = open_file(file_name)) < 0) {
         LOGE("");

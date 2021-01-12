@@ -15,3 +15,6 @@
 ffmpeg解码器下支持滤镜功能
 
 播放和切换滤镜可能出现异常，准备解决
+
+[效果视频](https://github.com/ExistNotSee/TestExample/blob/master/video.mp4)
+<iframe height=1920 width=1080 src="https://github.com/ExistNotSee/TestExample/blob/master/video.mp4" frameborder=0 allowfullscreen />

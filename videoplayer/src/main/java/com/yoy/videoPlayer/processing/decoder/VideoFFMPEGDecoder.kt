@@ -82,7 +82,10 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
         mHandler.post {
             when (status) {
                 0 -> callback.onPrepared()
-                5 -> ToastUtils.showShort(VideoApplication.context, "滤镜切换成功")
+                5 -> {
+                    isFilterFinishChange = true
+                    ToastUtils.showShort(VideoApplication.context, "滤镜切换成功")
+                }
             }
         }
     }
@@ -95,7 +98,7 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
      */
     fun onErrorCallback(errorCode: Int, msg: String) {
         when (errorCode) {
-
+            0x02 -> isFilterFinishChange = true
         }
     }
 }

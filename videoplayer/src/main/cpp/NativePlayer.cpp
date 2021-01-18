@@ -5,7 +5,6 @@
 #include "native_lib_define.h"
 #include "NativePlayer.h"
 
-
 extern NativeLibDefine *libDefine;
 extern NativePlayer nativePlayer;
 
@@ -49,7 +48,7 @@ void *playVideo(void *arg) {
         if (avPacket.stream_index == nativePlayer.videoIndex) {
             //视频解码
             if (avcodec_send_packet(vCodecCtx, &avPacket) != 0) break;
-            //从解码器接收返回的帧数据
+            //从解码器接收返回的帧数据 vFrame
             while (avcodec_receive_frame(vCodecCtx, vFrame) == 0) {
                 if (nativePlayer.getPlayStatus() == 5)break;
                 //获取当前帧对应的播放进度时间，并且忽略无效的时间戳
@@ -70,6 +69,7 @@ void *playVideo(void *arg) {
                           0,
                           mHeight,
                           pFrameRGBA->data, pFrameRGBA->linesize);
+                //锁定窗口
                 if (ANativeWindow_lock(nativeWindow, &windowBuffer,
                                        nullptr) >= 0) {
                     //逐行复制
@@ -111,27 +111,28 @@ void *playVideo(void *arg) {
 }
 
 void log_callback(void *ptr, int level, const char *format, va_list args) {
+    if (IsCloseLog_v)return;
     switch (level) {
         case AV_LOG_DEBUG:
-            LOGD(format, args);
+            LOGD_v(format, args);
             break;
         case AV_LOG_WARNING:
-            LOGW(format, args);
+            LOGW_v(format, args);
             break;
         case AV_LOG_ERROR:
-            LOGE(format, args);
+            LOGE_v(format, args);
             break;
         default:
-            LOGI(format, args);
+            LOGI_v(format, args);
             break;
     }
 }
 
 int NativePlayer::init_player() {
     // set the level of log
-//    av_log_set_level(AV_LOG_INFO);
+    av_log_set_level(AV_LOG_INFO);
     // set the callback of log, and redirect to print android log
-//    av_log_set_callback(log_callback);
+    av_log_set_callback(log_callback);
 
     int ret;
     if ((ret = open_file(file_name)) < 0) {
@@ -315,9 +316,10 @@ int NativePlayer::change_filter() const {
     if (ret < 0) {
         char errorStr[512];
         snprintf(errorStr, sizeof(errorStr), "切换滤镜失败:%d", ret);
-        libDefine->jniErrorCallback(INIT_FAIL, errorStr);
+        libDefine->jniErrorCallback(FILTER_CHANGE_FAIL, errorStr);
     } else {
         libDefine->jniPlayStatusCallback(5);
+        LOGD("切换滤镜完成");
     }
     return ret;
 }

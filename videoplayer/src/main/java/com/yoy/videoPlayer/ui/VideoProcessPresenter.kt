@@ -90,10 +90,7 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
         when (decodeType) {
             0 -> getPlayHandler().setDecoderType(DecodeType.HARDDecoder)
             1 -> getPlayHandler().setDecoderType(DecodeType.FFMPEGDecoder)
-            else -> {
-                getPlayHandler().setDecoderType(DecodeType.OTHER)
-                return
-            }
+            else -> return
         }
         uiControl.videoControlFragment.setSelectFuctionUI(2, decodeType)
     }

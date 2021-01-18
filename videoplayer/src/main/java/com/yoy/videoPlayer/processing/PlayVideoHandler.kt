@@ -59,13 +59,9 @@ class PlayVideoHandler : PlayStateCallback, SurfaceHolder.Callback {
     override fun onPlayCancel() {
     }
 
-    private fun getDecoderHandler(): VideoDecoder? = when (decoderType) {
+    private fun getDecoderHandler(): VideoDecoder = when (decoderType) {
         DecodeType.FFMPEGDecoder -> sDecoder
         DecodeType.HARDDecoder -> hDecoder
-        else -> {
-            LogUtils.e("PlayVideoHandler", "未知的解码类型")
-            null
-        }
     }
 
     fun setPlayStateListener(listener: PlayStateListener) {
@@ -76,6 +72,8 @@ class PlayVideoHandler : PlayStateCallback, SurfaceHolder.Callback {
      * 是否准备好播放
      */
     fun isReadyPlay() = isReadyPlay
+
+    fun getFilterChangeState() = getDecoderHandler().isFilterFinishChange
 
     fun setDecoderType(decoder: DecodeType) {
         this.decoderType = decoder
@@ -90,11 +88,11 @@ class PlayVideoHandler : PlayStateCallback, SurfaceHolder.Callback {
             return
         }
         listenerThread?.isStop = true
-        getDecoderHandler()?.setDataSource(path)
+        getDecoderHandler().setDataSource(path)
     }
 
     fun release() {
-        getDecoderHandler()?.release()
+        getDecoderHandler().release()
         surfaceHolder?.removeCallback(this)
         stopTimeUpdateThread()
     }
@@ -102,28 +100,28 @@ class PlayVideoHandler : PlayStateCallback, SurfaceHolder.Callback {
     //region 播放控制或播放信息获取
     @Synchronized
     fun plStart() {
-        getDecoderHandler()?.start()
+        getDecoderHandler().start()
     }
 
     @Synchronized
     fun plPause() {
         playStateListener?.onPlayPaused()
-        getDecoderHandler()?.pause()
+        getDecoderHandler().pause()
     }
 
     @Synchronized
     fun seekTo(time: Int) {
-        getDecoderHandler()?.seekTo(time)
+        getDecoderHandler().seekTo(time)
     }
 
     @Synchronized
-    fun isPlaying(): Boolean = getDecoderHandler()?.isPlaying() ?: false
+    fun isPlaying(): Boolean = getDecoderHandler().isPlaying()
 
     @Synchronized
-    fun getCurrentTime(): Long = getDecoderHandler()?.getPlayTimeIndex(1) ?: 0L
+    fun getCurrentTime(): Long = getDecoderHandler().getPlayTimeIndex(1)
 
     @Synchronized
-    fun getMaxTime(): Long = getDecoderHandler()?.getPlayTimeIndex(2) ?: 0L
+    fun getMaxTime(): Long = getDecoderHandler().getPlayTimeIndex(2)
     //endregion
 
     /**
@@ -155,6 +153,8 @@ class PlayVideoHandler : PlayStateCallback, SurfaceHolder.Callback {
     }
 
     fun setFilterValue(str: String) {
+        if (!getDecoderHandler().isFilterFinishChange) return
+        getDecoderHandler().isFilterFinishChange = false
         sDecoder.setFilter(str)
     }
 

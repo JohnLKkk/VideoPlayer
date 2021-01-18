@@ -8,8 +8,7 @@ package com.yoy.videoPlayer.processing
  */
 enum class DecodeType(private var code: String, val cn: String) {
     HARDDecoder("HARDDecoder", "硬解码"),//硬解码
-    FFMPEGDecoder("FFMPEGDecoder", "FFMPEG"), //ffmpeg解码
-    OTHER("OTHER", "未知"); //不存在的解码类型
+    FFMPEGDecoder("FFMPEGDecoder", "FFMPEG"); //ffmpeg解码
 
     override fun toString(): String = code
 }

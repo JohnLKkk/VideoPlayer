@@ -38,11 +38,9 @@
     </string-array>
     <!--滤镜类型-->
     <string-array name="FilterType">
-        <item>均衡</item>
         <item>素描</item>
         <item>鲜明</item>
-        <item>暖蓝</item>
-        <item>边缘</item>
+        <item>旋转90</item>
         <item>九宫格</item>
         <item>矩形</item>
         <item>翻转</item>

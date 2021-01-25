@@ -12,7 +12,7 @@ import com.yoy.videoPlayer.processing.PlayVideoHandler
  * Created by Void on 2020/12/4 14:46
  *
  */
-class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
+class VideoProcessPresenter(private val mActivityMain: MainVideoActivity,
                             private val uiControl: VideoProcessUiControl) :
         PlayStateListener {
 
@@ -50,7 +50,7 @@ class VideoProcessPresenter(private val mActivity: VideoProcessActivity,
     }
     //endregion
 
-    fun getPlayHandler(): PlayVideoHandler = mActivity.playHandler
+    fun getPlayHandler(): PlayVideoHandler = mActivityMain.playHandler
 
     fun selectFileResult(path: String?) {
         if (path == null || path.isEmpty()) {

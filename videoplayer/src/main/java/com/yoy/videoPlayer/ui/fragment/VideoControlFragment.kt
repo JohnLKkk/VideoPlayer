@@ -8,7 +8,7 @@ import com.yoy.v_Base.ui.BaseDefaultFragment
 import com.yoy.v_Base.utils.KLog
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.ui.FragmentCallback
-import com.yoy.videoPlayer.ui.VideoProcessActivity
+import com.yoy.videoPlayer.ui.MainVideoActivity
 import com.yoy.videoPlayer.ui.view.PlayHistoryPopupWindow
 
 /**
@@ -78,8 +78,8 @@ class VideoControlFragment : BaseDefaultFragment(),
         super.onClick(v)
         when (v?.id) {
             R.id.selectFileBtn ->
-                if (activity is VideoProcessActivity)
-                    (activity as VideoProcessActivity).openSelectFileView()
+                if (activity is MainVideoActivity)
+                    (activity as MainVideoActivity).openSelectFileView()
             R.id.videoHistory -> {
                 historyWindow?.setCallback(callback ?: return)
                 historyWindow?.show(v)

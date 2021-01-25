@@ -1,59 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:stretchColumns="*">
+    android:layout_height="match_parent">
 
-    <TableRow android:layout_marginBottom="@dimen/x5">
+    <LinearLayout
+        android:id="@+id/tmp1"
+        style="@style/baseLayout"
+        android:layout_marginBottom="@dimen/x5"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/selectFileBtn"
-            style="@style/TableLayoutBtn"
-            android:layout_span="2"
+            style="@style/videoBtnThemes"
             android:text="@string/selectFile" />
 
         <Button
             android:id="@+id/videoHistory"
-            style="@style/TableLayoutBtn"
-            android:layout_span="2"
+            style="@style/videoBtnThemes"
             android:text="@string/videoHistory" />
-    </TableRow>
+    </LinearLayout>
 
-    <TableRow android:layout_marginBottom="@dimen/x5">
+    <LinearLayout
+        android:id="@+id/tmp2"
+        style="@style/baseLayout"
+        android:layout_below="@id/tmp1"
+        android:layout_marginBottom="@dimen/x5"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/playBtn"
-            style="@style/TableLayoutBtn"
+            style="@style/videoBtnThemes"
             android:text="@string/play" />
 
         <Button
             android:id="@+id/stopBtn"
-            style="@style/TableLayoutBtn"
+            style="@style/videoBtnThemes"
             android:text="@string/stop" />
 
         <Button
             android:id="@+id/goBackBtn"
-            style="@style/TableLayoutBtn"
+            style="@style/videoBtnThemes"
             android:text="@string/goBack" />
 
         <Button
             android:id="@+id/forwardBtn"
-            style="@style/TableLayoutBtn"
+            style="@style/videoBtnThemes"
             android:text="@string/forwar" />
-    </TableRow>
 
-    <TableRow android:layout_marginBottom="@dimen/x5">
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/baseLayout"
+        android:layout_below="@id/tmp2"
+        android:layout_marginBottom="@dimen/x5"
+        android:orientation="horizontal">
 
         <Spinner
             android:id="@+id/doubleSpeedList"
+            style="@style/videoBtnThemes"
             android:entries="@array/DoubleSpeed" />
 
         <Spinner
             android:id="@+id/functionList"
+            style="@style/videoBtnThemes"
             android:entries="@array/FunctionList" />
 
         <Spinner
             android:id="@+id/decoderTypeList"
+            style="@style/videoBtnThemes"
             android:entries="@array/DecoderType" />
-    </TableRow>
-</TableLayout>
+    </LinearLayout>
+</RelativeLayout>

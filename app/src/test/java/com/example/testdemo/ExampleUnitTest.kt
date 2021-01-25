@@ -10,5 +10,8 @@ import org.junit.Test
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
+        val baseW = 800
+        val baseH = 1280
+        GenerateValueFiles(baseW, baseH, "").generate()
     }
 }

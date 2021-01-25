@@ -20,25 +20,25 @@ import java.util.*
  * Created by Void on 2020/12/3 17:08
  *
  */
-class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
+class VideoProcessUiControl(private val mActivityMain: MainVideoActivity) :
         FragmentCallback,
         VideoPreviewBar.ProgressCallback {
     private lateinit var mPresenter: VideoProcessPresenter
     val videoControlFragment = VideoControlFragment()
-    private val videoView: SurfaceView = mActivity.findViewById(R.id.videoView)
-    private val functionLayout1: FrameLayout = mActivity.findViewById(R.id.functionLayout1)
-    var videoProgressBar: VideoPreviewBar = mActivity.findViewById(R.id.videoProgressBar)
-    private val playTime: TextView = mActivity.findViewById(R.id.playTime)
-    private val fileInfo: TextView = mActivity.findViewById(R.id.fileInfo)
+    private val videoView: SurfaceView = mActivityMain.findViewById(R.id.videoView)
+    private val functionLayout1: FrameLayout = mActivityMain.findViewById(R.id.functionLayout1)
+    var videoProgressBar: VideoPreviewBar = mActivityMain.findViewById(R.id.videoProgressBar)
+    private val playTime: TextView = mActivityMain.findViewById(R.id.playTime)
+    private val fileInfo: TextView = mActivityMain.findViewById(R.id.fileInfo)
 
-    private val fragmentManager = mActivity.supportFragmentManager
+    private val fragmentManager = mActivityMain.supportFragmentManager
     private val function1FragmentItems = LinkedList<Fragment>()
     private val function2FragmentItems = LinkedList<Fragment>()
 
-    private val filterFragment = FilterFragment(mActivity)
+    private val filterFragment = FilterFragment(mActivityMain)
 
-    private var doubleSpeedArray = mActivity.resources.getStringArray(R.array.DoubleSpeed)
-    private var functionArray = mActivity.resources.getStringArray(R.array.FunctionList)
+    private var doubleSpeedArray = mActivityMain.resources.getStringArray(R.array.DoubleSpeed)
+    private var functionArray = mActivityMain.resources.getStringArray(R.array.FunctionList)
     private val mainHandler = Handler(Looper.getMainLooper())
     var isJumpProgress = false //用户正在更改进度
 
@@ -116,7 +116,7 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
         fragmentTransaction.commit()
     }
 
-    fun getPlayHandler(): PlayVideoHandler = mActivity.playHandler
+    fun getPlayHandler(): PlayVideoHandler = mActivityMain.playHandler
 
     fun setPresenter(mPresenter: VideoProcessPresenter) {
         this.mPresenter = mPresenter
@@ -125,7 +125,7 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
     }
 
     fun setFileInfo(name: String, path: String) {
-        fileInfo.text = mActivity.getString(R.string.fileInfo, name, path)
+        fileInfo.text = mActivityMain.getString(R.string.fileInfo, name, path)
     }
 
     fun onRelease() {
@@ -134,7 +134,7 @@ class VideoProcessUiControl(private val mActivity: VideoProcessActivity) :
     }
 
     fun setPlayTime(cT: Long, mT: Long) {
-        playTime.text = mActivity.getString(R.string.playTime,
+        playTime.text = mActivityMain.getString(R.string.playTime,
                 TimeUtils.formatTimeS(cT),
                 TimeUtils.formatTimeS(mT)
         )

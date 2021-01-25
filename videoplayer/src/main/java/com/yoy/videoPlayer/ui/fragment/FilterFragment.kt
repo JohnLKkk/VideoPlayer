@@ -8,13 +8,13 @@ import com.yoy.v_Base.ui.BaseDefaultFragment
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.processing.PlayVideoHandler
-import com.yoy.videoPlayer.ui.VideoProcessActivity
+import com.yoy.videoPlayer.ui.MainVideoActivity
 
 /**
  * Created by Void on 2020/12/18 14:52
  *
  */
-class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultFragment(),
+class FilterFragment(private val mActivityMain: MainVideoActivity) : BaseDefaultFragment(),
         AdapterView.OnItemSelectedListener {
 
     private lateinit var filterTypeSelect: Spinner
@@ -61,7 +61,7 @@ class FilterFragment(private val mActivity: VideoProcessActivity) : BaseDefaultF
         inputEt.addTextChangedListener(textChangeListener)
     }
 
-    fun getPlayHandler(): PlayVideoHandler = mActivity.playHandler
+    fun getPlayHandler(): PlayVideoHandler = mActivityMain.playHandler
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (!getPlayHandler().getFilterChangeState()) {

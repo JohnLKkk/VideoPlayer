@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/MainTheme">
         <activity
-            android:name=".ui.VideoProcessActivity"
+            android:name=".ui.MainVideoActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -27,5 +27,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

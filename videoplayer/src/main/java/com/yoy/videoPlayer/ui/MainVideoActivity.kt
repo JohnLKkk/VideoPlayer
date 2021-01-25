@@ -19,8 +19,8 @@ import com.yoy.videoPlayer.utils.PlayHistoryManager
  * Created by Void on 2020/12/3 14:41
  * 视频处理界面
  */
-class VideoProcessActivity : BaseDefaultActivity() {
-    private val TAG = VideoProcessActivity::class.java.simpleName
+class MainVideoActivity : BaseDefaultActivity() {
+    private val TAG = MainVideoActivity::class.java.simpleName
     private lateinit var uiControl: VideoProcessUiControl
     private lateinit var mPresenter: VideoProcessPresenter
     private var lastClickBackTime = System.currentTimeMillis()

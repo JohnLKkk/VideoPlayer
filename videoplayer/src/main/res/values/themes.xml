@@ -14,11 +14,16 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar" >
+    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
     </style>
-    <style name="TableLayoutBtn">
-        <item name="android:layout_marginStart">@dimen/x5</item>
-        <item name="android:layout_marginEnd">@dimen/x5</item>
+
+    <style name="baseLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="videoBtnThemes" parent="baseLayout">
+        <item name="android:layout_weight">1</item>
     </style>
 </resources>

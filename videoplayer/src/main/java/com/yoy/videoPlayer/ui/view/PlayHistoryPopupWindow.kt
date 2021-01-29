@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.*
 import android.widget.*
+import androidx.core.content.ContextCompat
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.beans.VideoFileInfo
@@ -34,8 +35,9 @@ class PlayHistoryPopupWindow(private val context: Context) :
 
     init {
         mPopupWindow.isOutsideTouchable = true
-        mPopupWindow.elevation = 10f
-        mPopupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        mPopupWindow.elevation = 20f
+
+        mPopupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.popupWindowBg)))
         contentView.findViewById<ListView>(R.id.playHistoryList).apply {
             adapter = this@PlayHistoryPopupWindow
             setOnItemClickListener { _, _, position, _ ->
@@ -56,8 +58,10 @@ class PlayHistoryPopupWindow(private val context: Context) :
                 R.layout.layout_popup_window_item,
                 null
         )
-        view.findViewById<TextView>(R.id.nameTv).text = getItem(position).vName
-        view.findViewById<TextView>(R.id.pathTv).text = getItem(position).vPath
+        view.findViewById<TextView>(R.id.nameTv).text = context.getString(R.string.fileNameStr,
+                getItem(position).vName)
+        view.findViewById<TextView>(R.id.pathTv).text = context.getString(R.string.filePathStr,
+                getItem(position).vPath)
         return view
     }
 

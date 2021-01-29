@@ -15,17 +15,10 @@ import com.yoy.videoPlayer.ui.view.PlayHistoryPopupWindow
  * Created by Void on 2020/12/3 14:47
  *
  */
-class VideoControlFragment : BaseDefaultFragment(),
-        AdapterView.OnItemSelectedListener {
+class VideoControlFragment : BaseDefaultFragment(), AdapterView.OnItemSelectedListener {
     private val TAG = VideoControlFragment::class.java.simpleName
     private var historyWindow: PlayHistoryPopupWindow? = null
     private var callback: FragmentCallback? = null
-    private lateinit var selectFileBtn: Button
-    private lateinit var videoHistory: Button
-    private lateinit var playBtn: Button
-    private lateinit var stopBtn: Button
-    private lateinit var goBackBtn: Button
-    private lateinit var forwardBtn: Button
     private lateinit var doubleSpeedList: Spinner
     private lateinit var functionList: Spinner
     private lateinit var decoderTypeList: Spinner
@@ -36,12 +29,6 @@ class VideoControlFragment : BaseDefaultFragment(),
 
     override fun initView(view: View) {
         super.initView(view)
-        selectFileBtn = view.findViewById(R.id.selectFileBtn)
-        videoHistory = view.findViewById(R.id.videoHistory)
-        playBtn = view.findViewById(R.id.playBtn)
-        stopBtn = view.findViewById(R.id.stopBtn)
-        goBackBtn = view.findViewById(R.id.goBackBtn)
-        forwardBtn = view.findViewById(R.id.forwardBtn)
         doubleSpeedList = view.findViewById(R.id.doubleSpeedList)
         functionList = view.findViewById(R.id.functionList)
         decoderTypeList = view.findViewById(R.id.decoderTypeList)
@@ -50,12 +37,16 @@ class VideoControlFragment : BaseDefaultFragment(),
 
     override fun initListener(view: View) {
         super.initListener(view)
-        selectFileBtn.setOnClickListener(this)
-        videoHistory.setOnClickListener(this)
-        playBtn.setOnClickListener(this)
-        stopBtn.setOnClickListener(this)
-        goBackBtn.setOnClickListener(this)
-        forwardBtn.setOnClickListener(this)
+        view.findViewById<Button>(R.id.selectFileBtn).setOnClickListener(this)
+        view.findViewById<Button>(R.id.videoHistory).setOnClickListener(this)
+        view.findViewById<Button>(R.id.playBtn).setOnClickListener(this)
+        view.findViewById<Button>(R.id.stopBtn).setOnClickListener(this)
+        view.findViewById<Button>(R.id.goBackBtn).setOnClickListener(this)
+        view.findViewById<Button>(R.id.forwardBtn).setOnClickListener(this)
+        //setSelection需要在注册事件之前
+        doubleSpeedList.setSelection(0,true)
+        functionList.setSelection(0,true)
+        decoderTypeList.setSelection(0,true)
         doubleSpeedList.onItemSelectedListener = this
         functionList.onItemSelectedListener = this
         decoderTypeList.onItemSelectedListener = this
@@ -105,7 +96,7 @@ class VideoControlFragment : BaseDefaultFragment(),
      * @param type 功能类型 0倍速 1功能列表 2解码方式
      * @param position 功能列表索引
      */
-    fun setSelectFuctionUI(type: Int, position: Int) {
+    fun setSelectFunctionUI(type: Int, position: Int) {
         if (!isInitFinish) return
         when (type) {
             0 -> if (position < doubleSpeedList.adapter.count)

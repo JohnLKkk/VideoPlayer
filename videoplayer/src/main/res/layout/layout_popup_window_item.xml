@@ -9,6 +9,8 @@
         android:id="@+id/nameTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/x20"
+        android:layout_marginEnd="@dimen/x20"
         android:lines="1"
         android:paddingTop="@dimen/x5"
         android:paddingBottom="@dimen/x5"
@@ -20,14 +22,17 @@
         android:id="@+id/pathTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/x20"
+        android:layout_marginEnd="@dimen/x20"
         android:lines="1"
         android:textColor="#99000000"
+        android:layout_marginBottom="@dimen/x10"
         android:textSize="@dimen/x18"
         tools:text="----------" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/x2"
-        android:visibility="gone"
-        android:background="#99000000" />
+        android:background="#99000000"
+        android:visibility="gone" />
 </LinearLayout>

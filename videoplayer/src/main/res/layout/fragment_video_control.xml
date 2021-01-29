@@ -57,17 +57,20 @@
 
         <Spinner
             android:id="@+id/doubleSpeedList"
-            style="@style/videoBtnThemes"
+            style="@style/baseLayout"
+            android:layout_weight="2.5"
             android:entries="@array/DoubleSpeed" />
 
         <Spinner
             android:id="@+id/functionList"
-            style="@style/videoBtnThemes"
+            style="@style/baseLayout"
+            android:layout_weight="3"
             android:entries="@array/FunctionList" />
 
         <Spinner
             android:id="@+id/decoderTypeList"
-            style="@style/videoBtnThemes"
+            style="@style/baseLayout"
+            android:layout_weight="3"
             android:entries="@array/DecoderType" />
     </LinearLayout>
 </RelativeLayout>

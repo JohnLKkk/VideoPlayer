@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.yoy.v_Base.utils.TimeUtils
+import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.beans.VideoFileInfo
 import com.yoy.videoPlayer.processing.PlayVideoHandler
@@ -81,8 +82,10 @@ class VideoProcessUiControl(private val mActivityMain: MainVideoActivity) :
 
     override fun onSelectFunction(type: Int, position: Int) {
         when (type) {
-            0 -> playSpeed = doubleSpeedArray[position]
+//            0 -> playSpeed = doubleSpeedArray[position]
+            0 -> ToastUtils.showShort(mActivityMain, "该功能还在开发")
             1 -> {
+                if (position > 1) ToastUtils.showShort(mActivityMain, "该功能还在开发")
                 selectFunction = functionArray[position]
                 setFunctionFragment(position - 1)
             }
@@ -94,10 +97,7 @@ class VideoProcessUiControl(private val mActivityMain: MainVideoActivity) :
         when (action) {
             0 -> getPlayHandler().plStart()
             1 -> getPlayHandler().plPause()
-            2 -> {
-            }
-            3 -> {
-            }
+            2, 3 -> ToastUtils.showShort(mActivityMain, "该功能还在开发")
         }
     }
 

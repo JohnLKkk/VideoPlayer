@@ -6,6 +6,8 @@
     <string name="playTime">%s / %s</string>
     <string name="decodeType">硬解码</string>
     <string name="fileInfo">文件名:%s \n 路径:%s</string>
+    <string name="fileNameStr">文件名:%s</string>
+    <string name="filePathStr">路径:%s</string>
 
     <string name="selectFile">选择文件</string>
     <string name="videoHistory">播放历史</string>

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="video_top_black">#cc1E1E1E</color>
     <color name="defaultWhite">#ffffff</color>
+    <color name="popupWindowBg">#99000000</color>
 </resources>

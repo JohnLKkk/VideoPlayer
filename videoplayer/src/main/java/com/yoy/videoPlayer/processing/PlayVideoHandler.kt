@@ -31,13 +31,13 @@ class PlayVideoHandler : PlayStateCallback, SurfaceHolder.Callback {
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
 //        LogUtils.e(msg = "PlayVideoHandler--surfaceDestroyed")
-        getDecoderHandler()?.setDisPlay(null, fileInfo)
+        getDecoderHandler().setDisPlay(null, fileInfo)
         stopTimeUpdateThread()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
 //        LogUtils.e(msg = "PlayVideoHandler--surfaceCreated")
-        getDecoderHandler()?.setDisPlay(holder, fileInfo)
+        getDecoderHandler().setDisPlay(holder, fileInfo)
     }
 
     override fun onPrepared() {

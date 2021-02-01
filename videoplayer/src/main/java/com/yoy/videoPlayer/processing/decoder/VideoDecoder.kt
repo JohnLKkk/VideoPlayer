@@ -12,6 +12,7 @@ import com.yoy.videoPlayer.processing.FileAttributes
 abstract class VideoDecoder {
 
     var isFilterFinishChange = false //滤镜切换状态
+
     //是否已经被释放
     protected var isRelease = false
 
@@ -40,4 +41,7 @@ abstract class VideoDecoder {
      */
     abstract fun getPlayTimeIndex(type: Int): Long
 
+    protected companion object {
+        var mHolder: SurfaceHolder? = null
+    }
 }

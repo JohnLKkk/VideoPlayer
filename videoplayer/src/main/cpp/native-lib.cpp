@@ -157,9 +157,7 @@ VIDEO_PLAYER_FUNC(void, initJni) {
     pthread_create(&libDefine->pt[1], nullptr, &onErrorCallbackThread, nullptr);
 }
 
-VIDEO_PLAYER_FUNC(void, setDataSource, jstring vPath, jobject surface) {
-    if (libDefine->isRelease)return;
-    nativePlayer.file_name = env->GetStringUTFChars(vPath, nullptr);
+VIDEO_PLAYER_FUNC(void,setDisplay, jobject surface){
     ANativeWindow *nativeWindow = ANativeWindow_fromSurface(env, surface);
     if (nativeWindow == nullptr) {
         LOGE("Could not get native window from surface");
@@ -167,6 +165,15 @@ VIDEO_PLAYER_FUNC(void, setDataSource, jstring vPath, jobject surface) {
         return;
     }
     nativePlayer.setPlayInfo(nativeWindow);
+}
+
+VIDEO_PLAYER_FUNC(void, setDataSource, jstring vPath) {
+    if (libDefine->isRelease)return;
+    nativePlayer.file_name = env->GetStringUTFChars(vPath, nullptr);
+    nativePlayer.setPlayStatus(0);
+    nativePlayer.init_player();
+    libDefine->jniPlayStatusCallback(0);
+
 }
 
 VIDEO_PLAYER_FUNC(long long, getCurrentPosition) {
@@ -203,6 +210,7 @@ VIDEO_PLAYER_FUNC(void, setFilter, jstring value) {
     usleep(50 * 1000);
     nativePlayer.setPlayStatus(1);
 }
+
 VIDEO_PLAYER_FUNC(void, isPlayAudio, jboolean flag) {
     nativePlayer.isPlayAudio = flag;
 }

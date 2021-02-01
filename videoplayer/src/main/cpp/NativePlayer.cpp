@@ -211,6 +211,7 @@ int NativePlayer::open_file(const char *file_path) {
     }
     mWidth = vCodecCtx->width;
     mHeight = vCodecCtx->height;
+    if (nativeWindow== nullptr)throw "nativeWindow not null";
     //更改窗口缓冲区的格式和大小。
     if (ANativeWindow_setBuffersGeometry(nativeWindow, mWidth,
                                          mHeight, WINDOW_FORMAT_RGBA_8888) <
@@ -365,9 +366,6 @@ int NativePlayer::init_audio() {
 
 void NativePlayer::setPlayInfo(ANativeWindow *aNWindow) {
     nativeWindow = aNWindow;
-    setPlayStatus(0);
-    nativePlayer.init_player();
-    libDefine->jniPlayStatusCallback(0);
 }
 
 long long NativePlayer::getPlayProgress(int type) const {

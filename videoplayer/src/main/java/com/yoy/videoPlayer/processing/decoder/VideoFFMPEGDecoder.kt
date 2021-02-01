@@ -15,7 +15,6 @@ import com.yoy.videoPlayer.processing.FileAttributes
  */
 class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder() {
     private val TAG = "FFMPEGDecoder"
-    private var holder: SurfaceHolder? = null
     private val decoderJni = FFMPEGDecoderJni(this)
     private val mHandler = Handler(Looper.getMainLooper())
     private val filterHandler = Handler()
@@ -27,15 +26,13 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
     }
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
-        this.holder = holder
-        if (!fileInfo.isValid || holder == null) return
-        if (!TextUtils.isEmpty(vPath)) setDataSource(vPath)
+        mHolder = holder
     }
 
     override fun setDataSource(path: String) {
         vPath = path
-        if (holder == null) return
-        decoderJni.setDataSource(path, holder!!.surface)
+        mHolder?.let { decoderJni.setDisplay(it.surface) }
+        decoderJni.setDataSource(path)
     }
 
     override fun start() {
@@ -60,7 +57,6 @@ class VideoFFMPEGDecoder(private val callback: PlayStateCallback) : VideoDecoder
 
     override fun release() {
         decoderJni.setPlayState(5)
-        holder = null
         callback.onCompletion()
     }
 

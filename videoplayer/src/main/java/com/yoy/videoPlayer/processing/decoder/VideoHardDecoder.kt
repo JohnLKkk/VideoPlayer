@@ -39,6 +39,7 @@ class VideoHardDecoder(callback: PlayStateCallback) : VideoDecoder(), MediaPlaye
 
     override fun setDisPlay(holder: SurfaceHolder?, fileInfo: FileAttributes) {
         try {
+            mHolder=holder
 //            KLog.e("----setDisPlay")
             mediaPlayer.setDisplay(holder)
             if (!fileInfo.isValid || holder == null) return

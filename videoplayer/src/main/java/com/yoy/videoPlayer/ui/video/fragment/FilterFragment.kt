@@ -1,4 +1,4 @@
-package com.yoy.videoPlayer.ui.fragment
+package com.yoy.videoPlayer.ui.video.fragment
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,7 +8,7 @@ import com.yoy.v_Base.ui.BaseDefaultFragment
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.processing.PlayVideoHandler
-import com.yoy.videoPlayer.ui.MainVideoActivity
+import com.yoy.videoPlayer.ui.video.MainVideoActivity
 
 /**
  * Created by Void on 2020/12/18 14:52
@@ -65,7 +65,7 @@ class FilterFragment(private val mActivityMain: MainVideoActivity) : BaseDefault
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (!getPlayHandler().getFilterChangeState()) {
-            ToastUtils.showShort(context, "滤镜正在切换……")
+            ToastUtils.showShort(context, "暂时无法修改滤镜……")
             filterTypeSelect.setSelection(filtersIndex)
             return
         }

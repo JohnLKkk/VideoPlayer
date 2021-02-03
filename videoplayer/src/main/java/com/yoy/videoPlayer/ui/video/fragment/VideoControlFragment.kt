@@ -1,4 +1,4 @@
-package com.yoy.videoPlayer.ui.fragment
+package com.yoy.videoPlayer.ui.video.fragment
 
 import android.view.View
 import android.widget.AdapterView
@@ -7,9 +7,9 @@ import android.widget.Spinner
 import com.yoy.v_Base.ui.BaseDefaultFragment
 import com.yoy.v_Base.utils.KLog
 import com.yoy.videoPlayer.R
-import com.yoy.videoPlayer.ui.FragmentCallback
-import com.yoy.videoPlayer.ui.MainVideoActivity
-import com.yoy.videoPlayer.ui.view.PlayHistoryPopupWindow
+import com.yoy.videoPlayer.ui.video.FragmentCallback
+import com.yoy.videoPlayer.ui.video.MainVideoActivity
+import com.yoy.videoPlayer.ui.video.view.PlayHistoryPopupWindow
 
 /**
  * Created by Void on 2020/12/3 14:47

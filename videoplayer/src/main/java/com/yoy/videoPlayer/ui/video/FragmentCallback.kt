@@ -1,4 +1,4 @@
-package com.yoy.videoPlayer.ui
+package com.yoy.videoPlayer.ui.video
 
 import com.yoy.videoPlayer.beans.VideoFileInfo
 

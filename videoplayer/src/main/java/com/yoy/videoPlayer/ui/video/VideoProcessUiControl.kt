@@ -1,4 +1,4 @@
-package com.yoy.videoPlayer.ui
+package com.yoy.videoPlayer.ui.video
 
 import android.os.Handler
 import android.os.Looper
@@ -13,8 +13,8 @@ import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.beans.VideoFileInfo
 import com.yoy.videoPlayer.processing.PlayVideoHandler
 import com.yoy.videoPlayer.processing.VideoPreviewBar
-import com.yoy.videoPlayer.ui.fragment.FilterFragment
-import com.yoy.videoPlayer.ui.fragment.VideoControlFragment
+import com.yoy.videoPlayer.ui.video.fragment.FilterFragment
+import com.yoy.videoPlayer.ui.video.fragment.VideoControlFragment
 import java.util.*
 
 /**
@@ -25,7 +25,9 @@ class VideoProcessUiControl(private val mActivityMain: MainVideoActivity) :
         FragmentCallback,
         VideoPreviewBar.ProgressCallback {
     private lateinit var mPresenter: VideoProcessPresenter
+    private val filterFragment = FilterFragment(mActivityMain)
     val videoControlFragment = VideoControlFragment()
+
     private val videoView: SurfaceView = mActivityMain.findViewById(R.id.videoView)
     private val functionLayout1: FrameLayout = mActivityMain.findViewById(R.id.functionLayout1)
     var videoProgressBar: VideoPreviewBar = mActivityMain.findViewById(R.id.videoProgressBar)
@@ -36,7 +38,6 @@ class VideoProcessUiControl(private val mActivityMain: MainVideoActivity) :
     private val function1FragmentItems = LinkedList<Fragment>()
     private val function2FragmentItems = LinkedList<Fragment>()
 
-    private val filterFragment = FilterFragment(mActivityMain)
 
     private var doubleSpeedArray = mActivityMain.resources.getStringArray(R.array.DoubleSpeed)
     private var functionArray = mActivityMain.resources.getStringArray(R.array.FunctionList)

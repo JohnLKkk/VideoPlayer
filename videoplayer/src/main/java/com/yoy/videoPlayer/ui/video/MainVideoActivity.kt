@@ -1,4 +1,4 @@
-package com.yoy.videoPlayer.ui
+package com.yoy.videoPlayer.ui.video
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -14,7 +14,6 @@ import com.yoy.videoPlayer.VideoApplication
 import com.yoy.videoPlayer.beans.VideoFileInfo
 import com.yoy.videoPlayer.processing.PlayVideoHandler
 import com.yoy.videoPlayer.utils.PlayHistoryManager
-import java.util.*
 
 /**
  * Created by Void on 2020/12/3 14:41

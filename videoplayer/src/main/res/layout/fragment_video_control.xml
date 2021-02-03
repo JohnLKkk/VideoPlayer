@@ -58,19 +58,19 @@
         <Spinner
             android:id="@+id/doubleSpeedList"
             style="@style/baseLayout"
-            android:layout_weight="2.5"
+            android:layout_weight="0.3"
             android:entries="@array/DoubleSpeed" />
 
         <Spinner
             android:id="@+id/functionList"
             style="@style/baseLayout"
-            android:layout_weight="3"
+            android:layout_weight="0.35"
             android:entries="@array/FunctionList" />
 
         <Spinner
             android:id="@+id/decoderTypeList"
             style="@style/baseLayout"
-            android:layout_weight="3"
+            android:layout_weight="0.35"
             android:entries="@array/DecoderType" />
     </LinearLayout>
 </RelativeLayout>

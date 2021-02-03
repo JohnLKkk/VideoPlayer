@@ -1,4 +1,4 @@
-package com.yoy.videoPlayer.ui
+package com.yoy.videoPlayer.ui.video
 
 import android.os.Handler
 import com.yoy.v_Base.utils.KLog

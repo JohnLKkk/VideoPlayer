@@ -1,7 +1,6 @@
-package com.yoy.videoPlayer.ui.view
+package com.yoy.videoPlayer.ui.video.view
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
 import android.os.Looper
@@ -11,7 +10,7 @@ import androidx.core.content.ContextCompat
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.beans.VideoFileInfo
-import com.yoy.videoPlayer.ui.FragmentCallback
+import com.yoy.videoPlayer.ui.video.FragmentCallback
 import com.yoy.videoPlayer.utils.PlayHistoryManager
 
 /**

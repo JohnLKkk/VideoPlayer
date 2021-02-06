@@ -25,6 +25,8 @@ object AppCode {
     //region ------------------ 一些通用的值
     //获取麦克风失败时最大的尝试次数
     const val tryGetRecorderFailMaxCount = 10
+    //选择文件后返回结果时的code
+    const val selectFileResultCode = 1001
     //endregion
 
     //region ------------------ 用于储存SharedPreferences数据所使用的key

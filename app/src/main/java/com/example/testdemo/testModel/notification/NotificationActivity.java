@@ -7,13 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.example.testdemo.R;
@@ -21,14 +19,6 @@ import com.yoy.v_Base.ui.BaseDefaultActivity;
 
 public class NotificationActivity extends BaseDefaultActivity {
     private NotificationManager manager;
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        setActionBar("通知测试",true);
-    }
 
     @Override
     public int getLayoutID() {
@@ -40,6 +30,11 @@ public class NotificationActivity extends BaseDefaultActivity {
         return true;
     }
 
+    @Override
+    public void onInit() {
+        manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        setActionBar("通知测试",true);
+    }
     public void onOpenOntification(View view) {
         if (!isEnabled()) {
             startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));

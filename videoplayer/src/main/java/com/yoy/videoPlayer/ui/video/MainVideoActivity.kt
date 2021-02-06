@@ -1,16 +1,13 @@
 package com.yoy.videoPlayer.ui.video
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.os.Bundle
-import android.text.TextUtils
 import android.view.KeyEvent
 import com.yoy.v_Base.ui.BaseDefaultActivity
+import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.FileTools
 import com.yoy.v_Base.utils.LogUtils
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
-import com.yoy.videoPlayer.VideoApplication
 import com.yoy.videoPlayer.beans.VideoFileInfo
 import com.yoy.videoPlayer.processing.PlayVideoHandler
 import com.yoy.videoPlayer.utils.PlayHistoryManager
@@ -21,23 +18,18 @@ import com.yoy.videoPlayer.utils.PlayHistoryManager
  */
 class MainVideoActivity : BaseDefaultActivity() {
     private val TAG = MainVideoActivity::class.java.simpleName
-    private lateinit var uiControl: VideoProcessUiControl
-    private lateinit var mPresenter: VideoProcessPresenter
     private var lastClickBackTime = System.currentTimeMillis()
-    private val selectFileResultCode = 1001
+
     val playHandler = PlayVideoHandler()
 
     override fun getLayoutID(): Int = R.layout.activity_video_process
 
-    override fun isFullScreenWindow(): Boolean = true
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onInit() {
+        mPresenter = VideoProcessPresenter(this)
         uiControl = VideoProcessUiControl(this)
-        mPresenter = VideoProcessPresenter(this, uiControl)
-        uiControl.setPresenter(mPresenter)
-        if (!TextUtils.isEmpty(mPresenter.videoPath)) mPresenter.selectFileResult(mPresenter.videoPath)
     }
+
+    override fun isFullScreenWindow(): Boolean = true
 
     override fun onDestroy() {
         super.onDestroy()
@@ -47,14 +39,14 @@ class MainVideoActivity : BaseDefaultActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == selectFileResultCode) {
+        if (requestCode == AppCode.selectFileResultCode) {
             val uri = data?.data
-            if (data == null || uri == null) {
+            if (uri == null) {
                 LogUtils.d(TAG, "选择文件路径结果为空！")
                 return
             }
             val path = FileTools.getFilePathByUri(applicationContext, uri) ?: return
-            mPresenter.selectFileResult(path)
+            (mPresenter as VideoProcessPresenter).selectFileResult(path)
             PlayHistoryManager.insertData(VideoFileInfo(path))
         }
     }
@@ -71,17 +63,5 @@ class MainVideoActivity : BaseDefaultActivity() {
             }
         }
         return super.onKeyDown(keyCode, event)
-    }
-
-    fun openSelectFileView() {
-        try {
-            startActivityForResult(Intent.createChooser(
-                    Intent(Intent.ACTION_GET_CONTENT).apply {
-                        type = "*/*"
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                    }, "选择视频文件"), selectFileResultCode)
-        } catch (ex: ActivityNotFoundException) {
-            ToastUtils.showShort(VideoApplication.context, "没有找到文件管理器！")
-        }
     }
 }

@@ -2,7 +2,6 @@ package com.example.testdemo.testModel.audioRecorder
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,14 +20,13 @@ class AudioRecorderActivity : BaseDefaultActivity(), InnerAudioRecorder.AudioRec
     //用于保存测试的音频文件的文件名
     private val audioFileName = "audioRecorderTest"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getLayoutID(): Int = R.layout.activity_audio_recorder
+
+    override fun onInit() {
         simpleAudioTrack.init()
         checkPermission()
         setActionBar("音频处理",true)
     }
-
-    override fun getLayoutID(): Int = R.layout.activity_audio_recorder
 
     override fun isFullScreenWindow(): Boolean = true
 
@@ -38,6 +36,34 @@ class AudioRecorderActivity : BaseDefaultActivity(), InnerAudioRecorder.AudioRec
     }
 
     override fun onInitError(message: String) {
+    }
+
+    /**
+     * 检查权限录音，读写等权限,没有将请求请求权限
+     *
+     * @return true 取得全部权限
+     */
+    fun checkPermission(): Boolean {
+        val permissions = arrayOf(
+                Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.SYSTEM_ALERT_WINDOW
+        )
+        for (a in permissions) {
+            if (ContextCompat.checkSelfPermission(this, a) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, a)) {
+                    ToastUtils.showShort(this, "已设置拒绝授予权限且不在显示，\n请前往设置手动设置权限")
+                } else {
+                    ActivityCompat.requestPermissions(this, permissions, 100)
+                }
+                KLog.d(TAG, "没有读写或录音权限，请求权限")
+                return false
+            }
+        }
+        KLog.d(TAG, "已具备基本运行所需权限")
+        return true
     }
 
     fun onInitRecorder(view: View) {
@@ -69,33 +95,5 @@ class AudioRecorderActivity : BaseDefaultActivity(), InnerAudioRecorder.AudioRec
 
     fun onStopPlayRecorder(view: View) {
         simpleAudioTrack.release()
-    }
-
-    /**
-     * 检查权限录音，读写等权限,没有将请求请求权限
-     *
-     * @return true 取得全部权限
-     */
-    override fun checkPermission(): Boolean {
-        val permissions = arrayOf(
-                Manifest.permission.MODIFY_AUDIO_SETTINGS,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.SYSTEM_ALERT_WINDOW
-        )
-        for (a in permissions) {
-            if (ContextCompat.checkSelfPermission(this, a) !=
-                    PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, a)) {
-                    ToastUtils.showShort(this, "已设置拒绝授予权限且不在显示，\n请前往设置手动设置权限")
-                } else {
-                    ActivityCompat.requestPermissions(this, permissions, 100)
-                }
-                KLog.d(TAG, "没有读写或录音权限，请求权限")
-                return false
-            }
-        }
-        KLog.d(TAG, "已具备基本运行所需权限")
-        return true
     }
 }

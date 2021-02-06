@@ -22,7 +22,7 @@ import kotlin.concurrent.thread
 class VideoApplication : Application() {
     companion object {
         lateinit var context: Context
-        var videoPath = ""
+        var defaultVideoPath = ""
     }
 
     override fun onCreate() {
@@ -39,9 +39,9 @@ class VideoApplication : Application() {
             }
             if (FileUtils.outputAssetsFileToFolder(context, "video.mp4",
                             "video.mp4", vPath)) {
-                videoPath = "$vPath/video.mp4"
+                defaultVideoPath = "$vPath/video.mp4"
                 PlayHistoryManager.insertData(LinkedList<VideoFileInfo>().apply {
-                    add(VideoFileInfo("defaultVideo", videoPath))
+                    add(VideoFileInfo("defaultVideo", defaultVideoPath))
                 })
             }
         }

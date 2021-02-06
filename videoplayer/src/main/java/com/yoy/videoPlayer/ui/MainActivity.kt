@@ -15,6 +15,9 @@ class MainActivity : BaseDefaultActivity() {
 
     override fun getLayoutID(): Int = R.layout.activity_main
 
+    override fun onInit() {
+    }
+
     fun onBtnClick(view: View) {
         when (view.id) {
             R.id.videoBtn -> startActivity(Intent(applicationContext, MainVideoActivity::class.java))

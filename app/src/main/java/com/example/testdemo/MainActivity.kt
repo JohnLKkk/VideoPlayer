@@ -2,7 +2,6 @@ package com.example.testdemo
 
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
-import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.example.testdemo.testModel.audioRecorder.AudioRecorderActivity
@@ -32,8 +31,9 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
 
     private var state = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getLayoutID(): Int = R.layout.activity_main
+
+    override fun onInit() {
         btn_1.setOnClickListener(this)
         btn_2.setOnClickListener(this)
         btn_3.setOnClickListener(this)
@@ -48,10 +48,8 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_11.setOnClickListener(this)
         btn_12.setOnClickListener(this)
         setActionBar("测试模块")
-        startActivity(Intent(this, AIDLActivity::class.java))
+//        startActivity(Intent(this, AIDLActivity::class.java))
     }
-
-    override fun getLayoutID(): Int = R.layout.activity_main
 
     override fun onClick(v: View?) {
         when (v?.id) {

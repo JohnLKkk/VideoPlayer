@@ -2,6 +2,7 @@ package com.example.testdemo.testModel.permission
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -9,25 +10,29 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.testdemo.R
 import com.yoy.v_Base.ui.BaseDefaultActivity
+import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.ToastUtils
 
 class PermissionActivity : BaseDefaultActivity() {
     private var permissionDialog: AlertDialog? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setActionBar("权限处理",true)
+
+    override fun getLayoutID(): Int = R.layout.activity_permission
+
+    override fun onInit() {
+        setActionBar("权限处理", true)
         if (checkPermission()) {
             if (checkFloatWindowPermission()) {
                 KLog.e("拿到全部权限！")
             }
         }
     }
-
-    override fun getLayoutID(): Int = R.layout.activity_permission
 
     override fun isFullScreenWindow(): Boolean = true
 
@@ -123,6 +128,39 @@ class PermissionActivity : BaseDefaultActivity() {
                     .show()
             return false
         }
+        return true
+    }
+
+    fun checkPermission(): Boolean {
+        for (a in AppCode.basePermissions) {
+            if (ContextCompat.checkSelfPermission(this, a) == PackageManager.PERMISSION_GRANTED) break
+            KLog.d("AuthActivity#checkPermission", "没有读写或录音权限，请求权限")
+            if (permissionDialog == null) {
+                permissionDialog = AlertDialog.Builder(this)
+                        .setTitle("请求权限")
+                        .setMessage("需要一些基础权限以提供完整体验。")
+                        .setCancelable(false)
+                        .setPositiveButton("设置权限") { _: DialogInterface?, _: Int ->
+                            if (ActivityCompat.shouldShowRequestPermissionRationale(this, a)) {
+                                KLog.e("已设置拒绝授予权限且不在显示，\n请前往设置手动设置权限:$a")
+                                ToastUtils.showShort(
+                                        applicationContext,
+                                        "已设置拒绝授予权限且不在显示，\n请前往设置手动设置权限"
+                                )
+                                finish()
+                            } else {
+                                ActivityCompat.requestPermissions(this, AppCode.basePermissions, 100)
+                            }
+                        }
+                        .create()
+            }
+            if (permissionDialog?.isShowing == true) {
+                permissionDialog?.dismiss()
+            }
+            permissionDialog?.show()
+            return false
+        }
+        Log.i("checkPermission", "AuthActivity#checkPermission-拿到所有权限")
         return true
     }
 }

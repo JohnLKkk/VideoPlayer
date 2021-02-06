@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -11,4 +12,11 @@
         android:layout_height="@dimen/x200"
         android:layout_alignParentBottom="true"
         android:background="@android:color/black" />
+
+    <fragment
+        android:id="@+id/myFragment"
+        android:name="com.example.testdemo.testModel.testView.MyFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/layout_advertising_view" />
 </RelativeLayout>

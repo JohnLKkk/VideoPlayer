@@ -11,12 +11,12 @@ import kotlin.concurrent.thread
 
 class NetworkActivity : BaseDefaultActivity() {
     private val TAG = this::class.java.simpleName
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setActionBar("网络处理",true)
-    }
 
     override fun getLayoutID(): Int = R.layout.activity_network
+
+    override fun onInit() {
+        setActionBar("网络处理",true)
+    }
 
     override fun isFullScreenWindow(): Boolean = true
 

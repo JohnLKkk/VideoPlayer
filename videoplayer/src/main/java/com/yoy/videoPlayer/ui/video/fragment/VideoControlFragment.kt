@@ -1,12 +1,17 @@
 package com.yoy.videoPlayer.ui.video.fragment
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.Spinner
 import com.yoy.v_Base.ui.BaseDefaultFragment
+import com.yoy.v_Base.utils.AppCode
 import com.yoy.v_Base.utils.KLog
+import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.R
+import com.yoy.videoPlayer.VideoApplication
 import com.yoy.videoPlayer.ui.video.FragmentCallback
 import com.yoy.videoPlayer.ui.video.MainVideoActivity
 import com.yoy.videoPlayer.ui.video.view.PlayHistoryPopupWindow
@@ -44,9 +49,9 @@ class VideoControlFragment : BaseDefaultFragment(), AdapterView.OnItemSelectedLi
         view.findViewById<Button>(R.id.goBackBtn).setOnClickListener(this)
         view.findViewById<Button>(R.id.forwardBtn).setOnClickListener(this)
         //setSelection需要在注册事件之前
-        doubleSpeedList.setSelection(0,true)
-        functionList.setSelection(0,true)
-        decoderTypeList.setSelection(0,true)
+        doubleSpeedList.setSelection(0, true)
+        functionList.setSelection(0, true)
+        decoderTypeList.setSelection(0, true)
         doubleSpeedList.onItemSelectedListener = this
         functionList.onItemSelectedListener = this
         decoderTypeList.onItemSelectedListener = this
@@ -68,9 +73,7 @@ class VideoControlFragment : BaseDefaultFragment(), AdapterView.OnItemSelectedLi
     override fun onClick(v: View?) {
         super.onClick(v)
         when (v?.id) {
-            R.id.selectFileBtn ->
-                if (activity is MainVideoActivity)
-                    (activity as MainVideoActivity).openSelectFileView()
+            R.id.selectFileBtn -> openSelectFileView()
             R.id.videoHistory -> {
                 historyWindow?.setCallback(callback ?: return)
                 historyWindow?.show(v)
@@ -105,6 +108,18 @@ class VideoControlFragment : BaseDefaultFragment(), AdapterView.OnItemSelectedLi
                 functionList.setSelection(position)
             2 -> if (position < decoderTypeList.adapter.count)
                 decoderTypeList.setSelection(position)
+        }
+    }
+
+    fun openSelectFileView() {
+        try {
+            startActivityForResult(Intent.createChooser(
+                    Intent(Intent.ACTION_GET_CONTENT).apply {
+                        type = "*/*"
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                    }, "选择视频文件"), AppCode.selectFileResultCode)
+        } catch (ex: ActivityNotFoundException) {
+            ToastUtils.showShort(VideoApplication.context, "没有找到文件管理器！")
         }
     }
 }

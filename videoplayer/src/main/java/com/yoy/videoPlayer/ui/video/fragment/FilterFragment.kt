@@ -49,7 +49,7 @@ class FilterFragment(private val mActivityMain: MainVideoActivity) : BaseDefault
 
     override fun initView(view: View) {
         super.initView(view)
-        txtArray = getArrayRes(R.array.FilterType) ?: arrayOf(String())
+        txtArray = getArrayRes(R.array.FilterType)
         filterTypeSelect = view.findViewById(R.id.filterTypeSelect)
         filterTv = view.findViewById(R.id.filterTv)
         inputEt = view.findViewById(R.id.inputEt)

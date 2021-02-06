@@ -1,8 +1,11 @@
 package com.yoy.videoPlayer.ui.video
 
 import android.os.Handler
+import android.text.TextUtils
+import com.yoy.v_Base.ui.BasePresenter
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.LogUtils
+import com.yoy.videoPlayer.BuildConfig
 import com.yoy.videoPlayer.R
 import com.yoy.videoPlayer.processing.DecodeType
 import com.yoy.videoPlayer.processing.PlayStateListener
@@ -12,24 +15,30 @@ import com.yoy.videoPlayer.processing.PlayVideoHandler
  * Created by Void on 2020/12/4 14:46
  *
  */
-class VideoProcessPresenter(private val mActivity: MainVideoActivity,
-                            private val uiControl: VideoProcessUiControl) :
+class VideoProcessPresenter(mActivity: MainVideoActivity) : BasePresenter(mActivity),
         PlayStateListener {
-
-
     var videoPath = ""
 
     init {
         getPlayHandler().setPlayStateListener(this)
-        Handler().postDelayed({
-            setDecoderType(1)
-        }, 1000)
+        if (BuildConfig.DEBUG) {
+            Handler().postDelayed({
+                setDecoderType(1)
+                if (!TextUtils.isEmpty(videoPath)) selectFileResult(videoPath)
+            }, 1000)
+        }
+    }
+
+    override fun getUiControl(): VideoProcessUiControl = getActivityObj().uiControl as VideoProcessUiControl
+
+    override fun onRelease() {
+        getPlayHandler().release()
     }
 
     //region ----- 播放状态回调 -----
     override fun onPlayStart() {
         LogUtils.d(msg = "即将播放的文件路径：$videoPath")
-        uiControl.setFileInfo(getPlayHandler().fileInfo.name, videoPath)
+        getUiControl().setFileInfo(getPlayHandler().fileInfo.name, videoPath)
         setPlayProgress(getPlayHandler().timestampToProgress())
     }
 
@@ -50,7 +59,9 @@ class VideoProcessPresenter(private val mActivity: MainVideoActivity,
     }
     //endregion
 
-    fun getPlayHandler(): PlayVideoHandler = mActivity.playHandler
+    override fun getActivityObj(): MainVideoActivity = super.getActivityObj() as MainVideoActivity
+
+    fun getPlayHandler(): PlayVideoHandler = getActivityObj().playHandler
 
     fun selectFileResult(path: String?) {
         if (path == null || path.isEmpty()) {
@@ -61,10 +72,6 @@ class VideoProcessPresenter(private val mActivity: MainVideoActivity,
         KLog.d("选中的文件路径是：$videoPath")
         getPlayHandler().setDataPath(path)
 //        onPlayControl(0)
-    }
-
-    fun onRelease() {
-        getPlayHandler().release()
     }
 
     /**
@@ -92,7 +99,7 @@ class VideoProcessPresenter(private val mActivity: MainVideoActivity,
             1 -> getPlayHandler().setDecoderType(DecodeType.FFMPEGDecoder)
             else -> return
         }
-        uiControl.videoControlFragment.setSelectFunctionUI(2, decodeType)
+        getUiControl().setSelectFunctionUI(2, decodeType)
     }
 
 
@@ -103,8 +110,8 @@ class VideoProcessPresenter(private val mActivity: MainVideoActivity,
      */
     fun setPlayProgress(index: Int) {
         //当用户正在更改播放进度，忽略设置播放进度请求
-        if (uiControl.isJumpProgress || !getPlayHandler().isReadyPlay()) return
-        uiControl.videoProgressBar.setProgress(index)
-        uiControl.setPlayTime(getPlayHandler().getCurrentTime(), getPlayHandler().getMaxTime())
+        if (getUiControl().isJumpProgress || !getPlayHandler().isReadyPlay()) return
+        getUiControl().videoProgressBar.setProgress(index)
+        getUiControl().setPlayTime(getPlayHandler().getCurrentTime(), getPlayHandler().getMaxTime())
     }
 }

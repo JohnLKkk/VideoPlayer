@@ -2,7 +2,6 @@ package com.example.testdemo.testModel.popupWindow
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,9 @@ class PopupWindowActivity : BaseDefaultActivity() {
     private lateinit var mPopupWindow: PopupWindow
     private val list = LinkedList<String>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getLayoutID(): Int = R.layout.activity_popup_window
+
+    override fun onInit() {
         setActionBar("弹窗测试")
         mPopupWindow = PopupWindow(
                 layoutInflater.inflate(R.layout.layout_skill_template_dialog, null),
@@ -30,11 +30,9 @@ class PopupWindowActivity : BaseDefaultActivity() {
         list.add("---1---")
         list.add("---2---")
         list.add("---3---")
-        val listview = mPopupWindow.contentView.findViewById<ListView>(R.id.listview)
-        listview.adapter = listAdapter
+        val listView = mPopupWindow.contentView.findViewById<ListView>(R.id.listview)
+        listView.adapter = listAdapter
     }
-
-    override fun getLayoutID(): Int = R.layout.activity_popup_window
 
     fun onClickBtn(view: View) {
 //        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return

@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Bundle
 import android.util.Log
 import com.example.testdemo.R
 import com.yoy.v_Base.ui.BaseDefaultActivity
@@ -12,8 +11,10 @@ import com.yoy.v_Base.utils.KLog
 import kotlinx.android.synthetic.main.activity_broadcast.*
 
 class BroadcastActivity : BaseDefaultActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    override fun getLayoutID(): Int = R.layout.activity_broadcast
+
+    override fun onInit() {
         setActionBar("广播测试",true)
         try {
             val mssage = intent.getStringExtra("userSaid") ?: "-1"
@@ -28,8 +29,6 @@ class BroadcastActivity : BaseDefaultActivity() {
         registerReceiver(broadcastReceiver, intentFilter)
         KLog.e("-----------111-")
     }
-
-    override fun getLayoutID(): Int = R.layout.activity_broadcast
 
     override fun isFullScreenWindow(): Boolean = true
 

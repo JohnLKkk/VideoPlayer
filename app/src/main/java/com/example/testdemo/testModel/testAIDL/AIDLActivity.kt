@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
@@ -17,16 +16,15 @@ class AIDLActivity : BaseDefaultActivity() {
     private var iAppAIDLTest: IAppAIDLTest? = null
     private var aidlIntent: Intent? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getLayoutID(): Int = R.layout.activity_aidl
+
+    override fun onInit() {
         aidlIntent = Intent("com.example.library_test_aidl.hello").apply {
             setPackage("com.example.library_test_aidl")
         }
         bindService(aidlIntent, aidlConnection, Context.BIND_AUTO_CREATE)
         setActionBar("AIDL测试", true)
     }
-
-    override fun getLayoutID(): Int = R.layout.activity_aidl
 
     override fun isFullScreenWindow(): Boolean = true
 

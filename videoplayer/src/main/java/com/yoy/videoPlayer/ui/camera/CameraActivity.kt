@@ -11,4 +11,10 @@ class CameraActivity : BaseDefaultActivity() {
 
     override fun getLayoutID(): Int = R.layout.activity_camera
 
+    override fun onInit() {
+        mPresenter = CameraPresenter(this)
+        uiControl = CameraUiControl(this)
+    }
+
+
 }

@@ -30,8 +30,8 @@ abstract class BaseDefaultFragment : Fragment(), View.OnClickListener {
 
     open fun initData(view: View) {}
 
-    open fun getArrayRes(@ArrayRes id: Int): Array<String>? {
-        return activity?.resources?.getStringArray(id)
+    open fun getArrayRes(@ArrayRes id: Int): Array<String> {
+        return requireActivity().resources.getStringArray(id)
     }
 }
 

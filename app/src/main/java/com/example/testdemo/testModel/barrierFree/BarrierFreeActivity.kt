@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Bundle
 import com.example.testdemo.R
 import com.yoy.v_Base.ui.BaseDefaultActivity
 import kotlinx.android.synthetic.main.activity_barrier_free.*
@@ -16,8 +15,9 @@ class BarrierFreeActivity : BaseDefaultActivity() {
             "侧边后面的按键;\n " +
             "注：为防止误触，两次按键低于一秒将忽略该操作。可以上下滑动\n"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getLayoutID(): Int = R.layout.activity_barrier_free
+
+    override fun onInit() {
         outputText.text = str
 
         val intentFilter = IntentFilter()
@@ -25,8 +25,6 @@ class BarrierFreeActivity : BaseDefaultActivity() {
         registerReceiver(mBroadcastReceiver, intentFilter)
         setActionBar("辅助服务测试",true)
     }
-
-    override fun getLayoutID(): Int = R.layout.activity_barrier_free
 
     override fun isFullScreenWindow(): Boolean = true
 

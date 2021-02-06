@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.os.Bundle
 import android.view.View
 import com.example.testdemo.R
 import com.yoy.v_Base.ui.BaseDefaultActivity
@@ -13,12 +12,12 @@ import kotlinx.android.synthetic.main.activity_start_phone_app.*
 
 class StartPhoneAppActivity : BaseDefaultActivity() {
     private val appItems = HashMap<String, ApplicationInfo>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getApps()
-    }
 
     override fun getLayoutID(): Int = R.layout.activity_start_phone_app
+
+    override fun onInit() {
+        getApps()
+    }
 
     override fun isFullScreenWindow(): Boolean = true
 

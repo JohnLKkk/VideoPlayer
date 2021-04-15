@@ -16,6 +16,8 @@ object Deps{
     //region kotlin
     const val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
     const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.4.10"
+    const val kotlinXCoroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5"
+    const val kotlinXCoroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7"
     //endregion
 
     //region okhttp
@@ -32,6 +34,9 @@ object Deps{
     //region rxjava
     const val rxjava = "io.reactivex:rxjava:1.0.14"
     const val rxandroid = "io.reactivex:rxandroid:1.0.1"
+    const val rxAndroid2 = "io.reactivex.rxjava2:rxandroid:2.1.0"
+    const val rxJava2 = "io.reactivex.rxjava2:rxjava:2.2.8"
+    const val retrofit2AdapterRxJava2 = "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
     //endregion
 
 

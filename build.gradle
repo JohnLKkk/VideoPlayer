@@ -4,6 +4,7 @@ buildscript {
 
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
     dependencies {
@@ -16,11 +17,12 @@ buildscript {
 allprojects {
     repositories {
         google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
         maven { url 'http://developer.huawei.com/repo' }
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
-        jcenter()
-        maven { url 'https://jitpack.io' }
     }
     //全局设置编码
     tasks.withType(JavaCompile) {

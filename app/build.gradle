@@ -37,7 +37,7 @@ android {
             // 指定存放native代码的目录，这里指定为jni和cpp皆可
             jni.srcDirs = ['src/main/jni', 'src/main/cpp/']
 //            res.srcDirs+=['faceResource/v2']
-            assets.srcDirs += ['faceResource/v5']
+//            assets.srcDirs += ['faceResource/v5']
         }
     }
     kotlinOptions {
@@ -53,12 +53,12 @@ android {
 }
 
 dependencies {
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
 //    implementation "io.github.prototypez:app-joint-core:1.7"
     implementation project(':v_Base')
     testImplementation Deps.junit
     androidTestImplementation Deps.ext_junit
     androidTestImplementation Deps.runner
-//    implementation fileTree(dir: 'libs', include: ['*.jar'])
 //    implementation project(path: ':videolibrary')
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation Deps.gif_drawable
@@ -68,5 +68,4 @@ dependencies {
     androidTestImplementation Deps.espresso_core
     implementation Deps.rxjava
     implementation Deps.rxandroid
-//    implementation project(':Live')
 }

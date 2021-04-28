@@ -1,8 +1,4 @@
-plugins{
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-android-extensions'
-}
+applyPlugin(project, true)
 android {
     compileSdkVersion Versions.compileSdk
     buildToolsVersion Versions.buildTools

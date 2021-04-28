@@ -27,10 +27,11 @@ abstract class BaseUiControl(val mActivity: BaseDefaultActivity) : View.OnClickL
     /**
      * 初始化运行顺序，有需要子类可以重写该方法
      */
-    fun runSeq(){
+    open fun runSeq() {
         initView()
         initListener()
         initData()
+        getPresenter().initData()
     }
 }
 

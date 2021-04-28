@@ -1,6 +1,7 @@
 package com.yoy.videoPlayer.ui.camera
 
 import com.yoy.v_Base.ui.BaseDefaultActivity
+import com.yoy.v_Base.utils.KLog
 import com.yoy.videoPlayer.R
 
 /**
@@ -14,7 +15,8 @@ class CameraActivity : BaseDefaultActivity() {
     override fun onInit() {
         mPresenter = CameraPresenter(this)
         uiControl = CameraUiControl(this)
+        (mPresenter as CameraPresenter).enumerateCameras().forEach {
+            KLog.d("CameraActivity", it.toString())
+        }
     }
-
-
 }

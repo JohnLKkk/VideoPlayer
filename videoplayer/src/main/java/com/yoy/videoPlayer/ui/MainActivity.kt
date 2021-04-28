@@ -16,6 +16,7 @@ class MainActivity : BaseDefaultActivity() {
     override fun getLayoutID(): Int = R.layout.activity_main
 
     override fun onInit() {
+        startActivity(Intent(applicationContext, CameraActivity::class.java))
     }
 
     fun onBtnClick(view: View) {

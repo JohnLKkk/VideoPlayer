@@ -1,24 +1,21 @@
 package com.yoy.videoPlayer.ui.camera
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.ImageFormat
 import android.hardware.camera2.*
-import android.media.MediaCodec
-import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
-import android.view.Surface
-import android.view.SurfaceHolder
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.yoy.v_Base.ui.BasePresenter
-import com.yoy.v_Base.ui.BaseUiControl
 import com.yoy.v_Base.utils.KLog
 import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.utils.camera.CameraDevicesInfo
+import kotlinx.coroutines.*
+import kotlin.coroutines.resume
 
 /**
  * Created by Void on 2021/2/3 17:58
@@ -38,19 +35,19 @@ class CameraPresenter(mActivity: CameraActivity) : BasePresenter(mActivity) {
 
     private lateinit var mSession: CameraCaptureSession
 
-    private var openCameraID = ""
     private val cameraThread = HandlerThread("cameraThread").apply { start() }
 
     private val cameraHandler = Handler(cameraThread.looper)
     private var cameraDevice: CameraDevice? = null
     private var useBackCamera = true
 
+    private var openCameraID = ""
+        get() {
+            if (field.isBlank()) field = getCameraId(useBackCamera)
+            return field
+        }
     val characteristics: CameraCharacteristics by lazy {
         cameraManager.getCameraCharacteristics(openCameraID)
-    }
-
-    init {
-        openCameraID = getCameraId(useBackCamera)
     }
 
     override fun getUiControl(): CameraUiControl = getActivityObj().uiControl as CameraUiControl
@@ -58,32 +55,46 @@ class CameraPresenter(mActivity: CameraActivity) : BasePresenter(mActivity) {
     override fun onRelease() {
     }
 
-    fun openCamera() {
+    fun initCamera() {
         if (openCameraID.isBlank()) {
-            ToastUtils.showShort(getActivityObj(), "打开摄像头失败，摄像头id为null")
-            KLog.e(TAG, "摄像头ID为null")
+            ToastUtils.showShort(getActivityObj(), "打开摄像头失败，没有找到匹配的摄像头")
+            KLog.e(TAG, "打开摄像头失败，没有找到匹配的摄像头")
             return
         }
         if (ActivityCompat.checkSelfPermission(getActivityObj(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            KLog.e(TAG, "请赋予权限")
             return
         }
-        cameraManager.openCamera(openCameraID, cameraStateCallback, cameraHandler)
-    }
+        GlobalScope.launch(Dispatchers.Main) {
+            cameraDevice = openCameras()
+            cameraDevice?.createCaptureSession(listOf(getUiControl().surfaceView.holder.surface),
+                    object : CameraCaptureSession.StateCallback() {
+                        override fun onConfigured(session: CameraCaptureSession) {
+                            mSession = session
+                            session.setRepeatingRequest(previewRequest, null, cameraHandler)
+                        }
 
-    fun getCameraId(useBack: Boolean): String {
-        enumerateCameras().forEach {
-            if (useBack && it.orientation ==
-                    CameraCharacteristics.LENS_FACING_BACK) {
-                return it.cameraID
-            } else if (!useBack && it.orientation ==
-                    CameraCharacteristics.LENS_FACING_FRONT) {
-                return it.cameraID
-            }
+                        override fun onConfigureFailed(session: CameraCaptureSession) {
+                        }
+
+                    }, cameraHandler)
         }
-        return ""
     }
 
-    fun enumerateCameras(): List<CameraDevicesInfo> {
+    @SuppressLint("MissingPermission")
+    private suspend fun openCameras() = suspendCancellableCoroutine<CameraDevice> {
+        cameraManager.openCamera(openCameraID, object : CameraDevice.StateCallback() {
+            override fun onOpened(camera: CameraDevice) = it.resume(camera)
+
+            override fun onDisconnected(camera: CameraDevice) {
+            }
+
+            override fun onError(camera: CameraDevice, error: Int) {
+            }
+        }, cameraHandler)
+    }
+
+    private fun enumerateCameras(): List<CameraDevicesInfo> {
         val cameraList = mutableListOf<CameraDevicesInfo>()
         // 获取所有兼容的相机列表
         for (cameraId in cameraManager.cameraIdList) {
@@ -96,6 +107,20 @@ class CameraPresenter(mActivity: CameraActivity) : BasePresenter(mActivity) {
             cameraList.add(CameraDevicesInfo(orientation, cameraId, ImageFormat.JPEG))
         }
         return cameraList
+    }
+
+    private fun getCameraId(useBack: Boolean): String {
+        enumerateCameras().forEach {
+            KLog.d("CameraActivity", it.toString())
+            if (useBack && it.orientation ==
+                    CameraCharacteristics.LENS_FACING_BACK) {
+                return it.cameraID
+            } else if (!useBack && it.orientation ==
+                    CameraCharacteristics.LENS_FACING_FRONT) {
+                return it.cameraID
+            }
+        }
+        return ""
     }
 
     private val cameraStateCallback = object : CameraDevice.StateCallback() {

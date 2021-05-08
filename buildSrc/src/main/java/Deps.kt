@@ -1,4 +1,4 @@
-object Deps{
+object Deps {
 
     //region androidx
     const val recyclerview = "androidx.recyclerview:recyclerview:1.1.0"
@@ -16,8 +16,9 @@ object Deps{
     //region kotlin
     const val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
     const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.4.10"
+    const val kotlin_stdlib_jdk8 = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10"
+    const val kotlinXCoroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8"
     const val kotlinXCoroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5"
-    const val kotlinXCoroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7"
     //endregion
 
     //region okhttp

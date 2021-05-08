@@ -15,8 +15,5 @@ class CameraActivity : BaseDefaultActivity() {
     override fun onInit() {
         mPresenter = CameraPresenter(this)
         uiControl = CameraUiControl(this)
-        (mPresenter as CameraPresenter).enumerateCameras().forEach {
-            KLog.d("CameraActivity", it.toString())
-        }
     }
 }

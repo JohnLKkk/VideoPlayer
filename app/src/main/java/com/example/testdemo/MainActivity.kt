@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import com.example.testdemo.testModel.audioRecorder.AudioRecorderActivity
 import com.example.testdemo.testModel.barrierFree.BarrierFreeActivity
 import com.example.testdemo.testModel.broadcast.BroadcastActivity
+import com.example.testdemo.testModel.coroutine.CoroutineTest
 import com.example.testdemo.testModel.jniTest.JniActivity
 import com.example.testdemo.testModel.notification.NotificationActivity
 import com.example.testdemo.testModel.onClickTest.ClickActivity
@@ -48,6 +49,7 @@ class MainActivity : BaseDefaultActivity(), View.OnClickListener {
         btn_11.setOnClickListener(this)
         btn_12.setOnClickListener(this)
         setActionBar("测试模块")
+        CoroutineTest().test()
 //        startActivity(Intent(this, AIDLActivity::class.java))
     }
 

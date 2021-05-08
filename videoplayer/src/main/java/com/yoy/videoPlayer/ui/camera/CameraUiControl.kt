@@ -38,7 +38,7 @@ class CameraUiControl(mActivity: CameraActivity) : BaseUiControl(mActivity), Sur
         Log.d(TAG, "View finder size: ${surfaceView.width} x ${surfaceView.height}")
         Log.d(TAG, "Selected preview size: $previewSize")
         surfaceView.setAspectRatio(previewSize.width, previewSize.height)
-        getPresenter().openCamera()
+        getPresenter().initCamera()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) = Unit

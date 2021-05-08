@@ -53,19 +53,24 @@ android {
 }
 
 dependencies {
-//    implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation "io.github.prototypez:app-joint-core:1.7"
-    implementation project(':v_Base')
     testImplementation Deps.junit
     androidTestImplementation Deps.ext_junit
     androidTestImplementation Deps.runner
+    androidTestImplementation Deps.espresso_core
+
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation "io.github.prototypez:app-joint-core:1.7"
+    implementation project(':v_Base')
+    implementation Deps.core_ktx
+    //kotlin 协程
+//    implementation Deps.kotlinXCoroutinesCore
+    implementation Deps.kotlinXCoroutinesAndroid
 //    implementation project(path: ':videolibrary')
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation Deps.gif_drawable
     implementation Deps.cardview
     implementation Deps.photoview
 
-    androidTestImplementation Deps.espresso_core
     implementation Deps.rxjava
     implementation Deps.rxandroid
 }

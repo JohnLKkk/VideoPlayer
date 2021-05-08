@@ -20,13 +20,13 @@ import com.yoy.videoPlayer.VideoApplication
  */
 class MyCameraManager private constructor() : CameraDevice.StateCallback() {
     private val TAG = MyCameraManager::class.java.simpleName
-    private val cameraStatus = CameraStatus()
     private val mCameraManager: CameraManager by lazy {
         VideoApplication.context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     }
     private val enumerateCameras: List<CameraDevicesInfo> by lazy {
         getCameraDevicesList()
     }
+    private val cameraStatus = CameraStatus()
 
     init {
         mCameraManager.registerAvailabilityCallback(cameraStatus, Handler())

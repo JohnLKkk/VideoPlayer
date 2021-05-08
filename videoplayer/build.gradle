@@ -60,4 +60,8 @@ dependencies {
 //    androidTestImplementation Deps.app_joint_core
     androidTestImplementation Deps.runner
     implementation project(':v_Base')
+    implementation Deps.core_ktx
+    //kotlin 协程
+//    implementation Deps.kotlinXCoroutinesCore
+    implementation Deps.kotlinXCoroutinesAndroid
 }

@@ -1,6 +1,7 @@
 package com.example.testdemo
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.testdemo.testModel.coroutine.CoroutineTest
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -14,7 +15,7 @@ class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
 //        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-
+        CoroutineTest().test()
     }
 
 

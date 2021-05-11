@@ -7,5 +7,28 @@
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
+    <FrameLayout
+        android:id="@+id/controlView"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:background="@android:color/transparent"
+        android:layout_height="wrap_content">
+        <Button
+            android:text="闪光灯"
+            android:id="@+id/lightBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:text="拍照"
+            android:id="@+id/photographBtn"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:text="切换摄像头"
+            android:id="@+id/switchCameraBtn"
+            android:layout_gravity="end|bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 </FrameLayout>

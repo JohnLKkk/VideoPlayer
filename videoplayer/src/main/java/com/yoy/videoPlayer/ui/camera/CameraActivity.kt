@@ -16,4 +16,12 @@ class CameraActivity : BaseDefaultActivity() {
         mPresenter = CameraPresenter(this)
         uiControl = CameraUiControl(this)
     }
+
+    override fun isFullScreenWindow(): Boolean = true
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.onRelease()
+        uiControl.onRelease()
+    }
 }

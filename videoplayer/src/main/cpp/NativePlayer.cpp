@@ -129,9 +129,9 @@ void log_callback(void *ptr, int level, const char *format, va_list args) {
 }
 
 int NativePlayer::init_player() {
-    // set the level of log
+    // 设置日志输出等级
     av_log_set_level(AV_LOG_INFO);
-    // set the callback of log, and redirect to print android log
+    // 设置日志回调
     av_log_set_callback(log_callback);
 
     int ret;

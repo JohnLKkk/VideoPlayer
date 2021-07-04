@@ -10,8 +10,7 @@ buildscript {
     dependencies {
         classpath Deps.gradleVersion
         classpath Deps.kotlin_gradle_plugin
-        classpath Deps.app_joint
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.4"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5"
     }
 }
 
@@ -21,9 +20,9 @@ allprojects {
         mavenCentral()
         jcenter()
         maven { url 'https://jitpack.io' }
-        maven { url 'http://developer.huawei.com/repo' }
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+//        maven { url 'http://developer.huawei.com/repo' }
+//        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+//        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
     }
     //全局设置编码
     tasks.withType(JavaCompile) {

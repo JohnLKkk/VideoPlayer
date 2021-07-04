@@ -7,7 +7,6 @@
 ext.applyPlugin = { Project project, boolean isApp ->
     if (isApp) {
         project.plugins.apply('com.android.application')
-        project.plugins.apply('app-joint')
     } else {
         project.plugins.apply('com.android.library')
     }

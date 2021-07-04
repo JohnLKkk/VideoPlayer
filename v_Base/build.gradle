@@ -50,5 +50,8 @@ dependencies {
     api Deps.okhttp_urlconnection
     api Deps.okio
     api Deps.recyclerview
-    api Deps.app_joint_core
+    api Deps.lifecycle_extensions
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    kapt "androidx.lifecycle:lifecycle-compiler:2.3.1"
+    api Deps.lifecycle_viewmodel_ktx
 }

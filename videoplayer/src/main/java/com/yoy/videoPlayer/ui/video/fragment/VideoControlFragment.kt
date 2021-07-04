@@ -115,7 +115,7 @@ class VideoControlFragment : BaseDefaultFragment(), AdapterView.OnItemSelectedLi
         try {
             startActivityForResult(Intent.createChooser(
                     Intent(Intent.ACTION_GET_CONTENT).apply {
-                        type = "*/*"
+                        type = "video/*"
                         addCategory(Intent.CATEGORY_OPENABLE)
                     }, "选择视频文件"), AppCode.selectFileResultCode)
         } catch (ex: ActivityNotFoundException) {

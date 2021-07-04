@@ -1,9 +1,7 @@
 package com.yoy.v_Base.ui
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity

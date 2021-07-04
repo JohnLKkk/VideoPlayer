@@ -10,7 +10,6 @@ import com.yoy.v_Base.utils.ToastUtils
 import com.yoy.videoPlayer.beans.VideoFileInfo
 import com.yoy.videoPlayer.utils.FileUtils
 import com.yoy.videoPlayer.utils.PlayHistoryManager
-import io.github.prototypez.appjoint.core.AppSpec
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -18,7 +17,6 @@ import kotlin.concurrent.thread
  * Created by Void on 2020/11/11 15:22
  *
  */
-@AppSpec
 class VideoApplication : Application() {
     companion object {
         lateinit var context: Context

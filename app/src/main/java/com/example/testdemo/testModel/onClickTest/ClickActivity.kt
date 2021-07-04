@@ -37,7 +37,6 @@ class ClickActivity : AppCompatActivity() {
 //        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri) // 表示录制完后保存的录制，如果不写，则会保存到默认的路径，在onActivityResult()的回调，通过intent.getData中返回保存的路径
         intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10) // 设置视频录制的最长时间
         startActivityForResult(intent, 1001) // 跳转
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

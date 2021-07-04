@@ -1,68 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:windowSoftInputMode="stateVisible|adjustResize">
+    android:windowSoftInputMode="stateVisible|adjustResize"
+    tools:context=".MainActivity">
 
-    <GridLayout
+    <ListView
+        android:id="@+id/mainListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnCount="4">
-
-        <Button
-            android:id="@+id/btn_1"
-            android:text="点击测试" />
-
-        <Button
-            android:id="@+id/btn_2"
-            android:text="弹窗测试" />
-
-        <Button
-            android:id="@+id/btn_3"
-            android:text="广播测试" />
-
-        <Button
-            android:id="@+id/btn_4"
-            android:text="视图测试" />
-
-        <Button
-            android:id="@+id/btn_5"
-            android:text="ViewpagerFragment内容测试" />
-
-        <Button
-            android:id="@+id/btn_6"
-            android:text="监听通知测试" />
-
-        <Button
-            android:id="@+id/btn_7"
-            android:text="Android原生录音测试" />
-
-        <Button
-            android:id="@+id/btn_8"
-            android:text="无障碍服务测试" />
-
-        <ImageView
-            android:id="@+id/testImageView"
-            android:layout_margin="@dimen/x50"
-            android:background="@drawable/ic_play_audio"
-            android:onClick="onImageView" />
-
-        <Button
-            android:id="@+id/btn_9"
-            android:text="权限测试" />
-
-        <Button
-            android:id="@+id/btn_10"
-            android:text="打开系统任意APP" />
-        <Button
-            android:id="@+id/btn_11"
-            android:text="扫描设备IP" />
-        <Button
-            android:id="@+id/btn_12"
-            android:text="JNI测试" />
-    </GridLayout>
+        android:layout_height="wrap_content" />
+<!--    <TextView-->
+<!--        android:text="1111111111111"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        android:background="@android:color/white"-->
+<!--        android:textSize="20"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
 </FrameLayout>

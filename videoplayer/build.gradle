@@ -2,7 +2,6 @@ applyPlugin(project, true)
 
 android {
     compileSdkVersion Versions.compileSdk
-    buildToolsVersion Versions.buildTools
 
     defaultConfig {
         applicationId "com.yoy.videoplayer"
@@ -10,7 +9,6 @@ android {
         targetSdkVersion Versions.targetSdk
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {

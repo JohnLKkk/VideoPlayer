@@ -2,17 +2,16 @@ package com.example.testdemo
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.example.testdemo.testModel.coroutine.CoroutineTest
 import com.example.testdemo.testModel.dagger.DaggerLearnActivity
-import org.hamcrest.Matchers
+import kotlinx.coroutines.awaitAll
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -35,8 +34,8 @@ class ExampleInstrumentedTest {
     fun testTextViewDisplay() {
         println("----------------单元测试----------------")
         onView(withId(R.id.onBtn)).perform(click())
-
-        onView(withText("你好单元测试")).perform(click())
+        Thread.sleep(500)
+//        onView(withText("你好单元测试")).perform(click())
 //        onView(withText("你好单元测试")).check(ViewAssertions.matches(isDisplayed()))
     }
 }

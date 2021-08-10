@@ -11,7 +11,7 @@ object Deps {
     const val rules = "com.android.support.test:rules:1.0.2"
     const val espresso_core = "androidx.test.espresso:espresso-core:3.3.0"
     const val constraint_layout = "androidx.constraintlayout:constraintlayout:2.0.4"
-    const val gradleVersion = "com.android.tools.build:gradle:7.0.0-beta03"
+    const val gradleVersion = "com.android.tools.build:gradle:4.2.2"
 
     const val lifecycle_extensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
     const val lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
